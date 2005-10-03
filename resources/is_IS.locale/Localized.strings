@@ -1,3 +1,13 @@
+iw.component.is.idega.idegaweb.egov.serviceoffer.presentation.ServiceOfferApplication.name=\u00DEj\u00F3nustukaup
+my_page=Fara \u00E1 m\u00EDna s\u00ED\u00F0u
 next=\u00C1fram
 previous=Tilbaka
 save=Vista
+service.offer.application.create_a_service_offer=B\u00FAa til fer\u00F0/efniss\u00F6lu skref 1 af 3
+service.offer.application.create_a_service_offer2=B\u00FAa til fer\u00F0/efniss\u00F6lu skref 2 af 3
+service.offer.application.create_a_service_offer3=B\u00FAa til fer\u00F0/efniss\u00F6lu skref 3 af 3
+service.offer.application.overview=Vinsamlegast far\u00F0u yfir uppl\u00FDsingarnar h\u00E9r a\u00F0 ne\u00F0an og vista\u00F0u svo.
+service.offer.application.saved=Fer\u00F0/Efnissala vistu\u00F0
+service.offer.application.saved.text=\u00DEakka \u00FE\u00E9r fyrir, fer\u00F0in/efnissalan sem \u00FE\u00FA bj\u00F3st til hefur veri\u00F0 vistu\u00F0 og send \u00E1 vi\u00F0komandi a\u00F0ila.
+service.offer.application.select_recipients=Vinsamlegast veldu vi\u00F0takendur bo\u00F0s um fer\u00F0ina/efniss\u00F6luna.
+service.offer.application.text=H\u00E9r er getur \u00FE\u00FA b\u00FAi\u00F0 til fer\u00F0 e\u00F0a efniss\u00F6lu og stillt hvort forr\u00E1\u00F0am\u00F0aur \u00FEarf a\u00F0 gei\u00F0a fyrir hana e\u00F0a ekki. \u00CD n\u00E6sta skrefi velur \u00FE\u00FA hverjir eiga a\u00F0 f\u00E1 bo\u00F0 um \u00FEj\u00F3nustukaupin.

@@ -1,3 +1,13 @@
+iw.component.is.idega.idegaweb.egov.serviceoffer.presentation.ServiceOfferApplication.name=Service Offer
+my_page=My page
 next=Next
 previous=Previous
 save=Save
+service.offer.application.create_a_service_offer=Create a new service offer step 1 of 3
+service.offer.application.create_a_service_offer2=Create a new service offer step 2 of 3
+service.offer.application.create_a_service_offer3=Create a new service offer step 3 of 3
+service.offer.application.overview=Please confirm the information below is correct.
+service.offer.application.saved=Finished creating a service offer
+service.offer.application.saved.text=Thank you, your service offer has been saved and sent to the corresponding recipients.
+service.offer.application.select_recipients=Please select the recipients of the service offer.
+service.offer.application.text=Here you can define a service offer and in the next step you can define the recipients.

@@ -1,5 +1,5 @@
 /*
- * $Id: ServiceOfferApplication.java,v 1.1 2005/10/02 23:42:29 eiki Exp $
+ * $Id: ServiceOfferApplication.java,v 1.2 2005/10/03 10:21:34 eiki Exp $
  * Created on Oct 2, 2005
  *
  * Copyright (C) 2005 Idega Software hf. All Rights Reserved.
@@ -12,8 +12,6 @@ package is.idega.idegaweb.egov.serviceoffer.presentation;
 import java.rmi.RemoteException;
 import javax.ejb.FinderException;
 import com.idega.block.school.data.School;
-import com.idega.block.school.data.SchoolClass;
-import com.idega.block.school.data.SchoolClassMember;
 import com.idega.block.school.data.SchoolSeason;
 import com.idega.business.IBORuntimeException;
 import com.idega.core.builder.data.ICPage;
@@ -31,36 +29,23 @@ import com.idega.user.data.User;
  * An application for sending a service offer(description), that may have a price, to a citizen or a group of citizens
  * that then have to approve it.
  * 
- *  Last modified: $Date: 2005/10/02 23:42:29 $ by $Author: eiki $
+ *  Last modified: $Date: 2005/10/03 10:21:34 $ by $Author: eiki $
  * 
  * @author <a href="mailto:eiki@idega.com">eiki</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class ServiceOfferApplication extends ServiceOfferBlock {
 	
 	private static final String PARAMETER_ACTION = "prm_action";
 	
-	private static final String PARAMETER_MONTH = "prm_month";
-	private static final String PARAMETER_DAYS = "prm_days";
-	private static final String PARAMETER_MILK = "prm_milk";
-	private static final String PARAMETER_FRUITS = "prm_fruits";
-	private static final String PARAMETER_COMMENTS = "prm_comments";
-	private static final String PARAMETER_AMOUNT = "prm_amount";
-	
 	private static final int ACTION_PHASE_ONE = 1;
 	private static final int ACTION_PHASE_TWO = 2;
-	private static final int ACTION_PHASE_THREE = 3;
 	private static final int ACTION_OVERVIEW = 4;
 	private static final int ACTION_SAVE = 5;
-	
+
 	private User user;
 	private School school;
 	private SchoolSeason season;
-	private SchoolClass group;
-	private SchoolClassMember placement;
-	
-	private boolean iUseEmployeeView = false;
-	private ICPage iHomePage;
 
 	/* (non-Javadoc)
 	 * @see se.idega.idegaweb.commune.school.meal.presentation.MealBlock#present(com.idega.presentation.IWContext)
@@ -111,7 +96,7 @@ public class ServiceOfferApplication extends ServiceOfferBlock {
 	private void showPhaseOne(IWContext iwc) throws RemoteException {
 		Form form = createForm(iwc, ACTION_PHASE_ONE);
 		
-		form.add(getPersonInfo(iwc, user, school, group));
+	//	form.add(getPersonInfo(iwc, user, school, group));
 		
 		Layer layer = new Layer(Layer.DIV);
 		layer.setID("phasesDiv");
@@ -139,8 +124,6 @@ public class ServiceOfferApplication extends ServiceOfferBlock {
 	private void showPhaseTwo(IWContext iwc) throws RemoteException {
 		Form form = createForm(iwc, ACTION_PHASE_TWO);
 		
-		form.add(getPersonInfo(iwc, user, school, group));
-
 		Layer layer = new Layer(Layer.DIV);
 		layer.setID("phasesDiv");
 		form.add(layer);
@@ -196,7 +179,7 @@ public class ServiceOfferApplication extends ServiceOfferBlock {
 		save.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_SAVE));
 		//save.setDisabled(!canSave);
 		SubmitButton previous = new SubmitButton(localize("previous", "Previous"));
-		previous.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_PHASE_THREE));
+		previous.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_PHASE_TWO));
 		buttonLayer.add(previous);
 		buttonLayer.add(save);
 
@@ -218,14 +201,22 @@ public class ServiceOfferApplication extends ServiceOfferBlock {
 			paragraph.add(new Text(localize("service.offer.application.saved.text", "Thank you, your service offer has been saved and sent to the corresponding recipients.")));
 			layer.add(paragraph);
 			
+			ICPage homePage = null;
+			try {
+				homePage = getUserBusiness(iwc).getHomePageForUser(getUser(iwc));
+			}
+			catch (FinderException e) {
+			//no homepage for user??
+				e.printStackTrace();
+			}
 			
-			if (getHomePage() != null) {
+			if (homePage!= null) {
 				Layer buttonLayer = new Layer(Layer.DIV);
 				buttonLayer.setStyleClass("buttonDiv");
 				layer.add(buttonLayer);
 				
 				GenericButton home = new GenericButton(localize("my_page", "My page"));
-				home.setPageToOpen(getHomePage());
+				home.setPageToOpen(homePage);
 			}
 //		}
 //		catch (IDOCreateException ice) {
@@ -260,12 +251,5 @@ public class ServiceOfferApplication extends ServiceOfferBlock {
 	private User getUser(IWContext iwc) throws RemoteException {
 		return iwc.getCurrentUser();
 	}
-
-	private ICPage getHomePage() {
-		return iHomePage;
-	}
 	
-	public void setHomePage(ICPage page) {
-		iHomePage = page;
-	}
 }
