@@ -1,5 +1,5 @@
 /*
- * $Id: ServiceOfferBusiness.java,v 1.1 2005/10/02 23:42:29 eiki Exp $
+ * $Id: ServiceOfferBusiness.java,v 1.2 2005/10/03 16:49:09 eiki Exp $
  * Created on Oct 2, 2005
  *
  * Copyright (C) 2005 Idega Software hf. All Rights Reserved.
@@ -27,10 +27,10 @@ import com.idega.user.data.User;
 
 /**
  * 
- *  Last modified: $Date: 2005/10/02 23:42:29 $ by $Author: eiki $
+ *  Last modified: $Date: 2005/10/03 16:49:09 $ by $Author: eiki $
  * 
  * @author <a href="mailto:eiki@idega.com">eiki</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public interface ServiceOfferBusiness extends IBOService, CaseBusiness {
 
@@ -71,4 +71,23 @@ public interface ServiceOfferBusiness extends IBOService, CaseBusiness {
 	 */
 	public void sendMessageToParents(ServiceOfferChoice application, String subject, String body)
 			throws java.rmi.RemoteException;
+
+	/**
+	 * Stores the service offer and creates the cases/processes and messages to send to the citizens.
+	 * @param name
+	 * @param paymentType
+	 * @param choiceOptional
+	 * @param deadline
+	 * @param date
+	 * @param time
+	 * @param price
+	 * @param location
+	 * @param text
+	 * @param schoolType
+	 * @param school
+	 * @param schoolClass
+	 * @param user
+	 */
+	public void storeServiceOffer(String name, String paymentType, String choiceOptional, String deadline, String date, String time, String price, String location, String text, String schoolType, String school, String schoolClass, User user);
+
 }

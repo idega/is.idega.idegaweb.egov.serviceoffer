@@ -1,5 +1,5 @@
 /*
- * $Id: ServiceOfferApplication.java,v 1.3 2005/10/03 15:03:19 eiki Exp $
+ * $Id: ServiceOfferApplication.java,v 1.4 2005/10/03 16:49:09 eiki Exp $
  * Created on Oct 2, 2005
  *
  * Copyright (C) 2005 Idega Software hf. All Rights Reserved.
@@ -37,10 +37,10 @@ import com.idega.user.data.User;
  * An application for sending a service offer(description), that may have a price, to a citizen or a group of citizens
  * that then have to approve it.
  * 
- *  Last modified: $Date: 2005/10/03 15:03:19 $ by $Author: eiki $
+ *  Last modified: $Date: 2005/10/03 16:49:09 $ by $Author: eiki $
  * 
  * @author <a href="mailto:eiki@idega.com">eiki</a>
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class ServiceOfferApplication extends ServiceOfferBlock {
 	
@@ -346,8 +346,20 @@ public class ServiceOfferApplication extends ServiceOfferBlock {
 	
 	private void save(IWContext iwc) throws RemoteException {
 		
-//		try {
-		//	getBusiness().storeChoice(null, user, school, season, comments, months, values, iwc.getCurrentUser());
+			getBusiness().storeServiceOffer(iwc.getParameter(PARAMETER_SERVICE_NAME),
+					iwc.getParameter(PARAMETER_SERVICE_PAYMENT_TYPE),
+					iwc.getParameter(PARAMETER_SERVICE_CHOICE_OPTIONAL),
+					iwc.getParameter(PARAMETER_SERVICE_DEADLINE),
+					iwc.getParameter(PARAMETER_SERVICE_DATE),
+					iwc.getParameter(PARAMETER_SERVICE_TIME),
+					iwc.getParameter(PARAMETER_SERVICE_PRICE),
+					iwc.getParameter(PARAMETER_SERVICE_LOCATION),
+					iwc.getParameter(PARAMETER_SERVICE_TEXT),
+					iwc.getParameter(PARAMETER_SERVICE_RECIPIENTS_SCHOOL_TYPE),
+					iwc.getParameter(PARAMETER_SERVICE_RECIPIENTS_SCHOOL),
+					iwc.getParameter(PARAMETER_SERVICE_RECIPIENTS_SCHOOL_CLASS),
+					getUser(iwc));
+			
 			
 			Layer layer = new Layer(Layer.DIV);
 			layer.setID("phasesDiv");
@@ -376,10 +388,7 @@ public class ServiceOfferApplication extends ServiceOfferBlock {
 				GenericButton home = new GenericButton(localize("my_page", "My page"));
 				home.setPageToOpen(homePage);
 			}
-//		}
-//		catch (IDOCreateException ice) {
-//			ice.printStackTrace();
-//		}
+	
 	}
 	
 	private Form createForm(IWContext iwc, int actionPhase) {

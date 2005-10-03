@@ -1,5 +1,5 @@
 /*
- * $Id: ServiceOfferBusinessBean.java,v 1.1 2005/10/02 23:42:29 eiki Exp $
+ * $Id: ServiceOfferBusinessBean.java,v 1.2 2005/10/03 16:49:09 eiki Exp $
  * Created on Aug 10, 2005
  *
  * Copyright (C) 2005 Idega Software hf. All Rights Reserved.
@@ -43,10 +43,10 @@ import com.idega.util.text.Name;
 /**
  * 
  * 
- *  Last modified: $Date: 2005/10/02 23:42:29 $ by $Author: eiki $
+ *  Last modified: $Date: 2005/10/03 16:49:09 $ by $Author: eiki $
  * 
  * @author <a href="mailto:eiki@idega.com">eiki</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class ServiceOfferBusinessBean extends CaseBusinessBean implements CaseBusiness, ServiceOfferBusiness{
 
@@ -190,5 +190,59 @@ public class ServiceOfferBusinessBean extends CaseBusinessBean implements CaseBu
 	
 	public School getManagingSchoolForUser(User user) throws RemoteException, FinderException {
 		return getCommuneUserBusiness().getFirstManagingSchoolForUser(user);
+	}
+
+	public void storeServiceOffer(String name, String paymentType, String choiceOptional, String deadline, String date, String time, String price, String location, String text, String schoolType, String school, String schoolClass, User user) {
+		try {
+			ServiceOffer offer = getServiceOfferHome().create();
+			
+			offer.setServiceName(name);
+			if("N".equals(choiceOptional)){
+				offer.setServiceChoiceAsMandatory();
+			}else{
+				offer.setServiceChoiceAsOptional();
+			}
+			offer.setServicePaymentType(paymentType);
+			if(deadline!=null){
+				offer.setServiceDeadline((new IWTimestamp(deadline)).getTimestamp());
+			}
+			//TODO use time
+			if(date!=null){
+				offer.setServiceDate((new IWTimestamp(date)).getTimestamp());
+			}
+			
+			offer.setServicePrice(Double.valueOf(price).doubleValue());
+			offer.setServiceText(text);
+			offer.setOwner(user);
+		
+			offer.store();
+			
+//			ServiceOfferChoice choice = getServiceOfferChoiceHome().create();
+//			
+//			choice.setUser(user);
+//			
+//			choice.setOwner(performer);
+//			//choice.setEmployee(user.equals(performer));
+//			
+//			choice.store();
+			
+			changeCaseStatus(offer, getCaseStatusOpenString(), user);
+			
+			
+			
+//			if (!user.equals(performer)) {
+//				String subject = getLocalizedString("service_offer.message_subject", "You have a service offer waiting for your response");
+//				String body = getLocalizedString("service_offer.message_body", "You have made a meal choice to {1} for {0}, {2}.");
+//				
+//				sendMessageToParents(choice, subject, body);
+//			}
+//
+//			return choice;
+		}
+		catch (CreateException ce) {
+		//	throw new IDOCreateException(ce);
+			ce.printStackTrace();
+		}
+		
 	}
 }
