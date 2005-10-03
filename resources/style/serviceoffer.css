@@ -1,35 +1,3 @@
-form#serviceOfferForm .listTable td, th {
-	font-size: 10px;
-	empty-cells: show;
-}
-
-form#serviceOfferForm .listTable tbody tr td {
-	padding: 3px;
-	white-space: nowrap;
-}
-
-form#serviceOfferForm .listTable tbody tr td a {
-	font-size: 10px;
-	text-decoration: none;
-}
-
-form#serviceOfferForm .listTable thead tr th {
-	text-align: left;
-	padding: 3px;
-	font-weight: bold;
-	color: #595A54;
-	border-top: 1px solid #D7D7D7;
-	border-bottom: 1px solid #D7D7D7;
-}
-
-form#serviceOfferForm .listTable .listTable_oddRow {
-	background-color: #EFEFEF;	
-}
-
-form#serviceOfferForm .listTable .listTable_evenRow {
-	background-color: #FFFFFF;	
-}
-
 form#serviceOfferForm input, select {
 	border: 1px #CCCCCC solid;
 	font-size: 9px;
@@ -43,20 +11,8 @@ form#serviceOfferForm p {
 	font-size: 10px;
 }
 
-div.personInfoItem {
-	float: left;
-	width: 150px;
-	height: 50px;
-}
-
-div.personInfoItem h1 {
-	font-size: 10px;
-	margin: 0;
-}
-
 div#phasesDiv {
 	margin-bottom: 20px;
-	border-top: 1px #CCCCCC solid;
 }
 
 div#phasesDiv h1 {
