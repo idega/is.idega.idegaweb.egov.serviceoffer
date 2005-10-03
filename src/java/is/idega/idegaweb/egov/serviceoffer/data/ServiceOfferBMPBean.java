@@ -1,5 +1,5 @@
 /*
- * $Id: ServiceOfferBMPBean.java,v 1.1 2005/10/02 23:42:29 eiki Exp $ Created on
+ * $Id: ServiceOfferBMPBean.java,v 1.2 2005/10/03 15:03:19 eiki Exp $ Created on
  * Aug 10, 2005
  * 
  * Copyright (C) 2005 Idega Software hf. All Rights Reserved.
@@ -23,10 +23,10 @@ import com.idega.util.ListUtil;
 /**
  * A parent case for ServiceOfferChoices
  * 
- * Last modified: $Date: 2005/10/02 23:42:29 $ by $Author: eiki $
+ * Last modified: $Date: 2005/10/03 15:03:19 $ by $Author: eiki $
  * 
  * @author <a href="mailto:eiki@idega.com">eiki</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class ServiceOfferBMPBean extends AbstractCaseBMPBean implements Case, ServiceOfferConstants, ServiceOffer {
 
@@ -37,10 +37,11 @@ public class ServiceOfferBMPBean extends AbstractCaseBMPBean implements Case, Se
 	public static final String COLUMN_SERVICE_PRICE = "SERVICE_PRICE";
 	public static final String COLUMN_SERVICE_LOCATION = "SERVICE_LOCATION";
 	public static final String COLUMN_SERVICE_NAME = "SERVICE_NAME";
+	public static final String COLUMN_SERVICE_TEXT = "SERVICE_TEXT";
 	public static final String ENTITY_NAME = "egov_service_offer";
 	public static final String GROUP_MIDDLE_TABLE_NAME = "egov_serv_off_ic_group";
 	public static final String SCHOOL_CLASS_MIDDLE_TABLE_NAME = "egov_serv_off_sch_class";
-	public static final String COLUMN_SERVICE_TEXT = "SERVICE_TEXT";
+
 
 	/*
 	 * (non-Javadoc)
