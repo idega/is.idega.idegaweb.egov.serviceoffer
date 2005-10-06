@@ -91,6 +91,11 @@ form#serviceOfferForm div#sectionDiv {
 	font-weight: bold;
 }
 
+#serviceOfferForm formText {
+	font-size: 10px;
+}
+
+
 #serviceOfferForm div.formElement label.labelRadioButton{
 	width: 40px;
 	float: none;

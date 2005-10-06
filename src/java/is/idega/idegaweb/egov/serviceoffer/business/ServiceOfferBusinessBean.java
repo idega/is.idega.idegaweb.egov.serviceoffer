@@ -1,5 +1,5 @@
 /*
- * $Id: ServiceOfferBusinessBean.java,v 1.2 2005/10/03 16:49:09 eiki Exp $
+ * $Id: ServiceOfferBusinessBean.java,v 1.3 2005/10/06 18:06:40 eiki Exp $
  * Created on Aug 10, 2005
  *
  * Copyright (C) 2005 Idega Software hf. All Rights Reserved.
@@ -14,6 +14,7 @@ import is.idega.idegaweb.egov.serviceoffer.data.ServiceOffer;
 import is.idega.idegaweb.egov.serviceoffer.data.ServiceOfferChoice;
 import is.idega.idegaweb.egov.serviceoffer.data.ServiceOfferChoiceHome;
 import is.idega.idegaweb.egov.serviceoffer.data.ServiceOfferHome;
+import is.idega.idegaweb.egov.serviceoffer.util.ServiceOfferConstants;
 import java.rmi.RemoteException;
 import java.sql.Date;
 import java.text.MessageFormat;
@@ -43,12 +44,12 @@ import com.idega.util.text.Name;
 /**
  * 
  * 
- *  Last modified: $Date: 2005/10/03 16:49:09 $ by $Author: eiki $
+ *  Last modified: $Date: 2005/10/06 18:06:40 $ by $Author: eiki $
  * 
  * @author <a href="mailto:eiki@idega.com">eiki</a>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
-public class ServiceOfferBusinessBean extends CaseBusinessBean implements CaseBusiness, ServiceOfferBusiness{
+public class ServiceOfferBusinessBean extends CaseBusinessBean implements CaseBusiness, ServiceOfferBusiness, ServiceOfferConstants{
 
 	public SchoolBusiness getSchoolBusiness() {
 		try {
@@ -245,4 +246,14 @@ public class ServiceOfferBusinessBean extends CaseBusinessBean implements CaseBu
 		}
 		
 	}
+
+
+	/**
+	 * Can be overrided in subclasses
+	 */
+	protected String getBundleIdentifier() {
+		return ServiceOfferConstants.IW_BUNDLE_IDENTIFIER;
+	}
+
+	
 }

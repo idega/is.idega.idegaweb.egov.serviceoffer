@@ -1,5 +1,6 @@
 No=No
 Yes=Yes
+case_code_key.SERVOFP=SERVOFP
 iw.component.is.idega.idegaweb.egov.serviceoffer.presentation.ServiceOfferApplication.name=Service Offer
 my_page=My page
 next=Next

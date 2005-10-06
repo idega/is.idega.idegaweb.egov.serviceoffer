@@ -27,3 +27,4 @@ service.offer.application.select_recipients=Please select the recipients of the 
 service.offer.application.service_offer_date=Date of service
 service.offer.application.service_offer_time=Time of service offer
 service.offer.application.text=Here you can define a service offer and in the next step you can define the recipients.
+case_code_key.SERVOFP=Service Offer

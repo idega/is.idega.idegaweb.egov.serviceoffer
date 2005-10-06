@@ -1,5 +1,5 @@
 /*
- * $Id: ServiceOfferApplication.java,v 1.4 2005/10/03 16:49:09 eiki Exp $
+ * $Id: ServiceOfferApplication.java,v 1.5 2005/10/06 18:06:40 eiki Exp $
  * Created on Oct 2, 2005
  *
  * Copyright (C) 2005 Idega Software hf. All Rights Reserved.
@@ -37,13 +37,15 @@ import com.idega.user.data.User;
  * An application for sending a service offer(description), that may have a price, to a citizen or a group of citizens
  * that then have to approve it.
  * 
- *  Last modified: $Date: 2005/10/03 16:49:09 $ by $Author: eiki $
+ *  Last modified: $Date: 2005/10/06 18:06:40 $ by $Author: eiki $
  * 
  * @author <a href="mailto:eiki@idega.com">eiki</a>
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class ServiceOfferApplication extends ServiceOfferBlock {
 	
+	public static final String STYLE_CLASS_LABEL_TEXT = "labelText";
+	public static final String STYLE_CLASS_FORM_TEXT = "formText";
 	private static final String STYLE_CLASS_FORM_ELEMENT = "formElement";
 
 	private static final String PARAMETER_ACTION = "prm_action";
@@ -70,9 +72,7 @@ public class ServiceOfferApplication extends ServiceOfferBlock {
 	private School school;
 	private SchoolSeason season;
 
-	/* (non-Javadoc)
-	 * @see se.idega.idegaweb.commune.school.meal.presentation.MealBlock#present(com.idega.presentation.IWContext)
-	 */
+	
 	public void present(IWContext iwc) {
 		try {
 			try {
@@ -134,12 +134,10 @@ public class ServiceOfferApplication extends ServiceOfferBlock {
 		TextInput name = new TextInput(PARAMETER_SERVICE_NAME);
 		name.keepStatusOnAction();
 		name.setAsNotEmpty(localize("service.offer.application.cannot_be_empty","The name of service offer must be filled in"));
-		
 		Label nameLabel = new Label(localize("service.offer.application.name_of_service_offer" ,"Name of service offer"), name);
 		formElementName.add(nameLabel);
 		formElementName.add(name);
 		layer.add(formElementName);
-		
 		
 		Layer formElementPrice = new Layer();
 		formElementPrice.setStyleClass(STYLE_CLASS_FORM_ELEMENT);
@@ -163,7 +161,7 @@ public class ServiceOfferApplication extends ServiceOfferBlock {
 		Label choiceNoLabel = new Label(localize("No" ,"No"), choiceNo);
 		choiceNoLabel.setStyleClass("labelRadioButton");
 		Text choiceText = new Text(localize("service.offer.application.choice_optional" ,"Must agree to service offer"));
-		choiceText.setStyleClass("labelText");
+		choiceText.setStyleClass(STYLE_CLASS_LABEL_TEXT);
 		formElementChoice.add(choiceText);
 		formElementChoice.add(choiceYesLabel);
 		formElementChoice.add(choiceYes);
@@ -182,12 +180,12 @@ public class ServiceOfferApplication extends ServiceOfferBlock {
 		layer.add(formElementDate);
 		
 		Layer formElementTime = new Layer();
-		formElementDate.setStyleClass(STYLE_CLASS_FORM_ELEMENT);
+		formElementTime.setStyleClass(STYLE_CLASS_FORM_ELEMENT);
 		TimeInput time = new TimeInput(PARAMETER_SERVICE_TIME);
 		time.keepStatusOnAction();
 		Label timeLabel = new Label(localize("service.offer.application.service_offer_time" ,"Time of service offer"), time);
-		formElementDate.add(timeLabel);
-		formElementDate.add(time);
+		formElementTime.add(timeLabel);
+		formElementTime.add(time);
 		layer.add(formElementTime);
 		
 		
@@ -197,16 +195,16 @@ public class ServiceOfferApplication extends ServiceOfferBlock {
 //		DatePicker deadline = new DatePicker(PARAMETER_SERVICE_DEADLINE);
 //		Text deadlineLabel = new Text(localize("service.offer.application.dealine_for_choice" ,"Choice deadline"));
 		DateInput deadline = new DateInput(PARAMETER_SERVICE_DEADLINE);
-		date.keepStatusOnAction();
+		deadline.keepStatusOnAction();
 		Label deadlineLabel = new Label(localize("service.offer.application.dealine_for_choice" ,"Choice deadline"),deadline);
-		deadlineLabel.setStyleClass("labelText");
+		deadlineLabel.setStyleClass(STYLE_CLASS_LABEL_TEXT);
 		formElementDeadline.add(deadlineLabel);
 		formElementDeadline.add(deadline);
 		layer.add(formElementDeadline);
 		
 		Layer formElementLocation = new Layer();
 		formElementLocation.setStyleClass(STYLE_CLASS_FORM_ELEMENT);
-		TextInput location = new TextInput(PARAMETER_SERVICE_NAME);
+		TextInput location = new TextInput(PARAMETER_SERVICE_LOCATION);
 		location.keepStatusOnAction();
 		Label locationLabel = new Label(localize("service.offer.application.location" ,"Location"), location);
 		formElementLocation.add(locationLabel);
@@ -226,7 +224,7 @@ public class ServiceOfferApplication extends ServiceOfferBlock {
 		Label invoiceLabel = new Label(localize("service.offer.application.payment.type.invoice" ,"Invoice"), invoice);
 		invoiceLabel.setStyleClass("labelRadioButton");
 		Text paymentTypeText = new Text(localize("service.offer.application.payment_type" ,"Payment option"));
-		paymentTypeText.setStyleClass("labelText");
+		paymentTypeText.setStyleClass(STYLE_CLASS_LABEL_TEXT);
 		formElementPaymentType.add(paymentTypeText);
 		formElementPaymentType.add(cashLabel);
 		formElementPaymentType.add(cash);
@@ -270,11 +268,6 @@ public class ServiceOfferApplication extends ServiceOfferBlock {
 		Paragraph paragraph = new Paragraph();
 		paragraph.add(new Text(localize("service.offer.application.select_recipients", "Please select the recipients of the service offer.")));
 		layer.add(paragraph);
-		
-		
-		Layer clear = new Layer(Layer.DIV);
-		clear.setStyleClass("Clear");
-		layer.add(clear);
 		
 		Layer formElementRecipient = new Layer();
 		formElementRecipient.setStyleClass(STYLE_CLASS_FORM_ELEMENT);
@@ -324,11 +317,105 @@ public class ServiceOfferApplication extends ServiceOfferBlock {
 		paragraph.add(new Text(localize("service.offer.application.overview", "Please confirm the information below is correct.")));
 		layer.add(paragraph);
 		
-
-		Layer clear = new Layer(Layer.DIV);
-		clear.setStyleClass("Clear");
-		layer.add(clear);
-				
+		Layer formElementName = new Layer();
+		formElementName.setStyleClass(STYLE_CLASS_FORM_ELEMENT);
+		Text name = new Text(iwc.getParameter(PARAMETER_SERVICE_NAME));
+		name.setStyleClass(STYLE_CLASS_FORM_TEXT);
+		Text nameLabel = new Text(localize("service.offer.application.name_of_service_offer" ,"Name of service offer"));
+		nameLabel.setStyle(STYLE_CLASS_LABEL_TEXT);
+		formElementName.add(nameLabel);
+		formElementName.add(name);
+		layer.add(formElementName);
+		
+		Layer formElementPrice = new Layer();
+		formElementPrice.setStyleClass(STYLE_CLASS_FORM_ELEMENT);
+		Text price = new Text(iwc.getParameter(PARAMETER_SERVICE_PRICE));
+		price.setStyleClass(STYLE_CLASS_FORM_TEXT);
+		Text priceLabel = new Text(localize("service.offer.application.price_of_service_offer" ,"Price of service offer"));
+		priceLabel.setStyle(STYLE_CLASS_LABEL_TEXT);
+		formElementPrice.add(priceLabel);
+		formElementPrice.add(price);
+		layer.add(formElementPrice);
+		
+		Layer formElementChoice = new Layer();
+		formElementChoice.setStyleClass(STYLE_CLASS_FORM_ELEMENT);
+		String localKey = "Y".equals(iwc.getParameter(PARAMETER_SERVICE_CHOICE_OPTIONAL))?"No":"Yes";
+		Text choice = new Text(localize(localKey,localKey));
+		choice.setStyleClass(STYLE_CLASS_FORM_TEXT);
+		Text choiceText = new Text(localize("service.offer.application.choice_optional" ,"Must agree to service offer"));
+		choiceText.setStyleClass(STYLE_CLASS_LABEL_TEXT);
+		formElementChoice.add(choiceText);
+		formElementChoice.add(choice);
+		layer.add(formElementChoice);
+		
+		Layer formElementDate = new Layer();
+		formElementDate.setStyleClass(STYLE_CLASS_FORM_ELEMENT);
+		DateInput date = new DateInput(PARAMETER_SERVICE_DATE);
+		date.setContent(iwc.getParameter(PARAMETER_SERVICE_DATE));
+		date.setDisabled(true);
+		Text dateLabel = new Text(localize("service.offer.application.service_offer_date" ,"Date of service"));
+		dateLabel.setStyleClass(STYLE_CLASS_LABEL_TEXT);
+		formElementDate.add(dateLabel);
+		formElementDate.add(date);
+		layer.add(formElementDate);
+		
+		Layer formElementTime = new Layer();
+		formElementTime.setStyleClass(STYLE_CLASS_FORM_ELEMENT);
+		TimeInput time = new TimeInput(PARAMETER_SERVICE_TIME);
+		time.setContent(iwc.getParameter(PARAMETER_SERVICE_TIME));
+		time.setDisabled(true);
+		
+		Text timeLabel = new Text(localize("service.offer.application.service_offer_time" ,"Time of service offer"));
+		timeLabel.setStyleClass(STYLE_CLASS_LABEL_TEXT);
+		formElementTime.add(timeLabel);
+		formElementTime.add(time);
+		layer.add(formElementTime);
+		
+		
+		Layer formElementDeadline = new Layer();
+		formElementDeadline.setStyleClass(STYLE_CLASS_FORM_ELEMENT);
+		DateInput deadline = new DateInput(PARAMETER_SERVICE_DEADLINE);
+		deadline.setContent(iwc.getParameter(PARAMETER_SERVICE_DEADLINE));
+		deadline.setDisabled(true);
+		Text deadlineLabel = new Text(localize("service.offer.application.dealine_for_choice" ,"Choice deadline"));
+		deadlineLabel.setStyleClass(STYLE_CLASS_LABEL_TEXT);
+		formElementDeadline.add(deadlineLabel);
+		formElementDeadline.add(deadline);
+		layer.add(formElementDeadline);
+		
+		Layer formElementLocation = new Layer();
+		formElementLocation.setStyleClass(STYLE_CLASS_FORM_ELEMENT);
+		Text location = new Text(iwc.getParameter(PARAMETER_SERVICE_LOCATION));
+		location.setStyleClass(STYLE_CLASS_FORM_TEXT);
+		Text locationLabel = new Text(localize("service.offer.application.location" ,"Location"));
+		locationLabel.setStyleClass(STYLE_CLASS_LABEL_TEXT);
+		formElementLocation.add(locationLabel);
+		formElementLocation.add(location);
+		layer.add(formElementLocation);
+		
+		
+		Layer formElementPaymentType = new Layer();
+		formElementPaymentType.setStyleClass(STYLE_CLASS_FORM_ELEMENT);
+		String paymentTypeLocalizationKey = PAYMENT_TYPE_CASH.equals(iwc.getParameter(PARAMETER_SERVICE_PAYMENT_TYPE))?"service.offer.application.payment.type.cash" :"service.offer.application.payment.type.invoice";
+		Text paymentType = new Text(localize(paymentTypeLocalizationKey,paymentTypeLocalizationKey));
+		Text paymentTypeText = new Text(localize("service.offer.application.payment_type" ,"Payment option"));
+		paymentTypeText.setStyleClass(STYLE_CLASS_LABEL_TEXT);
+		formElementPaymentType.add(paymentTypeText);
+		formElementPaymentType.add(paymentType);
+		layer.add(formElementPaymentType);
+		
+		Layer formElementText = new Layer();
+		formElementText.setStyleClass(STYLE_CLASS_FORM_ELEMENT);
+		TextArea text = new TextArea(PARAMETER_SERVICE_TEXT, iwc.getParameter(PARAMETER_SERVICE_TEXT));
+		text.setDisabled(true);
+		
+		Label textLabel = new Label(localize("service.offer.application.description" ,"Description of service"), text);
+		formElementText.add(textLabel);
+		formElementText.add(text);
+		layer.add(formElementText);	
+		
+		layer.add(new CSSSpacer());
+		
 		Layer buttonLayer = new Layer(Layer.DIV);
 		buttonLayer.setStyleClass("buttonDiv");
 		layer.add(buttonLayer);
@@ -413,7 +500,6 @@ public class ServiceOfferApplication extends ServiceOfferBlock {
 			form.maintainParameter(PARAMETER_SERVICE_RECIPIENTS_SCHOOL_CLASS);
 			form.maintainParameter(PARAMETER_SERVICE_RECIPIENTS_SCHOOL_TYPE);
 		}
-		
 		
 		return form;
 	}
