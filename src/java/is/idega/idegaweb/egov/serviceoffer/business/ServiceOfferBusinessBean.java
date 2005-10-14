@@ -1,5 +1,5 @@
 /*
- * $Id: ServiceOfferBusinessBean.java,v 1.3 2005/10/06 18:06:40 eiki Exp $
+ * $Id: ServiceOfferBusinessBean.java,v 1.4 2005/10/14 21:54:53 eiki Exp $
  * Created on Aug 10, 2005
  *
  * Copyright (C) 2005 Idega Software hf. All Rights Reserved.
@@ -16,20 +16,19 @@ import is.idega.idegaweb.egov.serviceoffer.data.ServiceOfferChoiceHome;
 import is.idega.idegaweb.egov.serviceoffer.data.ServiceOfferHome;
 import is.idega.idegaweb.egov.serviceoffer.util.ServiceOfferConstants;
 import java.rmi.RemoteException;
-import java.sql.Date;
 import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.Map;
 import javax.ejb.CreateException;
 import javax.ejb.FinderException;
 import se.idega.idegaweb.commune.business.CommuneUserBusiness;
-import se.idega.idegaweb.commune.message.business.MessageBusiness;
-import se.idega.idegaweb.commune.message.data.Message;
+import se.idega.idegaweb.commune.message.business.CommuneMessageBusiness;
 import com.idega.block.process.business.CaseBusiness;
 import com.idega.block.process.business.CaseBusinessBean;
+import com.idega.block.process.message.data.Message;
 import com.idega.block.school.business.SchoolBusiness;
 import com.idega.block.school.data.School;
+import com.idega.block.school.data.SchoolClass;
 import com.idega.block.school.data.SchoolClassMember;
 import com.idega.block.school.data.SchoolSeason;
 import com.idega.business.IBOLookupException;
@@ -44,10 +43,10 @@ import com.idega.util.text.Name;
 /**
  * 
  * 
- *  Last modified: $Date: 2005/10/06 18:06:40 $ by $Author: eiki $
+ *  Last modified: $Date: 2005/10/14 21:54:53 $ by $Author: eiki $
  * 
  * @author <a href="mailto:eiki@idega.com">eiki</a>
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class ServiceOfferBusinessBean extends CaseBusinessBean implements CaseBusiness, ServiceOfferBusiness, ServiceOfferConstants{
 
@@ -69,9 +68,9 @@ public class ServiceOfferBusinessBean extends CaseBusinessBean implements CaseBu
 		}
 	}
 
-	protected MessageBusiness getMessageBusiness() {
+	protected CommuneMessageBusiness getCommuneMessageBusiness() {
 		try {
-			return (MessageBusiness) this.getServiceInstance(MessageBusiness.class);
+			return (CommuneMessageBusiness) this.getServiceInstance(CommuneMessageBusiness.class);
 		}
 		catch (RemoteException e) {
 			throw new IBORuntimeException(e.getMessage());
@@ -128,26 +127,25 @@ public class ServiceOfferBusinessBean extends CaseBusinessBean implements CaseBu
 	}
 	
 	
-	public ServiceOfferChoice createServiceOfferChoiceAndSendMessage(ServiceOffer offer, User user, School school, SchoolSeason season, String comments, Date[] months, Map monthValues, User performer) throws IDOCreateException {
+	public ServiceOfferChoice createServiceOfferChoiceAndSendMessage(ServiceOffer offer, User custodian, User user, User performer, boolean isOptional) throws IDOCreateException {
 		try {
 			ServiceOfferChoice choice = getServiceOfferChoiceHome().create();
-			
 			choice.setUser(user);
-			
-			choice.setOwner(performer);
-			//choice.setEmployee(user.equals(performer));
-			
+			choice.setOwner(custodian);
+			choice.setHandler(performer.getPrimaryGroup());
+			choice.setParentCase(offer);
 			choice.store();
-			
 			changeCaseStatus(choice, getCaseStatusOpenString(), performer);
-			
-			
-			
-			if (!user.equals(performer)) {
-				String subject = getLocalizedString("service_offer.message_subject", "You have a service offer waiting for your response");
-				String body = getLocalizedString("service_offer.message_body", "You have made a meal choice to {1} for {0}, {2}.");
-				
-				sendMessageToParents(choice, subject, body);
+
+			if(isOptional){
+				String subject = getLocalizedString("service_offer.message_subject_optional", "You have received a service offer that awaits your response");
+				String body = getLocalizedString("service_offer.message_body_optional", "The service offer: \"{2}\", has been made that needs your approval for {0}, {1}. Please click on case nr.{3} in your case list for more info.");
+				sendMessageToParents(choice, offer, subject, body);
+			}
+			else{
+				String subject = getLocalizedString("service_offer.message_subject_mandatory", "You have received a mandatory service offer");
+				String body = getLocalizedString("service_offer.message_body_mandatory", "The service offer: \"{2}\", has been made for {0}, {1}. Please click on case nr.{3} in your case list for more info.");
+				sendMessageToParents(choice, offer,subject, body);
 			}
 
 			return choice;
@@ -157,14 +155,17 @@ public class ServiceOfferBusinessBean extends CaseBusinessBean implements CaseBu
 		}
 	}
 
-	public void sendMessageToParents(ServiceOfferChoice application, String subject, String body) {
+	public void sendMessageToParents(ServiceOfferChoice application, ServiceOffer offer, String subject, String body) {
 		try {
 			User user = application.getUser();
-			Object[] arguments = { new Name(user.getFirstName(), user.getMiddleName(), user.getLastName()).getName(getIWApplicationContext().getApplicationSettings().getDefaultLocale(), true), PersonalIDFormatter.format(user.getPersonalID(), getIWApplicationContext().getApplicationSettings().getDefaultLocale()) };
+			Object[] arguments = { new Name(user.getFirstName(), user.getMiddleName(), user.getLastName()).getName(getIWApplicationContext().getApplicationSettings().getDefaultLocale(), true),
+					PersonalIDFormatter.format(user.getPersonalID(), getIWApplicationContext().getApplicationSettings().getDefaultLocale()),
+					offer.getServiceName(),
+					application.getPrimaryKey()};
 
 			User appParent = application.getOwner();
 			if (getCommuneUserBusiness().getMemberFamilyLogic().isChildInCustodyOf(user, appParent)) {
-				Message message = getMessageBusiness().createUserMessage(application, appParent, subject, MessageFormat.format(body, arguments), true);
+				Message message = getCommuneMessageBusiness().createUserMessage(application, appParent, subject, MessageFormat.format(body, arguments), true);
 				message.setParentCase(application);
 				message.store();
 			}
@@ -175,7 +176,7 @@ public class ServiceOfferBusinessBean extends CaseBusinessBean implements CaseBu
 					while (iter.hasNext()) {
 						User parent = (User) iter.next();
 						if (!parent.equals(appParent)) {
-							getMessageBusiness().createUserMessage(application, parent, subject, MessageFormat.format(body, arguments), true);
+							getCommuneMessageBusiness().createUserMessage(application, parent, subject, MessageFormat.format(body, arguments), true);
 						}
 					}
 				}
@@ -193,7 +194,7 @@ public class ServiceOfferBusinessBean extends CaseBusinessBean implements CaseBu
 		return getCommuneUserBusiness().getFirstManagingSchoolForUser(user);
 	}
 
-	public void storeServiceOffer(String name, String paymentType, String choiceOptional, String deadline, String date, String time, String price, String location, String text, String schoolType, String school, String schoolClass, User user) {
+	public void storeServiceOffer(String name, String paymentType, String choiceOptional, String deadline, String date, String time, String price, String location, String text, String[] schoolType, String[] school, String[] schoolClass, User performer) {
 		try {
 			ServiceOffer offer = getServiceOfferHome().create();
 			
@@ -203,34 +204,54 @@ public class ServiceOfferBusinessBean extends CaseBusinessBean implements CaseBu
 			}else{
 				offer.setServiceChoiceAsOptional();
 			}
+			
 			offer.setServicePaymentType(paymentType);
-			if(deadline!=null){
+			if(deadline!=null && !"".equals(deadline)){
 				offer.setServiceDeadline((new IWTimestamp(deadline)).getTimestamp());
 			}
-			//TODO use time
-			if(date!=null){
-				offer.setServiceDate((new IWTimestamp(date)).getTimestamp());
-			}
 			
+			if(date!=null && !"".equals(date)){			
+				if(time!=null && !"".equals(time)){
+					date+= " "+time;
+				}
+				IWTimestamp stamp = new IWTimestamp(date);
+				offer.setServiceDate(stamp.getTimestamp());
+			}
+						
 			offer.setServicePrice(Double.valueOf(price).doubleValue());
 			offer.setServiceText(text);
-			offer.setOwner(user);
+			offer.setOwner(performer);
 		
 			offer.store();
 			
-//			ServiceOfferChoice choice = getServiceOfferChoiceHome().create();
-//			
-//			choice.setUser(user);
-//			
-//			choice.setOwner(performer);
-//			//choice.setEmployee(user.equals(performer));
-//			
-//			choice.store();
 			
-			changeCaseStatus(offer, getCaseStatusOpenString(), user);
+			changeCaseStatus(offer, getCaseStatusOpenString(), performer);
 			
-			
-			
+						
+			if(schoolClass!=null && schoolClass.length>0){
+				try {
+					for (int i = 0; i < schoolClass.length; i++) {
+						String zeClass = schoolClass[i];
+						
+						SchoolClass theClass = getSchoolBusiness().getSchoolClassHome().findByPrimaryKey(zeClass);
+						Collection pupils = getSchoolBusiness().getSchoolClassMemberHome().findAllBySchoolClass(theClass);
+						for (Iterator iter = pupils.iterator(); iter.hasNext();) {
+							SchoolClassMember member = (SchoolClassMember) iter.next();
+							User student = member.getStudent();
+							
+							User custodian = getCommuneUserBusiness().getCustodianForChild(student);
+							createServiceOfferChoiceAndSendMessage(offer, custodian, student, performer, offer.isServiceChoiceOptional());
+						}
+					}
+				}
+				catch (RemoteException e) {
+					e.printStackTrace();
+				}
+				catch (FinderException e) {
+					e.printStackTrace();
+				}
+
+			}
 //			if (!user.equals(performer)) {
 //				String subject = getLocalizedString("service_offer.message_subject", "You have a service offer waiting for your response");
 //				String body = getLocalizedString("service_offer.message_body", "You have made a meal choice to {1} for {0}, {2}.");
@@ -246,7 +267,14 @@ public class ServiceOfferBusinessBean extends CaseBusinessBean implements CaseBu
 		}
 		
 	}
+	
+	public ServiceOffer getServiceOffer(int caseID) throws FinderException {
+		return getServiceOfferHome().findByPrimaryKey(new Integer(caseID));
+	}
 
+	public ServiceOfferChoice getServiceOfferChoice(int caseID) throws FinderException {
+		return getServiceOfferChoiceHome().findByPrimaryKey(new Integer(caseID));
+	}
 
 	/**
 	 * Can be overrided in subclasses

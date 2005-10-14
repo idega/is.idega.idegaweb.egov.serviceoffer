@@ -1,6 +1,6 @@
 /*
- * $Id: ServiceOfferBusiness.java,v 1.2 2005/10/03 16:49:09 eiki Exp $
- * Created on Oct 2, 2005
+ * $Id: ServiceOfferBusiness.java,v 1.3 2005/10/14 21:54:53 eiki Exp $
+ * Created on Oct 12, 2005
  *
  * Copyright (C) 2005 Idega Software hf. All Rights Reserved.
  *
@@ -11,8 +11,8 @@ package is.idega.idegaweb.egov.serviceoffer.business;
 
 import is.idega.idegaweb.egov.serviceoffer.data.ServiceOffer;
 import is.idega.idegaweb.egov.serviceoffer.data.ServiceOfferChoice;
-import java.sql.Date;
-import java.util.Map;
+import is.idega.idegaweb.egov.serviceoffer.util.ServiceOfferConstants;
+import java.rmi.RemoteException;
 import javax.ejb.FinderException;
 import se.idega.idegaweb.commune.business.CommuneUserBusiness;
 import com.idega.block.process.business.CaseBusiness;
@@ -27,12 +27,12 @@ import com.idega.user.data.User;
 
 /**
  * 
- *  Last modified: $Date: 2005/10/03 16:49:09 $ by $Author: eiki $
+ *  Last modified: $Date: 2005/10/14 21:54:53 $ by $Author: eiki $
  * 
  * @author <a href="mailto:eiki@idega.com">eiki</a>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
-public interface ServiceOfferBusiness extends IBOService, CaseBusiness {
+public interface ServiceOfferBusiness extends IBOService, CaseBusiness, ServiceOfferConstants {
 
 	/**
 	 * @see is.idega.idegaweb.egov.serviceoffer.business.ServiceOfferBusinessBean#getSchoolBusiness
@@ -62,32 +62,34 @@ public interface ServiceOfferBusiness extends IBOService, CaseBusiness {
 	/**
 	 * @see is.idega.idegaweb.egov.serviceoffer.business.ServiceOfferBusinessBean#createServiceOfferChoiceAndSendMessage
 	 */
-	public ServiceOfferChoice createServiceOfferChoiceAndSendMessage(ServiceOffer offer, User user, School school,
-			SchoolSeason season, String comments, Date[] months, Map monthValues, User performer)
-			throws IDOCreateException, java.rmi.RemoteException;
+	public ServiceOfferChoice createServiceOfferChoiceAndSendMessage(ServiceOffer offer, User custodian, User user,
+			User performer, boolean isOptional) throws IDOCreateException, java.rmi.RemoteException;
 
 	/**
 	 * @see is.idega.idegaweb.egov.serviceoffer.business.ServiceOfferBusinessBean#sendMessageToParents
 	 */
-	public void sendMessageToParents(ServiceOfferChoice application, String subject, String body)
+	public void sendMessageToParents(ServiceOfferChoice application, ServiceOffer offer, String subject, String body)
 			throws java.rmi.RemoteException;
 
 	/**
-	 * Stores the service offer and creates the cases/processes and messages to send to the citizens.
-	 * @param name
-	 * @param paymentType
-	 * @param choiceOptional
-	 * @param deadline
-	 * @param date
-	 * @param time
-	 * @param price
-	 * @param location
-	 * @param text
-	 * @param schoolType
-	 * @param school
-	 * @param schoolClass
-	 * @param user
+	 * @see is.idega.idegaweb.egov.serviceoffer.business.ServiceOfferBusinessBean#getManagingSchoolForUser
 	 */
-	public void storeServiceOffer(String name, String paymentType, String choiceOptional, String deadline, String date, String time, String price, String location, String text, String schoolType, String school, String schoolClass, User user);
+	public School getManagingSchoolForUser(User user) throws RemoteException, FinderException;
 
+	/**
+	 * @see is.idega.idegaweb.egov.serviceoffer.business.ServiceOfferBusinessBean#storeServiceOffer
+	 */
+	public void storeServiceOffer(String name, String paymentType, String choiceOptional, String deadline, String date,
+			String time, String price, String location, String text, String[] schoolType, String[] school,
+			String[] schoolClass, User performer) throws java.rmi.RemoteException;
+
+	/**
+	 * @see is.idega.idegaweb.egov.serviceoffer.business.ServiceOfferBusinessBean#getServiceOffer
+	 */
+	public ServiceOffer getServiceOffer(int caseID) throws FinderException, java.rmi.RemoteException;
+
+	/**
+	 * @see is.idega.idegaweb.egov.serviceoffer.business.ServiceOfferBusinessBean#getServiceOfferChoice
+	 */
+	public ServiceOfferChoice getServiceOfferChoice(int caseID) throws FinderException, java.rmi.RemoteException;
 }

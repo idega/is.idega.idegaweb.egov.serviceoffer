@@ -1,5 +1,5 @@
 /*
- * $Id: ServiceOfferApplication.java,v 1.5 2005/10/06 18:06:40 eiki Exp $
+ * $Id: ServiceOfferApplication.java,v 1.6 2005/10/14 21:54:53 eiki Exp $
  * Created on Oct 2, 2005
  *
  * Copyright (C) 2005 Idega Software hf. All Rights Reserved.
@@ -11,9 +11,9 @@ package is.idega.idegaweb.egov.serviceoffer.presentation;
 
 import java.rmi.RemoteException;
 import javax.ejb.FinderException;
+import se.idega.idegaweb.commune.school.presentation.inputhandler.SchoolGroupHandler;
 import com.idega.block.school.data.School;
 import com.idega.block.school.data.SchoolSeason;
-import com.idega.block.school.presentation.SchoolGroupSelector;
 import com.idega.business.IBORuntimeException;
 import com.idega.core.builder.data.ICPage;
 import com.idega.presentation.CSSSpacer;
@@ -32,15 +32,16 @@ import com.idega.presentation.ui.TextArea;
 import com.idega.presentation.ui.TextInput;
 import com.idega.presentation.ui.TimeInput;
 import com.idega.user.data.User;
+import com.idega.util.IWTimestamp;
 
 /**
  * An application for sending a service offer(description), that may have a price, to a citizen or a group of citizens
  * that then have to approve it.
  * 
- *  Last modified: $Date: 2005/10/06 18:06:40 $ by $Author: eiki $
+ *  Last modified: $Date: 2005/10/14 21:54:53 $ by $Author: eiki $
  * 
  * @author <a href="mailto:eiki@idega.com">eiki</a>
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public class ServiceOfferApplication extends ServiceOfferBlock {
 	
@@ -48,7 +49,7 @@ public class ServiceOfferApplication extends ServiceOfferBlock {
 	public static final String STYLE_CLASS_FORM_TEXT = "formText";
 	private static final String STYLE_CLASS_FORM_ELEMENT = "formElement";
 
-	private static final String PARAMETER_ACTION = "prm_action";
+	private static final String PARAMETER_ACTION = "prm_servoff_action";
 	
 	public static final String PARAMETER_SERVICE_PAYMENT_TYPE = "SERVICE_PAYMENT_TYPE";
 	public static final String PARAMETER_SERVICE_CHOICE_OPTIONAL = "SERVICE_CHOICE_OPTIONAL";
@@ -151,8 +152,8 @@ public class ServiceOfferApplication extends ServiceOfferBlock {
 		
 		Layer formElementChoice = new Layer();
 		formElementChoice.setStyleClass(STYLE_CLASS_FORM_ELEMENT);
-		RadioButton choiceYes = new RadioButton(PARAMETER_SERVICE_CHOICE_OPTIONAL, "N");//is not optional
-		RadioButton choiceNo = new RadioButton(PARAMETER_SERVICE_CHOICE_OPTIONAL, "Y");//is optional
+		RadioButton choiceYes = new RadioButton(PARAMETER_SERVICE_CHOICE_OPTIONAL, "Y");//is optional
+		RadioButton choiceNo = new RadioButton(PARAMETER_SERVICE_CHOICE_OPTIONAL, "N");//is not optional
 		choiceYes.setSelected(true);
 		choiceYes.keepStatusOnAction();
 		choiceNo.keepStatusOnAction();
@@ -160,7 +161,7 @@ public class ServiceOfferApplication extends ServiceOfferBlock {
 		choiceYesLabel.setStyleClass("labelRadioButton");
 		Label choiceNoLabel = new Label(localize("No" ,"No"), choiceNo);
 		choiceNoLabel.setStyleClass("labelRadioButton");
-		Text choiceText = new Text(localize("service.offer.application.choice_optional" ,"Must agree to service offer"));
+		Text choiceText = new Text(localize("service.offer.application.choice_optional" ,"Optional service"));
 		choiceText.setStyleClass(STYLE_CLASS_LABEL_TEXT);
 		formElementChoice.add(choiceText);
 		formElementChoice.add(choiceYesLabel);
@@ -169,10 +170,13 @@ public class ServiceOfferApplication extends ServiceOfferBlock {
 		formElementChoice.add(choiceNo);
 		layer.add(formElementChoice);
 		
+		int thisYear = (new IWTimestamp()).getYear();
+		
 		Layer formElementDate = new Layer();
 		formElementDate.setStyleClass(STYLE_CLASS_FORM_ELEMENT);
 		//DatePicker date = new DatePicker(PARAMETER_SERVICE_DATE);
 		DateInput date = new DateInput(PARAMETER_SERVICE_DATE);
+		date.setYearRange(thisYear, thisYear+1);
 		date.keepStatusOnAction();
 		Label dateLabel = new Label(localize("service.offer.application.service_offer_date" ,"Date of service"),date);
 		formElementDate.add(dateLabel);
@@ -188,7 +192,6 @@ public class ServiceOfferApplication extends ServiceOfferBlock {
 		formElementTime.add(time);
 		layer.add(formElementTime);
 		
-		
 		Layer formElementDeadline = new Layer();
 		formElementDeadline.setStyleClass(STYLE_CLASS_FORM_ELEMENT);
 		//date picker is missing keepstatus method
@@ -196,7 +199,8 @@ public class ServiceOfferApplication extends ServiceOfferBlock {
 //		Text deadlineLabel = new Text(localize("service.offer.application.dealine_for_choice" ,"Choice deadline"));
 		DateInput deadline = new DateInput(PARAMETER_SERVICE_DEADLINE);
 		deadline.keepStatusOnAction();
-		Label deadlineLabel = new Label(localize("service.offer.application.dealine_for_choice" ,"Choice deadline"),deadline);
+		deadline.setYearRange(thisYear, thisYear+1);
+		Label deadlineLabel = new Label(localize("service.offer.application.deadline_for_choice" ,"Choice deadline"),deadline);
 		deadlineLabel.setStyleClass(STYLE_CLASS_LABEL_TEXT);
 		formElementDeadline.add(deadlineLabel);
 		formElementDeadline.add(deadline);
@@ -272,18 +276,23 @@ public class ServiceOfferApplication extends ServiceOfferBlock {
 		Layer formElementRecipient = new Layer();
 		formElementRecipient.setStyleClass(STYLE_CLASS_FORM_ELEMENT);
 		//TODO create a proper chooser
-		SchoolGroupSelector recipients = new SchoolGroupSelector(PARAMETER_SERVICE_RECIPIENTS_SCHOOL_TYPE,PARAMETER_SERVICE_RECIPIENTS_SCHOOL,PARAMETER_SERVICE_RECIPIENTS_SCHOOL_CLASS);
-		recipients.keepStatusOnAction();
+//		SchoolGroupSelector recipients = new SchoolGroupSelector(PARAMETER_SERVICE_RECIPIENTS_SCHOOL_TYPE,PARAMETER_SERVICE_RECIPIENTS_SCHOOL,PARAMETER_SERVICE_RECIPIENTS_SCHOOL_CLASS);
+//		recipients.keepStatusOnAction();
+//		
+//		recipients.setSchoolCategory(getBusiness().getSchoolBusiness().getCategoryElementarySchool());
+//		School usersSchool = null;
+//		try {
+//			usersSchool = getBusiness().getCommuneUserBusiness().getFirstManagingSchoolForUser(getUser(iwc));
+//			recipients.setSelectedSchool(usersSchool.getPrimaryKey());
+//		}
+//		catch (FinderException e) {
+//			e.printStackTrace();
+//		}
+		SchoolGroupHandler recipients = new SchoolGroupHandler();
 		
-		recipients.setSchoolCategory(getBusiness().getSchoolBusiness().getCategoryElementarySchool());
-		School usersSchool = null;
-		try {
-			usersSchool = getBusiness().getCommuneUserBusiness().getFirstManagingSchoolForUser(getUser(iwc));
-			recipients.setSelectedSchool(usersSchool.getPrimaryKey());
-		}
-		catch (FinderException e) {
-			e.printStackTrace();
-		}
+		recipients.setName(PARAMETER_SERVICE_RECIPIENTS_SCHOOL_CLASS);
+		recipients.setStyleClass("selectionBox");
+		recipients.keepStatusOnAction();
 		
 //		Label recipientsLabel = new Label(localize("service.offer.application.recipients" ,"Recipients"), recipients);
 //		formElementRecipient.add(recipientsLabel);
@@ -339,10 +348,10 @@ public class ServiceOfferApplication extends ServiceOfferBlock {
 		
 		Layer formElementChoice = new Layer();
 		formElementChoice.setStyleClass(STYLE_CLASS_FORM_ELEMENT);
-		String localKey = "Y".equals(iwc.getParameter(PARAMETER_SERVICE_CHOICE_OPTIONAL))?"No":"Yes";
+		String localKey = "Y".equals(iwc.getParameter(PARAMETER_SERVICE_CHOICE_OPTIONAL))?"Yes":"No";
 		Text choice = new Text(localize(localKey,localKey));
 		choice.setStyleClass(STYLE_CLASS_FORM_TEXT);
-		Text choiceText = new Text(localize("service.offer.application.choice_optional" ,"Must agree to service offer"));
+		Text choiceText = new Text(localize("service.offer.application.choice_optional" ,"Optional service"));
 		choiceText.setStyleClass(STYLE_CLASS_LABEL_TEXT);
 		formElementChoice.add(choiceText);
 		formElementChoice.add(choice);
@@ -371,7 +380,6 @@ public class ServiceOfferApplication extends ServiceOfferBlock {
 		formElementTime.add(time);
 		layer.add(formElementTime);
 		
-		
 		Layer formElementDeadline = new Layer();
 		formElementDeadline.setStyleClass(STYLE_CLASS_FORM_ELEMENT);
 		DateInput deadline = new DateInput(PARAMETER_SERVICE_DEADLINE);
@@ -393,7 +401,6 @@ public class ServiceOfferApplication extends ServiceOfferBlock {
 		formElementLocation.add(location);
 		layer.add(formElementLocation);
 		
-		
 		Layer formElementPaymentType = new Layer();
 		formElementPaymentType.setStyleClass(STYLE_CLASS_FORM_ELEMENT);
 		String paymentTypeLocalizationKey = PAYMENT_TYPE_CASH.equals(iwc.getParameter(PARAMETER_SERVICE_PAYMENT_TYPE))?"service.offer.application.payment.type.cash" :"service.offer.application.payment.type.invoice";
@@ -413,6 +420,23 @@ public class ServiceOfferApplication extends ServiceOfferBlock {
 		formElementText.add(textLabel);
 		formElementText.add(text);
 		layer.add(formElementText);	
+		
+		Layer formElementRecipient = new Layer();
+		formElementRecipient.setStyleClass(STYLE_CLASS_FORM_ELEMENT);
+		
+		Text recipientsText = new Text(localize("service.offer.application.recipients" ,"Recipients"));
+		recipientsText.setStyleClass(STYLE_CLASS_LABEL_TEXT);
+		
+		SchoolGroupHandler recipients = new SchoolGroupHandler();
+		recipients.setName(PARAMETER_SERVICE_RECIPIENTS_SCHOOL_CLASS);
+		recipients.setStyleClass("selectionBox");
+		recipients.setDisabled(true);	
+		recipients.setToShowOnlySelected(true);
+		recipients.keepStatusOnAction();
+		
+		formElementRecipient.add(recipientsText);
+		formElementRecipient.add(recipients);
+		layer.add(formElementRecipient);
 		
 		layer.add(new CSSSpacer());
 		
@@ -442,9 +466,9 @@ public class ServiceOfferApplication extends ServiceOfferBlock {
 					iwc.getParameter(PARAMETER_SERVICE_PRICE),
 					iwc.getParameter(PARAMETER_SERVICE_LOCATION),
 					iwc.getParameter(PARAMETER_SERVICE_TEXT),
-					iwc.getParameter(PARAMETER_SERVICE_RECIPIENTS_SCHOOL_TYPE),
-					iwc.getParameter(PARAMETER_SERVICE_RECIPIENTS_SCHOOL),
-					iwc.getParameter(PARAMETER_SERVICE_RECIPIENTS_SCHOOL_CLASS),
+					iwc.getParameterValues(PARAMETER_SERVICE_RECIPIENTS_SCHOOL_TYPE),
+					iwc.getParameterValues(PARAMETER_SERVICE_RECIPIENTS_SCHOOL),
+					iwc.getParameterValues(PARAMETER_SERVICE_RECIPIENTS_SCHOOL_CLASS),
 					getUser(iwc));
 			
 			
@@ -474,6 +498,7 @@ public class ServiceOfferApplication extends ServiceOfferBlock {
 				
 				GenericButton home = new GenericButton(localize("my_page", "My page"));
 				home.setPageToOpen(homePage);
+				buttonLayer.add(home);
 			}
 	
 	}
@@ -495,7 +520,8 @@ public class ServiceOfferApplication extends ServiceOfferBlock {
 			form.maintainParameter(PARAMETER_SERVICE_TEXT);
 			form.maintainParameter(PARAMETER_SERVICE_TIME);
 		}
-		else if(actionPhase!=ACTION_PHASE_TWO){
+		
+		if(actionPhase!=ACTION_PHASE_TWO){
 			form.maintainParameter(PARAMETER_SERVICE_RECIPIENTS_SCHOOL);
 			form.maintainParameter(PARAMETER_SERVICE_RECIPIENTS_SCHOOL_CLASS);
 			form.maintainParameter(PARAMETER_SERVICE_RECIPIENTS_SCHOOL_TYPE);

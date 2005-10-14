@@ -91,10 +91,15 @@ form#serviceOfferForm div#sectionDiv {
 	font-weight: bold;
 }
 
-#serviceOfferForm formText {
+.formText {
 	font-size: 10px;
 }
 
+.serviceDescription{
+	font-size: 10px;
+	clear: both;
+	float:left;
+}
 
 #serviceOfferForm div.formElement label.labelRadioButton{
 	width: 40px;
@@ -113,6 +118,14 @@ form#serviceOfferForm div.formElement input.radio {
 }
 
 form#serviceOfferForm div.formElement textarea {
+	clear: both;
+	float:left;
+	width: 100%;
+	height: 120px;
+	margin-top: 3px;
+}
+
+form#serviceOfferForm div.formElement select.selectionBox {
 	clear: both;
 	float:left;
 	width: 100%;

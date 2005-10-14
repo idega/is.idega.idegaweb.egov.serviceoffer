@@ -23,9 +23,28 @@
             </value>
             <type>map</type>
           </key>
-         </map>
+          <key>
+            <name>is.idega.idegaweb.egov.serviceoffer.presentation.ServiceOfferChoiceBlock</name>
+            <value>
+              <map>
+                <key>
+                  <name>component_property_file</name>
+                  <type>java.lang.String</type>
+                  <value>is.idega.idegaweb.egov.serviceoffer.presentation.ServiceOfferChoiceBlock.pxml</value>
+                </key>
+              </map>
+            </value>
+            <type>map</type>
+          </key>
+        </map>
       </value>
       <type>map</type>
     </key>
+    <key>
+      <name>layout.use_style_names</name>
+      <type>java.lang.String</type>
+      <value>false</value>
+    </key>
   </map>
 </pxml>
+
