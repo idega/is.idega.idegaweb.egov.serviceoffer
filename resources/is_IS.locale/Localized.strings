@@ -1,4 +1,6 @@
-No=Nei Yes=J\u00E1 accept=Sam\u00FEykkja
+No=Nei
+Yes=J\u00E1
+accept=Sam\u00FEykkja
 case_code_key.SERVOFF=Sko\u00F0a/sam\u00FEykkja fer\u00F0/s\u00F6lu
 case_code_key.SERVOFP=Service offer
 decline=Hafna
