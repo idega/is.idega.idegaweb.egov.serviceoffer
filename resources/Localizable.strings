@@ -19,6 +19,7 @@ service.offer.application.deadline_for_choice=Choice deadline
 service.offer.application.dealine_for_choice=Choice deadline
 service.offer.application.description=Description of service
 service.offer.application.location=Location
+service.offer.application.must_select_recipients=At least one recipient must be chosen
 service.offer.application.name_of_service_offer=Name of service offer
 service.offer.application.overview=Please confirm the information below is correct.
 service.offer.application.payment.type.cash=Cash

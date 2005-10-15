@@ -1,5 +1,5 @@
 /*
- * $Id: ServiceOfferApplication.java,v 1.6 2005/10/14 21:54:53 eiki Exp $
+ * $Id: ServiceOfferApplication.java,v 1.7 2005/10/15 18:22:42 eiki Exp $
  * Created on Oct 2, 2005
  *
  * Copyright (C) 2005 Idega Software hf. All Rights Reserved.
@@ -9,6 +9,7 @@
  */
 package is.idega.idegaweb.egov.serviceoffer.presentation;
 
+import is.idega.idegaweb.egov.serviceoffer.util.ServiceOfferConstants;
 import java.rmi.RemoteException;
 import javax.ejb.FinderException;
 import se.idega.idegaweb.commune.school.presentation.inputhandler.SchoolGroupHandler;
@@ -38,17 +39,13 @@ import com.idega.util.IWTimestamp;
  * An application for sending a service offer(description), that may have a price, to a citizen or a group of citizens
  * that then have to approve it.
  * 
- *  Last modified: $Date: 2005/10/14 21:54:53 $ by $Author: eiki $
+ *  Last modified: $Date: 2005/10/15 18:22:42 $ by $Author: eiki $
  * 
  * @author <a href="mailto:eiki@idega.com">eiki</a>
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
-public class ServiceOfferApplication extends ServiceOfferBlock {
+public class ServiceOfferApplication extends ServiceOfferBlock implements ServiceOfferConstants{
 	
-	public static final String STYLE_CLASS_LABEL_TEXT = "labelText";
-	public static final String STYLE_CLASS_FORM_TEXT = "formText";
-	private static final String STYLE_CLASS_FORM_ELEMENT = "formElement";
-
 	private static final String PARAMETER_ACTION = "prm_servoff_action";
 	
 	public static final String PARAMETER_SERVICE_PAYMENT_TYPE = "SERVICE_PAYMENT_TYPE";
@@ -103,9 +100,14 @@ public class ServiceOfferApplication extends ServiceOfferBlock {
 					break;
 
 				case ACTION_SAVE:
-					save(iwc);
+					if(iwc.isParameterSet(PARAMETER_SERVICE_RECIPIENTS_SCHOOL_CLASS)){
+						save(iwc);
+					}
+					else{
+						showOverview(iwc);
+					}
 					break;
-}
+			}
 		}
 		catch (RemoteException re) {
 			throw new IBORuntimeException(re);
@@ -289,6 +291,8 @@ public class ServiceOfferApplication extends ServiceOfferBlock {
 //			e.printStackTrace();
 //		}
 		SchoolGroupHandler recipients = new SchoolGroupHandler();
+		//Doesn't work
+		//recipients.setAsNotEmpty(localize("service.offer.application.must_select_recipients","At least one recipient must be chosen"));
 		
 		recipients.setName(PARAMETER_SERVICE_RECIPIENTS_SCHOOL_CLASS);
 		recipients.setStyleClass("selectionBox");
@@ -405,22 +409,23 @@ public class ServiceOfferApplication extends ServiceOfferBlock {
 		formElementPaymentType.setStyleClass(STYLE_CLASS_FORM_ELEMENT);
 		String paymentTypeLocalizationKey = PAYMENT_TYPE_CASH.equals(iwc.getParameter(PARAMETER_SERVICE_PAYMENT_TYPE))?"service.offer.application.payment.type.cash" :"service.offer.application.payment.type.invoice";
 		Text paymentType = new Text(localize(paymentTypeLocalizationKey,paymentTypeLocalizationKey));
+		paymentType.setStyleClass(STYLE_CLASS_FORM_TEXT);
 		Text paymentTypeText = new Text(localize("service.offer.application.payment_type" ,"Payment option"));
 		paymentTypeText.setStyleClass(STYLE_CLASS_LABEL_TEXT);
 		formElementPaymentType.add(paymentTypeText);
 		formElementPaymentType.add(paymentType);
 		layer.add(formElementPaymentType);
-		
+
 		Layer formElementText = new Layer();
 		formElementText.setStyleClass(STYLE_CLASS_FORM_ELEMENT);
-		TextArea text = new TextArea(PARAMETER_SERVICE_TEXT, iwc.getParameter(PARAMETER_SERVICE_TEXT));
-		text.setDisabled(true);
-		
-		Label textLabel = new Label(localize("service.offer.application.description" ,"Description of service"), text);
+		Text text = new Text( iwc.getParameter(PARAMETER_SERVICE_TEXT));
+		text.setStyleClass(STYLE_CLASS_SERVICE_DESCRIPTION);
+		Text textLabel = new Text(localize("service.offer.application.description" ,"Description of service"));
+		textLabel.setStyleClass(STYLE_CLASS_LABEL_TEXT);
 		formElementText.add(textLabel);
 		formElementText.add(text);
-		layer.add(formElementText);	
-		
+		layer.add(formElementText);		
+				
 		Layer formElementRecipient = new Layer();
 		formElementRecipient.setStyleClass(STYLE_CLASS_FORM_ELEMENT);
 		

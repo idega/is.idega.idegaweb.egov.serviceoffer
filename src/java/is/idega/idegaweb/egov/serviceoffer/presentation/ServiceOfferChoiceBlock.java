@@ -1,5 +1,5 @@
 /*
- * $Id: ServiceOfferChoiceBlock.java,v 1.1 2005/10/14 21:54:53 eiki Exp $
+ * $Id: ServiceOfferChoiceBlock.java,v 1.2 2005/10/15 18:22:42 eiki Exp $
  * Created on Oct 2, 2005
  *
  * Copyright (C) 2005 Idega Software hf. All Rights Reserved.
@@ -11,6 +11,7 @@ package is.idega.idegaweb.egov.serviceoffer.presentation;
 
 import is.idega.idegaweb.egov.serviceoffer.data.ServiceOffer;
 import is.idega.idegaweb.egov.serviceoffer.data.ServiceOfferChoice;
+import is.idega.idegaweb.egov.serviceoffer.util.ServiceOfferConstants;
 import java.rmi.RemoteException;
 import java.sql.Timestamp;
 import javax.ejb.FinderException;
@@ -31,23 +32,17 @@ import com.idega.util.IWTimestamp;
 /**
  * A block for viewing/accepting/declining a service offer choice
  * 
- *  Last modified: $Date: 2005/10/14 21:54:53 $ by $Author: eiki $
+ *  Last modified: $Date: 2005/10/15 18:22:42 $ by $Author: eiki $
  * 
  * @author <a href="mailto:eiki@idega.com">eiki</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
-public class ServiceOfferChoiceBlock extends ServiceOfferBlock {
-	
-	public static final String STYLE_CLASS_SERVICE_DESCRIPTION = "serviceDescription";
-	public static final String STYLE_CLASS_LABEL_TEXT = "labelText";
-	public static final String STYLE_CLASS_FORM_TEXT = "formText";
-	private static final String STYLE_CLASS_FORM_ELEMENT = "formElement";
+public class ServiceOfferChoiceBlock extends ServiceOfferBlock implements ServiceOfferConstants{
 	
 	private static final String PARAMETER_ACTION = "prm_servofc_action";
 	
 	public static final String PARAMETER_SERVICE_OFFER_CHOICE_ACCEPT = "SERVICE_CHOICE_ACCEPT";
 	public static final String PARAMETER_SERVICE_OFFER_CHOICE_DECLINE = "SERVICE_CHOICE_DECLINE";
-	
 	public static final String PARAMETER_SERVICE_OFFER_CHOICE_COMMENT = "SERVICE_COMMENT";
 	
 	private static final int ACTION_PHASE_ONE = 1;
