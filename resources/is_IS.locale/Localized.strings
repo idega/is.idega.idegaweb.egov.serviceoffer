@@ -8,7 +8,8 @@ iw.component.is.idega.idegaweb.egov.serviceoffer.presentation.ServiceOfferApplic
 my_page=Fara \u00E1 m\u00EDna s\u00ED\u00F0u
 next=\u00C1fram
 previous=Tilbaka
-save=Vista service.offer.application.cannot_be_empty=\u00DEa\u00F0 ver\u00F0ur a\u00F0 gefa fer\u00F0inni/efniss\u00F6lunni nafn 
+save=Vista
+service.offer.application.cannot_be_empty=\u00DEa\u00F0 ver\u00F0ur a\u00F0 gefa fer\u00F0inni/efniss\u00F6lunni nafn 
 service.offer.application.choice_optional=Forr\u00E1\u00F0ama\u00F0ur \u00FEarf a\u00F0 sam\u00FEykkja fer\u00F0ina/efniss\u00F6luna
 service.offer.application.create_a_service_offer=B\u00FAa til fer\u00F0/efniss\u00F6lu skref 1 af 3
 service.offer.application.create_a_service_offer2=B\u00FAa til fer\u00F0/efniss\u00F6lu skref 2 af 3
