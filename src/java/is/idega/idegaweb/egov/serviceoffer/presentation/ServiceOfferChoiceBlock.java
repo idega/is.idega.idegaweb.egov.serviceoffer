@@ -1,5 +1,5 @@
 /*
- * $Id: ServiceOfferChoiceBlock.java,v 1.2 2005/10/15 18:22:42 eiki Exp $
+ * $Id: ServiceOfferChoiceBlock.java,v 1.3 2005/10/16 16:19:50 eiki Exp $
  * Created on Oct 2, 2005
  *
  * Copyright (C) 2005 Idega Software hf. All Rights Reserved.
@@ -32,15 +32,16 @@ import com.idega.util.IWTimestamp;
 /**
  * A block for viewing/accepting/declining a service offer choice
  * 
- *  Last modified: $Date: 2005/10/15 18:22:42 $ by $Author: eiki $
+ *  Last modified: $Date: 2005/10/16 16:19:50 $ by $Author: eiki $
  * 
  * @author <a href="mailto:eiki@idega.com">eiki</a>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class ServiceOfferChoiceBlock extends ServiceOfferBlock implements ServiceOfferConstants{
 	
 	private static final String PARAMETER_ACTION = "prm_servofc_action";
 	
+	public static final String PARAMETER_SERVICE_OFFER_CHOICE = "SERVOFF_CH";
 	public static final String PARAMETER_SERVICE_OFFER_CHOICE_ACCEPT = "SERVICE_CHOICE_ACCEPT";
 	public static final String PARAMETER_SERVICE_OFFER_CHOICE_DECLINE = "SERVICE_CHOICE_DECLINE";
 	public static final String PARAMETER_SERVICE_OFFER_CHOICE_COMMENT = "SERVICE_COMMENT";
@@ -102,6 +103,10 @@ public class ServiceOfferChoiceBlock extends ServiceOfferBlock implements Servic
 	 */
 	private void showPhaseOne(IWContext iwc, ServiceOfferChoice choice, ServiceOffer offer) throws RemoteException {
 		Form form = createForm(iwc, ACTION_PHASE_ONE);
+		
+		//mark as viewed
+		getBusiness().setServiceChoiceAsViewed(choice);
+		
 		boolean isOptional = offer.isServiceChoiceOptional();
 		
 		Layer layer = new Layer(Layer.DIV);
@@ -138,7 +143,6 @@ public class ServiceOfferChoiceBlock extends ServiceOfferBlock implements Servic
 			
 			SubmitButton decline = new SubmitButton(localize("decline", "Decline"));
 			decline.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_DECLINE));
-			
 			
 			buttonLayer.add(decline);
 	
@@ -294,6 +298,13 @@ public class ServiceOfferChoiceBlock extends ServiceOfferBlock implements Servic
 		layer.setID("phasesDiv");
 		form.add(layer);
 		
+		if(accepts){
+			form.addParameter(PARAMETER_SERVICE_OFFER_CHOICE,PARAMETER_SERVICE_OFFER_CHOICE_ACCEPT);
+		}
+		else{
+			form.addParameter(PARAMETER_SERVICE_OFFER_CHOICE, PARAMETER_SERVICE_OFFER_CHOICE_DECLINE);
+		}
+		
 		layer.add(new Heading1(localize("service.offer.choice.make_a_service_choice2", "Make a service offer choice 2 of 2")));
 		
 		Paragraph paragraph = new Paragraph();
@@ -336,7 +347,11 @@ public class ServiceOfferChoiceBlock extends ServiceOfferBlock implements Servic
 	
 	private void save(IWContext iwc, ServiceOfferChoice choice, ServiceOffer offer) throws RemoteException {
 		
-		//TODO save the result
+		
+		boolean accepts = PARAMETER_SERVICE_OFFER_CHOICE_ACCEPT.equals(iwc.getParameter(PARAMETER_SERVICE_OFFER_CHOICE));
+		
+		getBusiness().changeServiceOfferChoiceStatus(choice,accepts,iwc.getCurrentUser());
+		
 		Layer layer = new Layer(Layer.DIV);
 		layer.setID("phasesDiv");
 		add(layer);

@@ -1,5 +1,5 @@
 /*
- * $Id: ServiceOfferChoiceBMPBean.java,v 1.1 2005/10/02 23:42:29 eiki Exp $
+ * $Id: ServiceOfferChoiceBMPBean.java,v 1.2 2005/10/16 16:19:50 eiki Exp $
  * Created on Aug 10, 2005
  *
  * Copyright (C) 2005 Idega Software hf. All Rights Reserved.
@@ -20,20 +20,19 @@ import com.idega.user.data.User;
  * The actual case that is created for a custodian of the user that is referenced in this bean.
  * The parent case is the ServiceOffer that belongs to the person who creates a new ServiceOffer
  * 
- *  Last modified: $Date: 2005/10/02 23:42:29 $ by $Author: eiki $
+ *  Last modified: $Date: 2005/10/16 16:19:50 $ by $Author: eiki $
  * 
  * @author <a href="mailto:eiki@idega.com">eiki</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class ServiceOfferChoiceBMPBean extends AbstractCaseBMPBean implements Case , ServiceOfferConstants, ServiceOfferChoice{
 	
 	private static final String ENTITY_NAME = "egov_service_offer_choice";
 	
 	private static final String COLUMN_USER = "user_id";
-	private static final String COLUMN_SCHOOL = "school_id";
-	private static final String COLUMN_SEASON = "season_id";
-	private static final String COLUMN_COMMENTS = "comments";
-	private static final String COLUMN_IS_EMPLOYEE = "is_employee";
+	private static final String COLUMN_VIEWED = "viewed";
+	private static final String COLUMN_PAYED = "payed";
+	
 
 	/* (non-Javadoc)
 	 * @see com.idega.block.process.data.AbstractCaseBMPBean#getCaseCodeKey()
@@ -62,9 +61,11 @@ public class ServiceOfferChoiceBMPBean extends AbstractCaseBMPBean implements Ca
 	public void initializeAttributes() {
 		addGeneralCaseRelation();		
 		addManyToOneRelationship(COLUMN_USER, "Citizen", User.class);
+		addAttribute(COLUMN_VIEWED, "Has been viewed?", Boolean.class);
+		addAttribute(COLUMN_PAYED, "Has been paid for?", Boolean.class);
 	}
 	
-	//Getters
+	//Getters and setters
 	public User getUser() {
 		return (User) getColumnValue(COLUMN_USER);
 	}
@@ -73,8 +74,28 @@ public class ServiceOfferChoiceBMPBean extends AbstractCaseBMPBean implements Ca
 		setColumn(COLUMN_USER, user);
 	}
 	
-	public Object getUserPK() {
-		return getIntegerColumnValue(COLUMN_USER);
+	public boolean hasBeenViewed() {
+		return (boolean) getBooleanColumnValue(COLUMN_VIEWED,false);
+	}
+	
+	public void setAsViewed(){
+		setColumn(COLUMN_VIEWED, true);
+	}
+	
+	public void setAsNotViewed(){
+		setColumn(COLUMN_VIEWED, false);
+	}
+	
+	public boolean hasBeenPaidFor() {
+		return (boolean) getBooleanColumnValue(COLUMN_PAYED,false);
+	}
+	
+	public void setAsPaidFor(){
+		setColumn(COLUMN_VIEWED, true);
+	}
+	
+	public void setAsUnPaidFor(){
+		setColumn(COLUMN_VIEWED, false);
 	}
 	
 }

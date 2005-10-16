@@ -37,34 +37,31 @@ form#serviceOfferForm input, select {
 
 form#serviceOfferForm h1 {
 	font-size: 12px;
-        margin-top: 3px;
-        margin-bottom: 5px;
+	margin-top: 3px;
+    margin-bottom: 5px;
 }
 
 form#serviceOfferForm p {
 	font-size: 10px;
-        margin-top: 5px;
-        margin-bottom: 5px;
-}
-
-div.personInfoItem {
-	float: left;
-	width: 150px;
-	height: 50px;
-}
-
-div.personInfoItem h1 {
-	font-size: 10px;
-	margin: 0;
+	margin-top: 5px;
+	margin-bottom: 5px;
 }
 
 div#phasesDiv {
 	margin-bottom: 20px;
-	border-top: 1px #CCCCCC solid;
 }
 
-div#phasesDiv h1 {
-	font-size: 12px;	
+
+#phasesDiv h1 {
+	font-size: 12px;
+    margin-top: 3px;
+    margin-bottom: 5px;
+}
+
+#phasesDiv p {
+	font-size: 10px;
+	margin-top: 5px;
+	margin-bottom: 5px;
 }
 
 div.buttonDiv {

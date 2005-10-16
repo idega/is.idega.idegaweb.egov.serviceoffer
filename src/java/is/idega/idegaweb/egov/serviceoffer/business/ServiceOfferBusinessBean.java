@@ -1,5 +1,5 @@
 /*
- * $Id: ServiceOfferBusinessBean.java,v 1.4 2005/10/14 21:54:53 eiki Exp $
+ * $Id: ServiceOfferBusinessBean.java,v 1.5 2005/10/16 16:19:50 eiki Exp $
  * Created on Aug 10, 2005
  *
  * Copyright (C) 2005 Idega Software hf. All Rights Reserved.
@@ -43,10 +43,10 @@ import com.idega.util.text.Name;
 /**
  * 
  * 
- *  Last modified: $Date: 2005/10/14 21:54:53 $ by $Author: eiki $
+ *  Last modified: $Date: 2005/10/16 16:19:50 $ by $Author: eiki $
  * 
  * @author <a href="mailto:eiki@idega.com">eiki</a>
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class ServiceOfferBusinessBean extends CaseBusinessBean implements CaseBusiness, ServiceOfferBusiness, ServiceOfferConstants{
 
@@ -283,5 +283,16 @@ public class ServiceOfferBusinessBean extends CaseBusinessBean implements CaseBu
 		return ServiceOfferConstants.IW_BUNDLE_IDENTIFIER;
 	}
 
+	public void setServiceChoiceAsViewed(ServiceOfferChoice choice){
+		choice.setAsViewed();
+		choice.store();
+	}
 	
+	public void changeServiceOfferChoiceStatus(ServiceOfferChoice choice, boolean accepts, User performer){
+		if(accepts){
+			changeCaseStatus(choice, getCaseStatusGranted(), performer);
+		}else{
+			changeCaseStatus(choice, getCaseStatusDenied(), performer);
+		}
+	}
 }
