@@ -1,5 +1,5 @@
 /*
- * $Id: ServiceOfferApplication.java,v 1.7 2005/10/15 18:22:42 eiki Exp $
+ * $Id: ServiceOfferApplication.java,v 1.8 2005/10/16 17:53:04 eiki Exp $
  * Created on Oct 2, 2005
  *
  * Copyright (C) 2005 Idega Software hf. All Rights Reserved.
@@ -39,10 +39,10 @@ import com.idega.util.IWTimestamp;
  * An application for sending a service offer(description), that may have a price, to a citizen or a group of citizens
  * that then have to approve it.
  * 
- *  Last modified: $Date: 2005/10/15 18:22:42 $ by $Author: eiki $
+ *  Last modified: $Date: 2005/10/16 17:53:04 $ by $Author: eiki $
  * 
  * @author <a href="mailto:eiki@idega.com">eiki</a>
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 public class ServiceOfferApplication extends ServiceOfferBlock implements ServiceOfferConstants{
 	
@@ -108,6 +108,9 @@ public class ServiceOfferApplication extends ServiceOfferBlock implements Servic
 					}
 					break;
 			}
+			
+			add(getHelpButton("service_offer_application"));
+			
 		}
 		catch (RemoteException re) {
 			throw new IBORuntimeException(re);
