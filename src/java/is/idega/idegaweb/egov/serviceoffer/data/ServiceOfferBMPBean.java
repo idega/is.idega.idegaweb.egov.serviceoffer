@@ -1,5 +1,5 @@
 /*
- * $Id: ServiceOfferBMPBean.java,v 1.2 2005/10/03 15:03:19 eiki Exp $ Created on
+ * $Id: ServiceOfferBMPBean.java,v 1.3 2005/10/17 02:27:54 eiki Exp $ Created on
  * Aug 10, 2005
  * 
  * Copyright (C) 2005 Idega Software hf. All Rights Reserved.
@@ -18,15 +18,16 @@ import com.idega.block.school.data.SchoolClass;
 import com.idega.data.IDOAddRelationshipException;
 import com.idega.data.IDORelationshipException;
 import com.idega.user.data.Group;
+import com.idega.util.IWTimestamp;
 import com.idega.util.ListUtil;
 
 /**
  * A parent case for ServiceOfferChoices
  * 
- * Last modified: $Date: 2005/10/03 15:03:19 $ by $Author: eiki $
+ * Last modified: $Date: 2005/10/17 02:27:54 $ by $Author: eiki $
  * 
  * @author <a href="mailto:eiki@idega.com">eiki</a>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class ServiceOfferBMPBean extends AbstractCaseBMPBean implements Case, ServiceOfferConstants, ServiceOffer {
 
@@ -187,35 +188,16 @@ public class ServiceOfferBMPBean extends AbstractCaseBMPBean implements Case, Se
 		this.idoAddTo(schoolClass);
 	}
 	
-	//	
-	// //Finders
-	// public Object ejbFindByUserAndSeason(User user, School school,
-	// SchoolSeason season) throws FinderException {
-	// Table table = new Table(this);
-	//		
-	// SelectQuery query = new SelectQuery(table);
-	// query.addColumn(table, getIDColumnName());
-	// query.addCriteria(new MatchCriteria(table, COLUMN_USER,
-	// MatchCriteria.EQUALS, user));
-	// query.addCriteria(new MatchCriteria(table, COLUMN_SCHOOL,
-	// MatchCriteria.EQUALS, school));
-	// query.addCriteria(new MatchCriteria(table, COLUMN_SEASON,
-	// MatchCriteria.EQUALS, season));
-	//		
-	// return idoFindOnePKByQuery(query);
-	// }
-	//	
-	// public Collection ejbFindAllBySchoolAndSeason(School school, SchoolSeason
-	// season) throws FinderException {
-	// Table table = new Table(this);
-	//		
-	// SelectQuery query = new SelectQuery(table);
-	// query.addColumn(table, getIDColumnName());
-	// query.addCriteria(new MatchCriteria(table, COLUMN_SCHOOL,
-	// MatchCriteria.EQUALS, school));
-	// query.addCriteria(new MatchCriteria(table, COLUMN_SEASON,
-	// MatchCriteria.EQUALS, season));
-	//		
-	// return idoFindPKsByQuery(query);
-	// }
+	public String toString(){
+		
+		Timestamp date = getServiceDate();
+		IWTimestamp stamp = new IWTimestamp(date);
+		if(date==null){
+			return getServiceName();
+		}
+		else{
+			return getServiceName()+" - "+stamp.getDateString("dd/MM/yyyy hh:mm");
+		}
+	}
+	
 }

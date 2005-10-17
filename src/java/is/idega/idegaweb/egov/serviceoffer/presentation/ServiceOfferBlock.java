@@ -1,5 +1,5 @@
 /*
- * $Id: ServiceOfferBlock.java,v 1.1 2005/10/02 23:42:29 eiki Exp $
+ * $Id: ServiceOfferBlock.java,v 1.2 2005/10/17 02:27:54 eiki Exp $
  * Created on Oct 2, 2005
  * 
  * Copyright (C) 2005 Idega Software hf. All Rights Reserved.
@@ -10,37 +10,27 @@
 package is.idega.idegaweb.egov.serviceoffer.presentation;
 
 import is.idega.idegaweb.egov.serviceoffer.business.ServiceOfferBusiness;
+import is.idega.idegaweb.egov.serviceoffer.data.ServiceOffer;
 import is.idega.idegaweb.egov.serviceoffer.util.ServiceOfferConstants;
-import java.rmi.RemoteException;
+import java.sql.Timestamp;
 import se.idega.idegaweb.commune.business.CommuneUserBusiness;
 import se.idega.idegaweb.commune.presentation.CommuneBlock;
-import com.idega.block.school.data.School;
-import com.idega.block.school.data.SchoolClass;
-import com.idega.block.school.data.SchoolClassMember;
 import com.idega.business.IBOLookup;
 import com.idega.business.IBOLookupException;
 import com.idega.business.IBORuntimeException;
-import com.idega.core.contact.data.Email;
-import com.idega.core.contact.data.Phone;
-import com.idega.core.location.data.Address;
-import com.idega.core.location.data.PostalCode;
 import com.idega.idegaweb.IWApplicationContext;
 import com.idega.presentation.IWContext;
 import com.idega.presentation.Layer;
-import com.idega.presentation.text.Heading1;
 import com.idega.presentation.text.Text;
-import com.idega.user.business.NoEmailFoundException;
-import com.idega.user.business.NoPhoneFoundException;
-import com.idega.user.data.User;
-import com.idega.util.PersonalIDFormatter;
+import com.idega.util.IWTimestamp;
 
 /**
  * A base presentationclass for ServiceOffer applications and lists...
  * 
- *  Last modified: $Date: 2005/10/02 23:42:29 $ by $Author: eiki $
+ *  Last modified: $Date: 2005/10/17 02:27:54 $ by $Author: eiki $
  * 
  * @author <a href="mailto:eiki@idega.com">eiki</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public abstract class ServiceOfferBlock extends CommuneBlock implements ServiceOfferConstants {
 
@@ -91,128 +81,126 @@ public abstract class ServiceOfferBlock extends CommuneBlock implements ServiceO
 
 	public abstract void present(IWContext iwc);
 
-	protected Layer getPersonInfo(IWContext iwc, SchoolClassMember member) throws RemoteException {
-		User user = member.getStudent();
-		SchoolClass group = member.getSchoolClass();
-		School school = group.getSchool();
-		return getPersonInfo(iwc, user, school, group);
+	protected void addServiceOffer(IWContext iwc, Layer layer, ServiceOffer offer) {
+		Layer formElementName = new Layer();
+		formElementName.setStyleClass(STYLE_CLASS_FORM_ELEMENT);
+		Text name = new Text(offer.getServiceName());
+		name.setStyleClass(STYLE_CLASS_FORM_TEXT);
+		Text nameLabel = new Text(localize("service.offer.application.name_of_service_offer" ,"Name of service offer"));
+		nameLabel.setStyle(STYLE_CLASS_LABEL_TEXT);
+		formElementName.add(nameLabel);
+		formElementName.add(name);
+		layer.add(formElementName);
+		
+		double thePrice = offer.getServicePrice();
+		if(thePrice>0){
+			Layer formElementPrice = new Layer();
+			formElementPrice.setStyleClass(STYLE_CLASS_FORM_ELEMENT);
+			
+			//TODO make the formatting of the double optional as a set method? Here I strip the .x off if it starts with .0
+			String priceString = String.valueOf(thePrice);
+			Text price;
+			if(priceString.endsWith(".0")){
+				price = new Text( String.valueOf((int)thePrice));	
+			}
+			else{
+				price = new Text(Double.toString(thePrice));
+			}
+			
+			price.setStyleClass(STYLE_CLASS_FORM_TEXT);
+			Text priceLabel = new Text(localize("service.offer.application.price_of_service_offer" ,"Price of service offer"));
+			priceLabel.setStyle(STYLE_CLASS_LABEL_TEXT);
+			formElementPrice.add(priceLabel);
+			formElementPrice.add(price);
+			layer.add(formElementPrice);
+			
+		}
+		
+		Timestamp timestamp = offer.getServiceDate();
+		if(timestamp!=null){
+			IWTimestamp theTimestamp = new IWTimestamp(timestamp);
+			String dateString = theTimestamp.getLocaleDate(iwc.getCurrentLocale());
+			
+			Layer formElementDate = new Layer();
+			formElementDate.setStyleClass(STYLE_CLASS_FORM_ELEMENT);
+			Text date = new Text(dateString);
+			date.setStyleClass(STYLE_CLASS_FORM_TEXT);
+			
+			Text dateLabel = new Text(localize("service.offer.application.service_offer_date" ,"Date of service"));
+			dateLabel.setStyleClass(STYLE_CLASS_LABEL_TEXT);
+			formElementDate.add(dateLabel);
+			formElementDate.add(date);
+			layer.add(formElementDate);
+			
+			Layer formElementTime = new Layer();
+			formElementTime.setStyleClass(STYLE_CLASS_FORM_ELEMENT);
+			int hour = theTimestamp.getHour();
+			int minute = theTimestamp.getMinute();
+			Text time = new Text( ((hour<10)?"0"+hour : ""+hour)+":"+ ((minute<10)?"0"+minute:""+minute));
+			time.setStyleClass(STYLE_CLASS_FORM_TEXT);
+					
+			Text timeLabel = new Text(localize("service.offer.application.service_offer_time" ,"Time of service offer"));
+			timeLabel.setStyleClass(STYLE_CLASS_LABEL_TEXT);
+			formElementTime.add(timeLabel);
+			formElementTime.add(time);
+			layer.add(formElementTime);
+		
+		}
+		
+		Timestamp stamper = offer.getServiceDate();
+		if(stamper!=null){
+			IWTimestamp theTimestamp = new IWTimestamp(stamper);
+			String dateString = theTimestamp.getLocaleDate(iwc.getCurrentLocale());
+			Layer formElementDeadline = new Layer();
+			formElementDeadline.setStyleClass(STYLE_CLASS_FORM_ELEMENT);
+			Text deadline = new Text(dateString);
+			deadline.setStyleClass(STYLE_CLASS_FORM_TEXT);
+			Text deadlineLabel = new Text(localize("service.offer.application.dealine_for_choice" ,"Choice deadline"));
+			deadlineLabel.setStyleClass(STYLE_CLASS_LABEL_TEXT);
+			formElementDeadline.add(deadlineLabel);
+			formElementDeadline.add(deadline);
+			layer.add(formElementDeadline);
+		}
+		
+		String locationText = offer.getServiceLocation();
+		
+		if(locationText!=null){
+			Layer formElementLocation = new Layer();
+			formElementLocation.setStyleClass(STYLE_CLASS_FORM_ELEMENT);
+			Text location = new Text(locationText);
+			location.setStyleClass(STYLE_CLASS_FORM_TEXT);
+			Text locationLabel = new Text(localize("service.offer.application.location" ,"Location"));
+			locationLabel.setStyleClass(STYLE_CLASS_LABEL_TEXT);
+			formElementLocation.add(locationLabel);
+			formElementLocation.add(location);
+			layer.add(formElementLocation);
+		}
+		
+		if(thePrice>0){
+			Layer formElementPaymentType = new Layer();
+			formElementPaymentType.setStyleClass(STYLE_CLASS_FORM_ELEMENT);
+			String paymentTypeLocalizationKey = PAYMENT_TYPE_CASH.equals(offer.getServicePaymentType())?"service.offer.application.payment.type.cash" :"service.offer.application.payment.type.invoice";
+			Text paymentType = new Text(localize(paymentTypeLocalizationKey,paymentTypeLocalizationKey));
+			paymentType.setStyleClass(STYLE_CLASS_FORM_TEXT);
+			Text paymentTypeText = new Text(localize("service.offer.application.payment_type" ,"Payment option"));
+			paymentTypeText.setStyleClass(STYLE_CLASS_LABEL_TEXT);
+			formElementPaymentType.add(paymentTypeText);
+			formElementPaymentType.add(paymentType);
+			layer.add(formElementPaymentType);
+		}
+		
+		String description = offer.getServiceText();
+		if(description!=null){
+			Layer formElementText = new Layer();
+			formElementText.setStyleClass(STYLE_CLASS_FORM_ELEMENT);
+			Text text = new Text(description);
+			text.setStyleClass(STYLE_CLASS_SERVICE_DESCRIPTION);
+			Text textLabel = new Text(localize("service.offer.application.description" ,"Description of service"));
+			textLabel.setStyleClass(STYLE_CLASS_LABEL_TEXT);
+			formElementText.add(textLabel);
+			formElementText.add(text);
+			layer.add(formElementText);			
+		}
 	}
 
-	protected Layer getPersonInfo(IWContext iwc, User user, School school, SchoolClass group) throws RemoteException {
-		Layer layer = new Layer();
-		layer.setID("personInfo");
-		Address address = getUserBusiness().getUsersMainAddress(user);
-		PostalCode postal = null;
-		if (address != null) {
-			postal = address.getPostalCode();
-		}
-		Phone phone = null;
-		try {
-			phone = getUserBusiness().getUsersHomePhone(user);
-		}
-		catch (NoPhoneFoundException npfe) {
-			phone = null;
-		}
-		Email email = null;
-		try {
-			email = getUserBusiness().getUsersMainEmail(user);
-		}
-		catch (NoEmailFoundException nefe) {
-			email = null;
-		}
-		Layer formElement = new Layer(Layer.DIV);
-		formElement.setStyleClass("personInfoItem");
-		Heading1 heading = new Heading1(localize("name", "Name"));
-		Text text = new Text(user.getName());
-		formElement.add(heading);
-		formElement.add(text);
-		layer.add(formElement);
-		formElement = new Layer(Layer.DIV);
-		formElement.setStyleClass("personInfoItem");
-		heading = new Heading1(localize("personal_id", "Personal ID"));
-		text = new Text(PersonalIDFormatter.format(user.getPersonalID(), iwc.getCurrentLocale()));
-		formElement.add(heading);
-		formElement.add(text);
-		layer.add(formElement);
-		formElement = new Layer(Layer.DIV);
-		formElement.setStyleClass("personInfoItem");
-		heading = new Heading1(localize("home_phone", "Home phone"));
-		if (phone != null && phone.getNumber() != null) {
-			text = new Text(phone.getNumber());
-		}
-		else {
-			text = new Text("-");
-		}
-		formElement.add(heading);
-		formElement.add(text);
-		layer.add(formElement);
-		formElement = new Layer(Layer.DIV);
-		formElement.setStyleClass("personInfoItem");
-		heading = new Heading1(localize("address", "Address"));
-		if (address != null) {
-			text = new Text(address.getStreetAddress());
-		}
-		else {
-			text = new Text("-");
-		}
-		formElement.add(heading);
-		formElement.add(text);
-		layer.add(formElement);
-		formElement = new Layer(Layer.DIV);
-		formElement.setStyleClass("personInfoItem");
-		heading = new Heading1(localize("zip_code", "Postal code"));
-		if (postal != null) {
-			text = new Text(postal.getPostalCode());
-		}
-		else {
-			text = new Text("-");
-		}
-		formElement.add(heading);
-		formElement.add(text);
-		layer.add(formElement);
-		formElement = new Layer(Layer.DIV);
-		formElement.setStyleClass("personInfoItem");
-		heading = new Heading1(localize("zip_city", "City"));
-		if (postal != null) {
-			text = new Text(postal.getName());
-		}
-		else {
-			text = new Text("-");
-		}
-		formElement.add(heading);
-		formElement.add(text);
-		layer.add(formElement);
-		if (school != null && group != null) {
-			formElement = new Layer(Layer.DIV);
-			formElement.setStyleClass("personInfoItem");
-			heading = new Heading1(localize("school", "School"));
-			text = new Text(school.getSchoolName());
-			formElement.add(heading);
-			formElement.add(text);
-			layer.add(formElement);
-			formElement = new Layer(Layer.DIV);
-			formElement.setStyleClass("personInfoItem");
-			heading = new Heading1(localize("group", "Group"));
-			text = new Text(group.getSchoolClassName());
-			formElement.add(heading);
-			formElement.add(text);
-			layer.add(formElement);
-		}
-		formElement = new Layer(Layer.DIV);
-		formElement.setStyleClass("personInfoItem");
-		heading = new Heading1(localize("email", "E-mail"));
-		if (email != null && email.getEmailAddress() != null) {
-			text = new Text(email.getEmailAddress());
-		}
-		else {
-			text = new Text("-");
-		}
-		formElement.add(heading);
-		formElement.add(text);
-		layer.add(formElement);
-		Layer clear = new Layer(Layer.DIV);
-		clear.setStyleClass("Clear");
-		layer.add(clear);
-		return layer;
-	}
 }

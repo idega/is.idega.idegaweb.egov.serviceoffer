@@ -1,5 +1,5 @@
 /*
- * $Id: ServiceOfferChoiceBlock.java,v 1.4 2005/10/16 17:53:04 eiki Exp $
+ * $Id: ServiceOfferChoiceBlock.java,v 1.5 2005/10/17 02:27:54 eiki Exp $
  * Created on Oct 2, 2005
  *
  * Copyright (C) 2005 Idega Software hf. All Rights Reserved.
@@ -13,7 +13,6 @@ import is.idega.idegaweb.egov.serviceoffer.data.ServiceOffer;
 import is.idega.idegaweb.egov.serviceoffer.data.ServiceOfferChoice;
 import is.idega.idegaweb.egov.serviceoffer.util.ServiceOfferConstants;
 import java.rmi.RemoteException;
-import java.sql.Timestamp;
 import javax.ejb.FinderException;
 import com.idega.business.IBORuntimeException;
 import com.idega.core.builder.data.ICPage;
@@ -27,15 +26,14 @@ import com.idega.presentation.ui.Form;
 import com.idega.presentation.ui.GenericButton;
 import com.idega.presentation.ui.SubmitButton;
 import com.idega.user.data.User;
-import com.idega.util.IWTimestamp;
 
 /**
  * A block for viewing/accepting/declining a service offer choice
  * 
- *  Last modified: $Date: 2005/10/16 17:53:04 $ by $Author: eiki $
+ *  Last modified: $Date: 2005/10/17 02:27:54 $ by $Author: eiki $
  * 
  * @author <a href="mailto:eiki@idega.com">eiki</a>
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class ServiceOfferChoiceBlock extends ServiceOfferBlock implements ServiceOfferConstants{
 	
@@ -52,7 +50,6 @@ public class ServiceOfferChoiceBlock extends ServiceOfferBlock implements Servic
 	private static final int ACTION_OVERVIEW = 4;
 	private static final int ACTION_SAVE = 5;
 	
-	private User user;
 	
 	public void present(IWContext iwc) {
 		String selectedCaseId = null;
@@ -97,7 +94,7 @@ public class ServiceOfferChoiceBlock extends ServiceOfferBlock implements Servic
 	}
 	
 	/**
-	 * Shows the form to create an Service Offer
+	 * Shows the form to answer a service offer choice 
 	 * @param iwc
 	 * @param offer 
 	 * @param choice 
@@ -121,6 +118,11 @@ public class ServiceOfferChoiceBlock extends ServiceOfferBlock implements Servic
 			layer.add(new Heading1(localize("service.offer.choice.service_offer_mandatory", "Mandatory Service Offer")));	
 		}
 		
+		User user = choice.getUser();
+		Paragraph forUserParagraph = new Paragraph();
+		forUserParagraph.add(new Text(localize("service.offer.choice.service_offer_for","A service offer for ")+user.getName()+", "+user.getPersonalID()));
+		layer.add(forUserParagraph);
+		
 		Paragraph paragraph = new Paragraph();
 		if(isOptional){
 			paragraph.add(new Text(localize("service.offer.choice.text", "Please review the following service offer and respond to it by clicking on one of the buttons (Decline/Accept) at the bottom of the page")));
@@ -128,10 +130,9 @@ public class ServiceOfferChoiceBlock extends ServiceOfferBlock implements Servic
 		else{
 			paragraph.add(new Text(localize("service.offer.choice.text_mandatory", "The following service offer is mandatory and is only for your viewing.")));
 		}
-		
 		layer.add(paragraph);
 		
-		addChoiceOffer(iwc, layer,offer,choice);
+		addServiceOffer(iwc, layer,offer);
 		
 		layer.add(new CSSSpacer());
 		
@@ -171,127 +172,6 @@ public class ServiceOfferChoiceBlock extends ServiceOfferBlock implements Servic
 		add(form);
 	}
 	
-	private void addChoiceOffer(IWContext iwc, Layer layer, ServiceOffer offer, ServiceOfferChoice choice) {
-		Layer formElementName = new Layer();
-		formElementName.setStyleClass(STYLE_CLASS_FORM_ELEMENT);
-		Text name = new Text(offer.getServiceName());
-		name.setStyleClass(STYLE_CLASS_FORM_TEXT);
-		Text nameLabel = new Text(localize("service.offer.application.name_of_service_offer" ,"Name of service offer"));
-		nameLabel.setStyle(STYLE_CLASS_LABEL_TEXT);
-		formElementName.add(nameLabel);
-		formElementName.add(name);
-		layer.add(formElementName);
-		
-		double thePrice = offer.getServicePrice();
-		if(thePrice>0){
-			Layer formElementPrice = new Layer();
-			formElementPrice.setStyleClass(STYLE_CLASS_FORM_ELEMENT);
-			
-			//TODO make the formatting of the double optional as a set method? Here I strip the .x off if it starts with .0
-			String priceString = String.valueOf(thePrice);
-			Text price;
-			if(priceString.endsWith(".0")){
-				price = new Text( String.valueOf((int)thePrice));	
-			}
-			else{
-				price = new Text(Double.toString(thePrice));
-			}
-			
-			price.setStyleClass(STYLE_CLASS_FORM_TEXT);
-			Text priceLabel = new Text(localize("service.offer.application.price_of_service_offer" ,"Price of service offer"));
-			priceLabel.setStyle(STYLE_CLASS_LABEL_TEXT);
-			formElementPrice.add(priceLabel);
-			formElementPrice.add(price);
-			layer.add(formElementPrice);
-			
-		}
-		
-		Timestamp timestamp = offer.getServiceDate();
-		if(timestamp!=null){
-			IWTimestamp theTimestamp = new IWTimestamp(timestamp);
-			String dateString = theTimestamp.getLocaleDate(iwc.getCurrentLocale());
-			
-			Layer formElementDate = new Layer();
-			formElementDate.setStyleClass(STYLE_CLASS_FORM_ELEMENT);
-			Text date = new Text(dateString);
-			date.setStyleClass(STYLE_CLASS_FORM_TEXT);
-			
-			Text dateLabel = new Text(localize("service.offer.application.service_offer_date" ,"Date of service"));
-			dateLabel.setStyleClass(STYLE_CLASS_LABEL_TEXT);
-			formElementDate.add(dateLabel);
-			formElementDate.add(date);
-			layer.add(formElementDate);
-			
-			Layer formElementTime = new Layer();
-			formElementTime.setStyleClass(STYLE_CLASS_FORM_ELEMENT);
-			int hour = theTimestamp.getHour();
-			int minute = theTimestamp.getMinute();
-			Text time = new Text( ((hour<10)?"0"+hour : ""+hour)+":"+ ((minute<10)?"0"+minute:""+minute));
-			time.setStyleClass(STYLE_CLASS_FORM_TEXT);
-					
-			Text timeLabel = new Text(localize("service.offer.application.service_offer_time" ,"Time of service offer"));
-			timeLabel.setStyleClass(STYLE_CLASS_LABEL_TEXT);
-			formElementTime.add(timeLabel);
-			formElementTime.add(time);
-			layer.add(formElementTime);
-		
-		}
-		
-		Timestamp stamper = offer.getServiceDate();
-		if(stamper!=null){
-			IWTimestamp theTimestamp = new IWTimestamp(stamper);
-			String dateString = theTimestamp.getLocaleDate(iwc.getCurrentLocale());
-			Layer formElementDeadline = new Layer();
-			formElementDeadline.setStyleClass(STYLE_CLASS_FORM_ELEMENT);
-			Text deadline = new Text(dateString);
-			deadline.setStyleClass(STYLE_CLASS_FORM_TEXT);
-			Text deadlineLabel = new Text(localize("service.offer.application.dealine_for_choice" ,"Choice deadline"));
-			deadlineLabel.setStyleClass(STYLE_CLASS_LABEL_TEXT);
-			formElementDeadline.add(deadlineLabel);
-			formElementDeadline.add(deadline);
-			layer.add(formElementDeadline);
-		}
-		
-		String locationText = offer.getServiceLocation();
-		
-		if(locationText!=null){
-			Layer formElementLocation = new Layer();
-			formElementLocation.setStyleClass(STYLE_CLASS_FORM_ELEMENT);
-			Text location = new Text(locationText);
-			location.setStyleClass(STYLE_CLASS_FORM_TEXT);
-			Text locationLabel = new Text(localize("service.offer.application.location" ,"Location"));
-			locationLabel.setStyleClass(STYLE_CLASS_LABEL_TEXT);
-			formElementLocation.add(locationLabel);
-			formElementLocation.add(location);
-			layer.add(formElementLocation);
-		}
-		
-		if(thePrice>0){
-			Layer formElementPaymentType = new Layer();
-			formElementPaymentType.setStyleClass(STYLE_CLASS_FORM_ELEMENT);
-			String paymentTypeLocalizationKey = PAYMENT_TYPE_CASH.equals(offer.getServicePaymentType())?"service.offer.application.payment.type.cash" :"service.offer.application.payment.type.invoice";
-			Text paymentType = new Text(localize(paymentTypeLocalizationKey,paymentTypeLocalizationKey));
-			paymentType.setStyleClass(STYLE_CLASS_FORM_TEXT);
-			Text paymentTypeText = new Text(localize("service.offer.application.payment_type" ,"Payment option"));
-			paymentTypeText.setStyleClass(STYLE_CLASS_LABEL_TEXT);
-			formElementPaymentType.add(paymentTypeText);
-			formElementPaymentType.add(paymentType);
-			layer.add(formElementPaymentType);
-		}
-		
-		String description = offer.getServiceText();
-		if(description!=null){
-			Layer formElementText = new Layer();
-			formElementText.setStyleClass(STYLE_CLASS_FORM_ELEMENT);
-			Text text = new Text(description);
-			text.setStyleClass(STYLE_CLASS_SERVICE_DESCRIPTION);
-			Text textLabel = new Text(localize("service.offer.application.description" ,"Description of service"));
-			textLabel.setStyleClass(STYLE_CLASS_LABEL_TEXT);
-			formElementText.add(textLabel);
-			formElementText.add(text);
-			layer.add(formElementText);			
-		}
-	}
 
 	private void showOverview(IWContext iwc, ServiceOfferChoice choice, ServiceOffer offer, boolean accepts) throws RemoteException {
 		Form form = createForm(iwc, ACTION_OVERVIEW);
@@ -299,6 +179,7 @@ public class ServiceOfferChoiceBlock extends ServiceOfferBlock implements Servic
 		Layer layer = new Layer(Layer.DIV);
 		layer.setID("phasesDiv");
 		form.add(layer);
+		
 		
 		if(accepts){
 			form.addParameter(PARAMETER_SERVICE_OFFER_CHOICE,PARAMETER_SERVICE_OFFER_CHOICE_ACCEPT);
@@ -308,6 +189,11 @@ public class ServiceOfferChoiceBlock extends ServiceOfferBlock implements Servic
 		}
 		
 		layer.add(new Heading1(localize("service.offer.choice.make_a_service_choice2", "Make a service offer choice 2 of 2")));
+		
+		Paragraph forUserParagraph = new Paragraph();
+		User user = choice.getUser();
+		forUserParagraph.add(new Text(localize("service.offer.choice.service_offer_for","A service offer for ")+user.getName()+", "+user.getPersonalID()));
+		layer.add(forUserParagraph);
 		
 		Paragraph paragraph = new Paragraph();
 		if(accepts){
@@ -360,6 +246,12 @@ public class ServiceOfferChoiceBlock extends ServiceOfferBlock implements Servic
 		
 		layer.add(new Heading1(localize("service.offer.choice.saved", "Service offer choice finished")));
 		
+		
+		Paragraph forUserParagraph = new Paragraph();
+		User user = choice.getUser();
+		forUserParagraph.add(new Text(localize("service.offer.choice.service_offer_for","A service offer for ")+user.getName()+", "+user.getPersonalID()));
+		layer.add(forUserParagraph);
+		
 		Paragraph paragraph = new Paragraph();
 		paragraph.add(new Text(localize("service.offer.choice.saved.text", "Thank you, your service choice has been saved and sent to the manager handling the service offer.")));
 		layer.add(paragraph);
@@ -389,7 +281,6 @@ public class ServiceOfferChoiceBlock extends ServiceOfferBlock implements Servic
 		Form form = new Form();
 		form.setID("serviceOfferForm");
 		
-		//todo maintain the choice somehow
 		form.addParameter(PARAMETER_ACTION, actionPhase);
 		
 		form.maintainParameter(getBusiness().getSelectedCaseParameter());

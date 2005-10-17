@@ -1,5 +1,5 @@
 /*
- * $Id: ServiceOfferConstants.java,v 1.2 2005/10/15 18:22:42 eiki Exp $
+ * $Id: ServiceOfferConstants.java,v 1.3 2005/10/17 02:27:54 eiki Exp $
  * Created on Oct 2, 2005
  *
  * Copyright (C) 2005 Idega Software hf. All Rights Reserved.
@@ -12,10 +12,10 @@ package is.idega.idegaweb.egov.serviceoffer.util;
 /**
  * Contains all constants for the serviceoffer package. "Implement" this interface to get access to them.
  * 
- *  Last modified: $Date: 2005/10/15 18:22:42 $ by $Author: eiki $
+ *  Last modified: $Date: 2005/10/17 02:27:54 $ by $Author: eiki $
  * 
  * @author <a href="mailto:eiki@idega.com">eiki</a>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public interface ServiceOfferConstants {
 	public static final String IW_BUNDLE_IDENTIFIER = "is.idega.idegaweb.egov.serviceoffer";	
@@ -31,5 +31,6 @@ public interface ServiceOfferConstants {
 	public static final String STYLE_CLASS_LABEL_TEXT = "labelText";
 	public static final String STYLE_CLASS_FORM_TEXT = "formText";
 	public static final String STYLE_CLASS_FORM_ELEMENT = "formElement";
+	public static final String STYLE_CLASS_SELECTION_BOX = "selectionBox";
 	
 }

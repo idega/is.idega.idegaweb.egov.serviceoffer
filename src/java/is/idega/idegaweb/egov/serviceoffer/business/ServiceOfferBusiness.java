@@ -1,5 +1,5 @@
 /*
- * $Id: ServiceOfferBusiness.java,v 1.4 2005/10/16 16:19:50 eiki Exp $
+ * $Id: ServiceOfferBusiness.java,v 1.5 2005/10/17 02:27:54 eiki Exp $
  * Created on Oct 16, 2005
  *
  * Copyright (C) 2005 Idega Software hf. All Rights Reserved.
@@ -13,6 +13,7 @@ import is.idega.idegaweb.egov.serviceoffer.data.ServiceOffer;
 import is.idega.idegaweb.egov.serviceoffer.data.ServiceOfferChoice;
 import is.idega.idegaweb.egov.serviceoffer.util.ServiceOfferConstants;
 import java.rmi.RemoteException;
+import java.util.Collection;
 import javax.ejb.FinderException;
 import se.idega.idegaweb.commune.business.CommuneUserBusiness;
 import com.idega.block.process.business.CaseBusiness;
@@ -27,10 +28,10 @@ import com.idega.user.data.User;
 
 /**
  * 
- *  Last modified: $Date: 2005/10/16 16:19:50 $ by $Author: eiki $
+ *  Last modified: $Date: 2005/10/17 02:27:54 $ by $Author: eiki $
  * 
  * @author <a href="mailto:eiki@idega.com">eiki</a>
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public interface ServiceOfferBusiness extends IBOService, CaseBusiness, ServiceOfferConstants {
 
@@ -86,12 +87,22 @@ public interface ServiceOfferBusiness extends IBOService, CaseBusiness, ServiceO
 	/**
 	 * @see is.idega.idegaweb.egov.serviceoffer.business.ServiceOfferBusinessBean#getServiceOffer
 	 */
+	public ServiceOffer getServiceOffer(Integer caseID) throws FinderException, java.rmi.RemoteException;
+
+	/**
+	 * @see is.idega.idegaweb.egov.serviceoffer.business.ServiceOfferBusinessBean#getServiceOffer
+	 */
 	public ServiceOffer getServiceOffer(int caseID) throws FinderException, java.rmi.RemoteException;
 
 	/**
 	 * @see is.idega.idegaweb.egov.serviceoffer.business.ServiceOfferBusinessBean#getServiceOfferChoice
 	 */
 	public ServiceOfferChoice getServiceOfferChoice(int caseID) throws FinderException, java.rmi.RemoteException;
+
+	/**
+	 * @see is.idega.idegaweb.egov.serviceoffer.business.ServiceOfferBusinessBean#getServiceOfferChoice
+	 */
+	public ServiceOfferChoice getServiceOfferChoice(Integer caseID) throws FinderException, java.rmi.RemoteException;
 
 	/**
 	 * @see is.idega.idegaweb.egov.serviceoffer.business.ServiceOfferBusinessBean#setServiceChoiceAsViewed
@@ -103,4 +114,14 @@ public interface ServiceOfferBusiness extends IBOService, CaseBusiness, ServiceO
 	 */
 	public void changeServiceOfferChoiceStatus(ServiceOfferChoice choice, boolean accepts, User performer)
 			throws java.rmi.RemoteException;
+
+	/**
+	 * @see is.idega.idegaweb.egov.serviceoffer.business.ServiceOfferBusinessBean#getServiceOfferChoices
+	 */
+	public Collection getServiceOfferChoices(ServiceOffer offer) throws java.rmi.RemoteException;
+
+	/**
+	 * @see is.idega.idegaweb.egov.serviceoffer.business.ServiceOfferBusinessBean#getServiceOffers
+	 */
+	public Collection getServiceOffers(User owner) throws java.rmi.RemoteException;
 }

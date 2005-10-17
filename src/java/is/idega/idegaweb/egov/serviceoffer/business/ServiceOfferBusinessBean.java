@@ -1,5 +1,5 @@
 /*
- * $Id: ServiceOfferBusinessBean.java,v 1.5 2005/10/16 16:19:50 eiki Exp $
+ * $Id: ServiceOfferBusinessBean.java,v 1.6 2005/10/17 02:27:54 eiki Exp $
  * Created on Aug 10, 2005
  *
  * Copyright (C) 2005 Idega Software hf. All Rights Reserved.
@@ -17,14 +17,18 @@ import is.idega.idegaweb.egov.serviceoffer.data.ServiceOfferHome;
 import is.idega.idegaweb.egov.serviceoffer.util.ServiceOfferConstants;
 import java.rmi.RemoteException;
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import javax.ejb.CreateException;
+import javax.ejb.EJBException;
 import javax.ejb.FinderException;
 import se.idega.idegaweb.commune.business.CommuneUserBusiness;
 import se.idega.idegaweb.commune.message.business.CommuneMessageBusiness;
 import com.idega.block.process.business.CaseBusiness;
 import com.idega.block.process.business.CaseBusinessBean;
+import com.idega.block.process.data.Case;
 import com.idega.block.process.message.data.Message;
 import com.idega.block.school.business.SchoolBusiness;
 import com.idega.block.school.data.School;
@@ -33,9 +37,11 @@ import com.idega.block.school.data.SchoolClassMember;
 import com.idega.block.school.data.SchoolSeason;
 import com.idega.business.IBOLookupException;
 import com.idega.business.IBORuntimeException;
+import com.idega.data.IDOAddRelationshipException;
 import com.idega.data.IDOCreateException;
 import com.idega.user.data.User;
 import com.idega.util.IWTimestamp;
+import com.idega.util.ListUtil;
 import com.idega.util.PersonalIDFormatter;
 import com.idega.util.text.Name;
 
@@ -43,10 +49,10 @@ import com.idega.util.text.Name;
 /**
  * 
  * 
- *  Last modified: $Date: 2005/10/16 16:19:50 $ by $Author: eiki $
+ *  Last modified: $Date: 2005/10/17 02:27:54 $ by $Author: eiki $
  * 
  * @author <a href="mailto:eiki@idega.com">eiki</a>
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public class ServiceOfferBusinessBean extends CaseBusinessBean implements CaseBusiness, ServiceOfferBusiness, ServiceOfferConstants{
 
@@ -234,10 +240,20 @@ public class ServiceOfferBusinessBean extends CaseBusinessBean implements CaseBu
 						String zeClass = schoolClass[i];
 						
 						SchoolClass theClass = getSchoolBusiness().getSchoolClassHome().findByPrimaryKey(zeClass);
+						
+						try {
+							offer.addSchoolClass(theClass);
+						}
+						catch (IDOAddRelationshipException e) {
+							e.printStackTrace();
+						}
+						
 						Collection pupils = getSchoolBusiness().getSchoolClassMemberHome().findAllBySchoolClass(theClass);
 						for (Iterator iter = pupils.iterator(); iter.hasNext();) {
 							SchoolClassMember member = (SchoolClassMember) iter.next();
 							User student = member.getStudent();
+							
+							//offer.addGroup(student);
 							
 							User custodian = getCommuneUserBusiness().getCustodianForChild(student);
 							createServiceOfferChoiceAndSendMessage(offer, custodian, student, performer, offer.isServiceChoiceOptional());
@@ -268,12 +284,20 @@ public class ServiceOfferBusinessBean extends CaseBusinessBean implements CaseBu
 		
 	}
 	
+	public ServiceOffer getServiceOffer(Integer caseID) throws FinderException {
+		return getServiceOfferHome().findByPrimaryKey(caseID);
+	}
+	
 	public ServiceOffer getServiceOffer(int caseID) throws FinderException {
-		return getServiceOfferHome().findByPrimaryKey(new Integer(caseID));
+		return getServiceOffer(new Integer(caseID));
 	}
 
 	public ServiceOfferChoice getServiceOfferChoice(int caseID) throws FinderException {
-		return getServiceOfferChoiceHome().findByPrimaryKey(new Integer(caseID));
+		return getServiceOfferChoice(new Integer(caseID));
+	}
+	
+	public ServiceOfferChoice getServiceOfferChoice(Integer caseID) throws FinderException {
+		return getServiceOfferChoiceHome().findByPrimaryKey(caseID);
 	}
 
 	/**
@@ -294,5 +318,65 @@ public class ServiceOfferBusinessBean extends CaseBusinessBean implements CaseBu
 		}else{
 			changeCaseStatus(choice, getCaseStatusDenied(), performer);
 		}
+	}
+	
+
+	/**
+	 * @return Returns a collection of ServiceOfferChoice cases
+	 */
+	public Collection getServiceOfferChoices(ServiceOffer offer){
+		Collection cases =  offer.getChildren();
+		List choices = new ArrayList();
+		for (Iterator iter = cases.iterator(); iter.hasNext();) {
+			
+			Case generalCase = (Case) iter.next();
+			String caseCode = generalCase.getCode();
+			if(CASE_CODE_KEY_SERVICE_OFFER.equals(caseCode)){
+				try {
+					choices.add(getServiceOfferChoice((Integer)generalCase.getPrimaryKey()));
+				}
+				catch (EJBException e) {
+					e.printStackTrace();
+				}
+				catch (FinderException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		return choices;
+	}
+	
+	/**
+	 * @return Returns a collection of ServiceOffer cases for the owner user
+	 */
+	public Collection getServiceOffers(User owner){
+		Collection cases;
+		try {
+			cases = getAllActiveCasesForUser(owner, CASE_CODE_KEY_SERVICE_OFFER_PARENT);
+		}
+		catch (FinderException e1) {
+			//e1.printStackTrace();
+			return ListUtil.getEmptyList();
+		}
+		
+		List offers = new ArrayList();
+		for (Iterator iter = cases.iterator(); iter.hasNext();) {
+			
+			Case generalCase = (Case) iter.next();
+		
+				try {
+					offers.add(getServiceOffer((Integer)generalCase.getPrimaryKey()));
+				}
+				catch (EJBException e) {
+					e.printStackTrace();
+				}
+				catch (FinderException e) {
+					e.printStackTrace();
+				}
+		
+		}
+		
+		return offers;
 	}
 }

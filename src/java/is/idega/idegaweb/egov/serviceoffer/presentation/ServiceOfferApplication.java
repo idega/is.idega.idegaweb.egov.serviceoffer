@@ -1,5 +1,5 @@
 /*
- * $Id: ServiceOfferApplication.java,v 1.8 2005/10/16 17:53:04 eiki Exp $
+ * $Id: ServiceOfferApplication.java,v 1.9 2005/10/17 02:27:54 eiki Exp $
  * Created on Oct 2, 2005
  *
  * Copyright (C) 2005 Idega Software hf. All Rights Reserved.
@@ -39,10 +39,10 @@ import com.idega.util.IWTimestamp;
  * An application for sending a service offer(description), that may have a price, to a citizen or a group of citizens
  * that then have to approve it.
  * 
- *  Last modified: $Date: 2005/10/16 17:53:04 $ by $Author: eiki $
+ *  Last modified: $Date: 2005/10/17 02:27:54 $ by $Author: eiki $
  * 
  * @author <a href="mailto:eiki@idega.com">eiki</a>
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 public class ServiceOfferApplication extends ServiceOfferBlock implements ServiceOfferConstants{
 	
@@ -298,7 +298,7 @@ public class ServiceOfferApplication extends ServiceOfferBlock implements Servic
 		//recipients.setAsNotEmpty(localize("service.offer.application.must_select_recipients","At least one recipient must be chosen"));
 		
 		recipients.setName(PARAMETER_SERVICE_RECIPIENTS_SCHOOL_CLASS);
-		recipients.setStyleClass("selectionBox");
+		recipients.setStyleClass(STYLE_CLASS_SELECTION_BOX);
 		recipients.keepStatusOnAction();
 		
 //		Label recipientsLabel = new Label(localize("service.offer.application.recipients" ,"Recipients"), recipients);
@@ -437,7 +437,7 @@ public class ServiceOfferApplication extends ServiceOfferBlock implements Servic
 		
 		SchoolGroupHandler recipients = new SchoolGroupHandler();
 		recipients.setName(PARAMETER_SERVICE_RECIPIENTS_SCHOOL_CLASS);
-		recipients.setStyleClass("selectionBox");
+		recipients.setStyleClass(STYLE_CLASS_SELECTION_BOX);
 		recipients.setDisabled(true);	
 		recipients.setToShowOnlySelected(true);
 		recipients.keepStatusOnAction();
