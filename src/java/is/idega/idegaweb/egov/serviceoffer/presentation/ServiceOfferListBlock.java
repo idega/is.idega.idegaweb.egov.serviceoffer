@@ -1,5 +1,5 @@
 /*
- * $Id: ServiceOfferListBlock.java,v 1.1 2005/10/17 02:27:54 eiki Exp $
+ * $Id: ServiceOfferListBlock.java,v 1.2 2005/10/17 03:33:57 eiki Exp $
  * Created on Oct 2, 2005
  *
  * Copyright (C) 2005 Idega Software hf. All Rights Reserved.
@@ -42,10 +42,10 @@ import com.idega.util.text.Name;
 /**
  * A block for viewing and editing a list of service offers
  * 
- *  Last modified: $Date: 2005/10/17 02:27:54 $ by $Author: eiki $
+ *  Last modified: $Date: 2005/10/17 03:33:57 $ by $Author: eiki $
  * 
  * @author <a href="mailto:eiki@idega.com">eiki</a>
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class ServiceOfferListBlock extends ServiceOfferBlock implements ServiceOfferConstants{
 	
@@ -271,14 +271,18 @@ public class ServiceOfferListBlock extends ServiceOfferBlock implements ServiceO
 				
 				Collection userPhones = owner.getPhones();
 				TableCell2 phoneCell = row.createCell();
-				int foneCount = 1;
+				//int foneCount = 1;
 				for (Iterator phones = userPhones.iterator(); phones.hasNext();) {
 					Phone phone = (Phone) phones.next();
-					if(foneCount>1){
-						phoneCell.add(new Text(" / "));
+//					if(foneCount>1){
+//						phoneCell.add(new Text(" / "));
+//					}
+					String number = phone.getNumber();
+					if(number!=null && !"".equals(number)){
+						phoneCell.add(new Text(phone.getNumber()));
+					//foneCount++;
+						break;
 					}
-					phoneCell.add(new Text(phone.getNumber()));
-					foneCount++;
 				}
 				
 				row.createCell().add(new Text(localize(status,status)));
