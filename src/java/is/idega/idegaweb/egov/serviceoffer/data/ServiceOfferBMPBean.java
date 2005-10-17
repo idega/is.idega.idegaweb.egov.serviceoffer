@@ -1,5 +1,5 @@
 /*
- * $Id: ServiceOfferBMPBean.java,v 1.3 2005/10/17 02:27:54 eiki Exp $ Created on
+ * $Id: ServiceOfferBMPBean.java,v 1.4 2005/10/17 03:08:12 eiki Exp $ Created on
  * Aug 10, 2005
  * 
  * Copyright (C) 2005 Idega Software hf. All Rights Reserved.
@@ -24,10 +24,10 @@ import com.idega.util.ListUtil;
 /**
  * A parent case for ServiceOfferChoices
  * 
- * Last modified: $Date: 2005/10/17 02:27:54 $ by $Author: eiki $
+ * Last modified: $Date: 2005/10/17 03:08:12 $ by $Author: eiki $
  * 
  * @author <a href="mailto:eiki@idega.com">eiki</a>
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class ServiceOfferBMPBean extends AbstractCaseBMPBean implements Case, ServiceOfferConstants, ServiceOffer {
 
@@ -191,11 +191,12 @@ public class ServiceOfferBMPBean extends AbstractCaseBMPBean implements Case, Se
 	public String toString(){
 		
 		Timestamp date = getServiceDate();
-		IWTimestamp stamp = new IWTimestamp(date);
+		
 		if(date==null){
 			return getServiceName();
 		}
 		else{
+			IWTimestamp stamp = new IWTimestamp(date);
 			return getServiceName()+" - "+stamp.getDateString("dd/MM/yyyy hh:mm");
 		}
 	}

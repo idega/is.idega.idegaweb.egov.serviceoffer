@@ -1,5 +1,5 @@
 /*
- * $Id: ServiceOfferBusinessBean.java,v 1.6 2005/10/17 02:27:54 eiki Exp $
+ * $Id: ServiceOfferBusinessBean.java,v 1.7 2005/10/17 03:08:12 eiki Exp $
  * Created on Aug 10, 2005
  *
  * Copyright (C) 2005 Idega Software hf. All Rights Reserved.
@@ -49,10 +49,10 @@ import com.idega.util.text.Name;
 /**
  * 
  * 
- *  Last modified: $Date: 2005/10/17 02:27:54 $ by $Author: eiki $
+ *  Last modified: $Date: 2005/10/17 03:08:12 $ by $Author: eiki $
  * 
  * @author <a href="mailto:eiki@idega.com">eiki</a>
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 public class ServiceOfferBusinessBean extends CaseBusinessBean implements CaseBusiness, ServiceOfferBusiness, ServiceOfferConstants{
 
@@ -141,6 +141,7 @@ public class ServiceOfferBusinessBean extends CaseBusinessBean implements CaseBu
 			choice.setHandler(performer.getPrimaryGroup());
 			choice.setParentCase(offer);
 			choice.store();
+			
 			changeCaseStatus(choice, getCaseStatusOpenString(), performer);
 
 			if(isOptional){

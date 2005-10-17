@@ -1,5 +1,5 @@
 /*
- * $Id: ServiceOfferChoiceBlock.java,v 1.5 2005/10/17 02:27:54 eiki Exp $
+ * $Id: ServiceOfferChoiceBlock.java,v 1.6 2005/10/17 03:08:12 eiki Exp $
  * Created on Oct 2, 2005
  *
  * Copyright (C) 2005 Idega Software hf. All Rights Reserved.
@@ -30,10 +30,10 @@ import com.idega.user.data.User;
 /**
  * A block for viewing/accepting/declining a service offer choice
  * 
- *  Last modified: $Date: 2005/10/17 02:27:54 $ by $Author: eiki $
+ *  Last modified: $Date: 2005/10/17 03:08:12 $ by $Author: eiki $
  * 
  * @author <a href="mailto:eiki@idega.com">eiki</a>
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public class ServiceOfferChoiceBlock extends ServiceOfferBlock implements ServiceOfferConstants{
 	
@@ -49,6 +49,7 @@ public class ServiceOfferChoiceBlock extends ServiceOfferBlock implements Servic
 	private static final int ACTION_DECLINE = 3;
 	private static final int ACTION_OVERVIEW = 4;
 	private static final int ACTION_SAVE = 5;
+	private static final int ACTION_VIEW_CLOSED = 6;
 	
 	
 	public void present(IWContext iwc) {
@@ -62,9 +63,15 @@ public class ServiceOfferChoiceBlock extends ServiceOfferBlock implements Servic
 				ServiceOfferChoice choice = (ServiceOfferChoice) getBusiness().getServiceOfferChoice(Integer.parseInt(selectedCaseId));
 				ServiceOffer offer = (ServiceOffer)  getBusiness().getServiceOffer(((Integer)choice.getParentCase().getPrimaryKey()).intValue());
 			
+				boolean isOver = !choice.getStatus().equals(getBusiness().getCaseStatusOpenString());
 				switch (parseAction(iwc)) {
 					case ACTION_PHASE_ONE:
-						showPhaseOne(iwc,choice,offer);
+						if(!isOver){
+							showPhaseOne(iwc,choice,offer);
+						}
+						else{
+							showClosedChoice(iwc,choice,offer);
+						}
 						break;
 					case ACTION_ACCEPT:
 						showOverview(iwc,choice,offer,true);
@@ -232,6 +239,58 @@ public class ServiceOfferChoiceBlock extends ServiceOfferBlock implements Servic
 		
 		add(form);
 	}
+	
+	private void showClosedChoice(IWContext iwc, ServiceOfferChoice choice, ServiceOffer offer) throws RemoteException {
+			Form form = createForm(iwc, 	ACTION_VIEW_CLOSED);
+			
+			boolean accepted = choice.getStatus().equals(getBusiness().getCaseStatusGranted().getStatus());
+			
+			Layer layer = new Layer(Layer.DIV);
+			layer.setID("phasesDiv");
+			form.add(layer);
+					
+			layer.add(new Heading1(localize("service.offer.choice.closed_choice_overview", "Closed service offer overview")));
+			
+			Paragraph forUserParagraph = new Paragraph();
+			User user = choice.getUser();
+			forUserParagraph.add(new Text(localize("service.offer.choice.service_offer_for","A service offer for ")+user.getName()+", "+user.getPersonalID()));
+			layer.add(forUserParagraph);
+			
+			Paragraph paragraph = new Paragraph();
+			if(accepted){
+				paragraph.add(new Text(localize("service.offer.choice.already_accepted_text", "You have already decided to accept the service offer below and the case is therefore closed.")));
+			}
+			else{
+				paragraph.add(new Text(localize("service.offer.choice.already_declined_text", "You have already decided to decline the service offer below and the case is therefore closed.")));	
+			}
+			layer.add(paragraph);
+			
+			addServiceOffer(iwc, layer,offer);
+			
+			layer.add(new CSSSpacer());
+						
+			ICPage homePage = null;
+			try {
+				homePage = getUserBusiness(iwc).getHomePageForUser(getUser(iwc));
+			}
+			catch (FinderException e) {
+				//no homepage for user??
+				e.printStackTrace();
+			}
+			
+			if (homePage!= null) {
+				Layer buttonLayer = new Layer(Layer.DIV);
+				buttonLayer.setStyleClass("buttonDiv");
+				layer.add(buttonLayer);
+				
+				GenericButton home = new GenericButton(localize("my_page", "My page"));
+				home.setPageToOpen(homePage);
+				buttonLayer.add(home);
+			}
+			
+			add(form);
+	}
+	
 	
 	private void save(IWContext iwc, ServiceOfferChoice choice, ServiceOffer offer) throws RemoteException {
 		
