@@ -1,5 +1,5 @@
 /*
- * $Id: ServiceOfferChoiceBlock.java,v 1.6 2005/10/17 03:08:12 eiki Exp $
+ * $Id: ServiceOfferChoiceBlock.java,v 1.7 2005/11/29 15:28:20 laddi Exp $
  * Created on Oct 2, 2005
  *
  * Copyright (C) 2005 Idega Software hf. All Rights Reserved.
@@ -30,10 +30,10 @@ import com.idega.user.data.User;
 /**
  * A block for viewing/accepting/declining a service offer choice
  * 
- *  Last modified: $Date: 2005/10/17 03:08:12 $ by $Author: eiki $
+ *  Last modified: $Date: 2005/11/29 15:28:20 $ by $Author: laddi $
  * 
  * @author <a href="mailto:eiki@idega.com">eiki</a>
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 public class ServiceOfferChoiceBlock extends ServiceOfferBlock implements ServiceOfferConstants{
 	
@@ -60,8 +60,8 @@ public class ServiceOfferChoiceBlock extends ServiceOfferBlock implements Servic
 				add(localize("service.offer.choice.no_case_selected", "NO CASE SELECTED"));
 			}
 			else{
-				ServiceOfferChoice choice = (ServiceOfferChoice) getBusiness().getServiceOfferChoice(Integer.parseInt(selectedCaseId));
-				ServiceOffer offer = (ServiceOffer)  getBusiness().getServiceOffer(((Integer)choice.getParentCase().getPrimaryKey()).intValue());
+				ServiceOfferChoice choice = getBusiness().getServiceOfferChoice(Integer.parseInt(selectedCaseId));
+				ServiceOffer offer = getBusiness().getServiceOffer(((Integer)choice.getParentCase().getPrimaryKey()).intValue());
 			
 				boolean isOver = !choice.getStatus().equals(getBusiness().getCaseStatusOpenString());
 				switch (parseAction(iwc)) {

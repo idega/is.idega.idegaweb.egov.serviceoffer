@@ -1,5 +1,5 @@
 /*
- * $Id: ServiceOfferChoiceBMPBean.java,v 1.2 2005/10/16 16:19:50 eiki Exp $
+ * $Id: ServiceOfferChoiceBMPBean.java,v 1.3 2005/11/29 15:28:20 laddi Exp $
  * Created on Aug 10, 2005
  *
  * Copyright (C) 2005 Idega Software hf. All Rights Reserved.
@@ -20,10 +20,10 @@ import com.idega.user.data.User;
  * The actual case that is created for a custodian of the user that is referenced in this bean.
  * The parent case is the ServiceOffer that belongs to the person who creates a new ServiceOffer
  * 
- *  Last modified: $Date: 2005/10/16 16:19:50 $ by $Author: eiki $
+ *  Last modified: $Date: 2005/11/29 15:28:20 $ by $Author: laddi $
  * 
  * @author <a href="mailto:eiki@idega.com">eiki</a>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class ServiceOfferChoiceBMPBean extends AbstractCaseBMPBean implements Case , ServiceOfferConstants, ServiceOfferChoice{
 	
@@ -75,7 +75,7 @@ public class ServiceOfferChoiceBMPBean extends AbstractCaseBMPBean implements Ca
 	}
 	
 	public boolean hasBeenViewed() {
-		return (boolean) getBooleanColumnValue(COLUMN_VIEWED,false);
+		return getBooleanColumnValue(COLUMN_VIEWED,false);
 	}
 	
 	public void setAsViewed(){
@@ -87,7 +87,7 @@ public class ServiceOfferChoiceBMPBean extends AbstractCaseBMPBean implements Ca
 	}
 	
 	public boolean hasBeenPaidFor() {
-		return (boolean) getBooleanColumnValue(COLUMN_PAYED,false);
+		return getBooleanColumnValue(COLUMN_PAYED,false);
 	}
 	
 	public void setAsPaidFor(){

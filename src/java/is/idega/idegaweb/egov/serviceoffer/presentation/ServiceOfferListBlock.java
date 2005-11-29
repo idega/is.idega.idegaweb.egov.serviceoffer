@@ -1,5 +1,5 @@
 /*
- * $Id: ServiceOfferListBlock.java,v 1.2 2005/10/17 03:33:57 eiki Exp $
+ * $Id: ServiceOfferListBlock.java,v 1.3 2005/11/29 15:28:20 laddi Exp $
  * Created on Oct 2, 2005
  *
  * Copyright (C) 2005 Idega Software hf. All Rights Reserved.
@@ -42,10 +42,10 @@ import com.idega.util.text.Name;
 /**
  * A block for viewing and editing a list of service offers
  * 
- *  Last modified: $Date: 2005/10/17 03:33:57 $ by $Author: eiki $
+ *  Last modified: $Date: 2005/11/29 15:28:20 $ by $Author: laddi $
  * 
  * @author <a href="mailto:eiki@idega.com">eiki</a>
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class ServiceOfferListBlock extends ServiceOfferBlock implements ServiceOfferConstants{
 	
@@ -63,7 +63,7 @@ public class ServiceOfferListBlock extends ServiceOfferBlock implements ServiceO
 			ServiceOffer offer = null;
 			selectedCaseId = iwc.getParameter(getBusiness().getSelectedCaseParameter());
 			if(selectedCaseId!=null && !"".equals(selectedCaseId)) {
-				offer = (ServiceOffer) getBusiness().getServiceOffer(Integer.parseInt(selectedCaseId));
+				offer = getBusiness().getServiceOffer(Integer.parseInt(selectedCaseId));
 			}
 			
 				switch (parseAction(iwc)) {
