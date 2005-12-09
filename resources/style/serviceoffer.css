@@ -48,20 +48,25 @@ form#serviceOfferForm p {
 }
 
 div#phasesDiv {
+position: relative;
+	padding-top:0px;
 	margin-bottom: 20px;
+	border: 0;
 }
 
 
-#phasesDiv h1 {
-	font-size: 12px;
+div#phasesDiv h1 {
+position: relative;
+    font-size: 12px;
     margin-top: 3px;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
 }
 
-#phasesDiv p {
+div#phasesDiv p {
+position:relative;
 	font-size: 10px;
 	margin-top: 5px;
-	margin-bottom: 5px;
+	margin-bottom: 10px;
 }
 
 div.buttonDiv {
@@ -69,21 +74,25 @@ div.buttonDiv {
 	text-align: right;
 }
 
+div.buttonDiv input {
+	text-transform: uppercase;
+}
+
 form#serviceOfferForm div#sectionDiv {
 	margin-bottom: 20px;
 }
 
-#serviceOfferForm div.formElement {
+form#serviceOfferForm div.formElement {
 	clear:left;
 	margin-bottom: 5px;
 }
 
-#serviceOfferForm div.formElement label {
+form#serviceOfferForm div.formElement label {
 	width: 150px;
 	float:left;
 }
 
-#serviceOfferForm label, labelText {
+form#serviceOfferForm label, labelText {
 	font-size: 10px;
 	font-weight: bold;
 }
@@ -98,12 +107,12 @@ form#serviceOfferForm div#sectionDiv {
 	float:left;
 }
 
-#serviceOfferForm div.formElement label.labelRadioButton{
+form#serviceOfferForm div.formElement label.labelRadioButton{
 	width: 40px;
 	float: none;
 }
 
-#serviceOfferForm .labelText{
+form#serviceOfferForm .labelText{
 	width: 150px;
 	float:left;
 	font-size: 10px;
