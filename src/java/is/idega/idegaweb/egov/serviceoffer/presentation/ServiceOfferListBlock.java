@@ -1,5 +1,5 @@
 /*
- * $Id: ServiceOfferListBlock.java,v 1.3 2005/11/29 15:28:20 laddi Exp $
+ * $Id: ServiceOfferListBlock.java,v 1.4 2006/02/22 21:02:41 laddi Exp $
  * Created on Oct 2, 2005
  *
  * Copyright (C) 2005 Idega Software hf. All Rights Reserved.
@@ -42,10 +42,10 @@ import com.idega.util.text.Name;
 /**
  * A block for viewing and editing a list of service offers
  * 
- *  Last modified: $Date: 2005/11/29 15:28:20 $ by $Author: laddi $
+ *  Last modified: $Date: 2006/02/22 21:02:41 $ by $Author: laddi $
  * 
  * @author <a href="mailto:eiki@idega.com">eiki</a>
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class ServiceOfferListBlock extends ServiceOfferBlock implements ServiceOfferConstants{
 	
@@ -54,8 +54,6 @@ public class ServiceOfferListBlock extends ServiceOfferBlock implements ServiceO
 	private static final int ACTION_PHASE_ONE = 1;
 	private static final int ACTION_LIST= 2;
 	private static final int ACTION_SAVE = 3;
-	
-	private User user;
 	
 	public void present(IWContext iwc) {
 		String selectedCaseId = null;
