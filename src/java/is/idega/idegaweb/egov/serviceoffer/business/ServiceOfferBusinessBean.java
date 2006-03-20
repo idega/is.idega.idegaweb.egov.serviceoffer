@@ -1,5 +1,5 @@
 /*
- * $Id: ServiceOfferBusinessBean.java,v 1.8 2006/03/20 08:09:34 laddi Exp $
+ * $Id: ServiceOfferBusinessBean.java,v 1.9 2006/03/20 09:20:42 laddi Exp $
  * Created on Aug 10, 2005
  *
  * Copyright (C) 2005 Idega Software hf. All Rights Reserved.
@@ -49,10 +49,10 @@ import com.idega.util.text.Name;
 /**
  * 
  * 
- *  Last modified: $Date: 2006/03/20 08:09:34 $ by $Author: laddi $
+ *  Last modified: $Date: 2006/03/20 09:20:42 $ by $Author: laddi $
  * 
  * @author <a href="mailto:eiki@idega.com">eiki</a>
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 public class ServiceOfferBusinessBean extends CaseBusinessBean implements CaseBusiness, ServiceOfferBusiness, ServiceOfferConstants{
 
@@ -398,7 +398,7 @@ public class ServiceOfferBusinessBean extends CaseBusinessBean implements CaseBu
 		}
 		
 		choices.removeAll(paidChoices);
-		Iterator iter = paidChoices.iterator();
+		Iterator iter = choices.iterator();
 		while (iter.hasNext()) {
 			ServiceOfferChoice choice = (ServiceOfferChoice) iter.next();
 			choice.setAsUnPaidFor();
