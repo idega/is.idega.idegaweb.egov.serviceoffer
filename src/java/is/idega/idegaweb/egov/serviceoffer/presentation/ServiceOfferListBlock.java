@@ -1,5 +1,5 @@
 /*
- * $Id: ServiceOfferListBlock.java,v 1.4 2006/02/22 21:02:41 laddi Exp $
+ * $Id: ServiceOfferListBlock.java,v 1.5 2006/03/20 08:09:34 laddi Exp $
  * Created on Oct 2, 2005
  *
  * Copyright (C) 2005 Idega Software hf. All Rights Reserved.
@@ -31,6 +31,7 @@ import com.idega.presentation.TableRowGroup;
 import com.idega.presentation.text.Heading1;
 import com.idega.presentation.text.Paragraph;
 import com.idega.presentation.text.Text;
+import com.idega.presentation.ui.CheckBox;
 import com.idega.presentation.ui.DropdownMenu;
 import com.idega.presentation.ui.Form;
 import com.idega.presentation.ui.GenericButton;
@@ -42,18 +43,20 @@ import com.idega.util.text.Name;
 /**
  * A block for viewing and editing a list of service offers
  * 
- *  Last modified: $Date: 2006/02/22 21:02:41 $ by $Author: laddi $
+ *  Last modified: $Date: 2006/03/20 08:09:34 $ by $Author: laddi $
  * 
  * @author <a href="mailto:eiki@idega.com">eiki</a>
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class ServiceOfferListBlock extends ServiceOfferBlock implements ServiceOfferConstants{
 	
 	private static final String PARAMETER_ACTION = "prm_servoflb_action";
+	private static final String PARAMETER_PAID = "prm_servoflb_paid";
 	
 	private static final int ACTION_PHASE_ONE = 1;
 	private static final int ACTION_LIST= 2;
 	private static final int ACTION_SAVE = 3;
+	private static final int ACTION_STORE_PAYMENT_INFO = 4;
 	
 	public void present(IWContext iwc) {
 		String selectedCaseId = null;
@@ -78,6 +81,10 @@ public class ServiceOfferListBlock extends ServiceOfferBlock implements ServiceO
 						break;
 					case ACTION_SAVE:
 						save(iwc,offer);
+						break;
+					case ACTION_STORE_PAYMENT_INFO:
+						storePaymentInfo(iwc, offer);
+						showChoiceList(iwc,offer);
 						break;
 				}
 				
@@ -164,9 +171,9 @@ public class ServiceOfferListBlock extends ServiceOfferBlock implements ServiceO
 		buttonLayer.setStyleClass("buttonDiv");
 		layer.add(buttonLayer);
 		
-//		SubmitButton save = new SubmitButton(localize("save", "Save"));
-//		save.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_SAVE));
-//		
+		SubmitButton save = new SubmitButton(localize("save", "Save"));
+		save.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_STORE_PAYMENT_INFO));
+		
 		SubmitButton previous = new SubmitButton(localize("previous", "Previous"));
 		previous.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_PHASE_ONE));
 		
@@ -188,7 +195,7 @@ public class ServiceOfferListBlock extends ServiceOfferBlock implements ServiceO
 		}
 		
 	//TODO make able to delete/cancel a service offer
-		//buttonLayer.add(save);
+		buttonLayer.add(save);
 		
 		add(form);
 	}
@@ -218,8 +225,8 @@ public class ServiceOfferListBlock extends ServiceOfferBlock implements ServiceO
 		row.createHeaderCell().add(new Text(localize("service.offer.choice.custodian_personal_id", "Custodian's ssn")));
 		row.createHeaderCell().add(new Text(localize("service.offer.choice.phone_number", "Phone number")));
 		row.createHeaderCell().add(new Text(localize("service.offer.choice.status", "Status")));
-		row.createHeaderCell().add(new Text(localize("service.offer.choice.payment_status", "Payment")));
 		row.createHeaderCell().add(new Text(localize("service.offer.choice.viewed", "Viewed")));
+		row.createHeaderCell().add(new Text(localize("service.offer.choice.payment_status", "Payment")));
 		
 		group = table.createBodyRowGroup();
 		int iRow = 1;
@@ -286,8 +293,11 @@ public class ServiceOfferListBlock extends ServiceOfferBlock implements ServiceO
 				row.createCell().add(new Text(localize(status,status)));
 				
 				//row.createCell().add(new Text( (paid)?localize("service.offer.choice.paid_for","Paid"):localize("service.offer.choice.un_paid","Not paid") ));
-				row.createCell().add(new Text( (paid)?"X":"-"));
 				row.createCell().add(new Text( (viewed)?"X":"-"));
+				
+				CheckBox hasPaid = new CheckBox(PARAMETER_PAID);
+				hasPaid.setChecked(paid);
+				row.createCell().add(hasPaid);
 				
 				if (iRow % 2 == 0) {
 					row.setStyleClass(STYLENAME_LIST_TABLE_EVEN_ROW);
@@ -371,5 +381,10 @@ public class ServiceOfferListBlock extends ServiceOfferBlock implements ServiceO
 		return action;
 	}
 	
-	
+	private void storePaymentInfo(IWContext iwc, ServiceOffer offer) throws RemoteException {
+		String[] choices = iwc.getParameterValues(PARAMETER_PAID);
+		if (choices != null) {
+			getBusiness().storePaymentInfo(offer, choices);
+		}
+	}
 }
