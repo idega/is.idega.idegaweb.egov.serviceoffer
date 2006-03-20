@@ -1,5 +1,5 @@
 /*
- * $Id: ServiceOfferListBlock.java,v 1.5 2006/03/20 08:09:34 laddi Exp $
+ * $Id: ServiceOfferListBlock.java,v 1.6 2006/03/20 08:28:31 laddi Exp $
  * Created on Oct 2, 2005
  *
  * Copyright (C) 2005 Idega Software hf. All Rights Reserved.
@@ -43,10 +43,10 @@ import com.idega.util.text.Name;
 /**
  * A block for viewing and editing a list of service offers
  * 
- *  Last modified: $Date: 2006/03/20 08:09:34 $ by $Author: laddi $
+ *  Last modified: $Date: 2006/03/20 08:28:31 $ by $Author: laddi $
  * 
  * @author <a href="mailto:eiki@idega.com">eiki</a>
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public class ServiceOfferListBlock extends ServiceOfferBlock implements ServiceOfferConstants{
 	
@@ -147,6 +147,7 @@ public class ServiceOfferListBlock extends ServiceOfferBlock implements ServiceO
 
 	private void showChoiceList(IWContext iwc, ServiceOffer offer) throws RemoteException {
 		Form form = createForm(iwc, ACTION_LIST);
+		form.addParameter(getBusiness().getSelectedCaseParameter(), offer.getPrimaryKey().toString());
 		
 		Layer layer = new Layer(Layer.DIV);
 		layer.setID("phasesDiv");
