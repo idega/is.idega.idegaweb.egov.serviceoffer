@@ -1,5 +1,5 @@
 /*
- * $Id: ServiceOfferChoiceBlock.java,v 1.7 2005/11/29 15:28:20 laddi Exp $
+ * $Id: ServiceOfferChoiceBlock.java,v 1.8 2006/03/20 09:44:16 laddi Exp $
  * Created on Oct 2, 2005
  *
  * Copyright (C) 2005 Idega Software hf. All Rights Reserved.
@@ -30,10 +30,10 @@ import com.idega.user.data.User;
 /**
  * A block for viewing/accepting/declining a service offer choice
  * 
- *  Last modified: $Date: 2005/11/29 15:28:20 $ by $Author: laddi $
+ *  Last modified: $Date: 2006/03/20 09:44:16 $ by $Author: laddi $
  * 
  * @author <a href="mailto:eiki@idega.com">eiki</a>
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 public class ServiceOfferChoiceBlock extends ServiceOfferBlock implements ServiceOfferConstants{
 	
@@ -83,8 +83,6 @@ public class ServiceOfferChoiceBlock extends ServiceOfferBlock implements Servic
 						save(iwc,choice,offer);
 						break;
 				}
-				
-				add(getHelpButton("service_offer_choice"));
 			}
 		}
 		catch (RemoteException re) {

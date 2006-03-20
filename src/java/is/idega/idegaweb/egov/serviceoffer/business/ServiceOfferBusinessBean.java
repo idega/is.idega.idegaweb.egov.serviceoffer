@@ -1,5 +1,5 @@
 /*
- * $Id: ServiceOfferBusinessBean.java,v 1.9 2006/03/20 09:20:42 laddi Exp $
+ * $Id: ServiceOfferBusinessBean.java,v 1.10 2006/03/20 09:44:16 laddi Exp $
  * Created on Aug 10, 2005
  *
  * Copyright (C) 2005 Idega Software hf. All Rights Reserved.
@@ -49,10 +49,10 @@ import com.idega.util.text.Name;
 /**
  * 
  * 
- *  Last modified: $Date: 2006/03/20 09:20:42 $ by $Author: laddi $
+ *  Last modified: $Date: 2006/03/20 09:44:16 $ by $Author: laddi $
  * 
  * @author <a href="mailto:eiki@idega.com">eiki</a>
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 public class ServiceOfferBusinessBean extends CaseBusinessBean implements CaseBusiness, ServiceOfferBusiness, ServiceOfferConstants{
 
@@ -385,19 +385,21 @@ public class ServiceOfferBusinessBean extends CaseBusinessBean implements CaseBu
 		Collection choices = getServiceOfferChoices(offer);
 		
 		Collection paidChoices = new ArrayList();
-		for (int i = 0; i < offerChoices.length; i++) {
-			try {
-				ServiceOfferChoice choice = getServiceOfferChoice(new Integer(offerChoices[i]));
-				choice.setAsPaidFor();
-				choice.store();
-				paidChoices.add(choice);
-			}
-			catch (FinderException fe) {
-				fe.printStackTrace();
+		if (offerChoices != null) {
+			for (int i = 0; i < offerChoices.length; i++) {
+				try {
+					ServiceOfferChoice choice = getServiceOfferChoice(new Integer(offerChoices[i]));
+					choice.setAsPaidFor();
+					choice.store();
+					paidChoices.add(choice);
+				}
+				catch (FinderException fe) {
+					fe.printStackTrace();
+				}
 			}
 		}
-		
 		choices.removeAll(paidChoices);
+		
 		Iterator iter = choices.iterator();
 		while (iter.hasNext()) {
 			ServiceOfferChoice choice = (ServiceOfferChoice) iter.next();

@@ -1,5 +1,5 @@
 /*
- * $Id: ServiceOfferListBlock.java,v 1.7 2006/03/20 09:00:11 laddi Exp $
+ * $Id: ServiceOfferListBlock.java,v 1.8 2006/03/20 09:44:16 laddi Exp $
  * Created on Oct 2, 2005
  *
  * Copyright (C) 2005 Idega Software hf. All Rights Reserved.
@@ -43,10 +43,10 @@ import com.idega.util.text.Name;
 /**
  * A block for viewing and editing a list of service offers
  * 
- *  Last modified: $Date: 2006/03/20 09:00:11 $ by $Author: laddi $
+ *  Last modified: $Date: 2006/03/20 09:44:16 $ by $Author: laddi $
  * 
  * @author <a href="mailto:eiki@idega.com">eiki</a>
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 public class ServiceOfferListBlock extends ServiceOfferBlock implements ServiceOfferConstants{
 	
@@ -87,8 +87,6 @@ public class ServiceOfferListBlock extends ServiceOfferBlock implements ServiceO
 						showChoiceList(iwc,offer);
 						break;
 				}
-				
-				add(getHelpButton("service_offer_list"));
 		}
 		catch (RemoteException re) {
 			throw new IBORuntimeException(re);
@@ -126,7 +124,6 @@ public class ServiceOfferListBlock extends ServiceOfferBlock implements ServiceO
 		formElementOffer.setStyleClass(STYLE_CLASS_FORM_ELEMENT);
 		
 		DropdownMenu offers = new DropdownMenu(getBusiness().getSelectedCaseParameter());
-		//offers.setStyleClass(	STYLE_CLASS_SELECTION_BOX);
 		offers.addMenuElements(getBusiness().getServiceOffers(iwc.getCurrentUser()));
 		
 		formElementOffer.add(offers);
@@ -185,7 +182,6 @@ public class ServiceOfferListBlock extends ServiceOfferBlock implements ServiceO
 			homePage = getUserBusiness(iwc).getHomePageForUser(iwc.getCurrentUser());
 		}
 		catch (FinderException e) {
-			//no homepage for user??
 			e.printStackTrace();
 		}
 		
@@ -195,14 +191,12 @@ public class ServiceOfferListBlock extends ServiceOfferBlock implements ServiceO
 			buttonLayer.add(home);
 		}
 		
-	//TODO make able to delete/cancel a service offer
 		buttonLayer.add(save);
 		
 		add(form);
 	}
 	
 	private void addServiceOfferChoiceList(IWContext iwc, Layer layer, ServiceOffer offer) throws RemoteException {
-
 		Table2 table = new Table2();
 		table.setWidth("100%");
 		table.setCellpadding(0);
@@ -259,12 +253,14 @@ public class ServiceOfferListBlock extends ServiceOfferBlock implements ServiceO
 			else if(deniedStatusCode.equals(status)){
 				totalDenied++;
 			}
+			
 			boolean paid = choice.hasBeenPaidFor();
-			if(paid){
+			if (paid){
 				totalPaid++;
 			}
+			
 			boolean viewed = choice.hasBeenViewed();
-			if(viewed){
+			if (viewed){
 				totalViewed++;
 			}
 			
@@ -277,23 +273,16 @@ public class ServiceOfferListBlock extends ServiceOfferBlock implements ServiceO
 				
 				Collection userPhones = owner.getPhones();
 				TableCell2 phoneCell = row.createCell();
-				//int foneCount = 1;
 				for (Iterator phones = userPhones.iterator(); phones.hasNext();) {
 					Phone phone = (Phone) phones.next();
-//					if(foneCount>1){
-//						phoneCell.add(new Text(" / "));
-//					}
 					String number = phone.getNumber();
 					if(number!=null && !"".equals(number)){
 						phoneCell.add(new Text(phone.getNumber()));
-					//foneCount++;
 						break;
 					}
 				}
 				
 				row.createCell().add(new Text(localize(status,status)));
-				
-				//row.createCell().add(new Text( (paid)?localize("service.offer.choice.paid_for","Paid"):localize("service.offer.choice.un_paid","Not paid") ));
 				row.createCell().add(new Text( (viewed)?"X":"-"));
 				
 				CheckBox hasPaid = new CheckBox(PARAMETER_PAID, choice.getPrimaryKey().toString());
@@ -322,15 +311,13 @@ public class ServiceOfferListBlock extends ServiceOfferBlock implements ServiceO
 		cell.setColumnSpan(5);
 		cell.add(new Text(localize("service.offer.choice.total", "Total")));
 		row.createCell().add(new Text(String.valueOf(totalAgreed)+"/"+String.valueOf(totalDenied)+"/"+total));
-		row.createCell().add(new Text(String.valueOf(totalPaid)+"/"+total));
 		row.createCell().add(new Text(String.valueOf(totalViewed)+"/"+total));
+		row.createCell().add(new Text(String.valueOf(totalPaid)+"/"+total));
 
 		layer.add(table);
-		
 	}
 
 	private void save(IWContext iwc, ServiceOffer offer) throws RemoteException {
-		
 		Layer layer = new Layer(Layer.DIV);
 		layer.setID("phasesDiv");
 		add(layer);
@@ -367,9 +354,6 @@ public class ServiceOfferListBlock extends ServiceOfferBlock implements ServiceO
 		form.setID("serviceOfferForm");
 		form.addParameter(PARAMETER_ACTION, actionPhase);
 		
-		//form.maintainParameter(getBusiness().getSelectedCaseParameter());
-		
-		
 		return form;
 	}
 	
@@ -384,8 +368,6 @@ public class ServiceOfferListBlock extends ServiceOfferBlock implements ServiceO
 	
 	private void storePaymentInfo(IWContext iwc, ServiceOffer offer) throws RemoteException {
 		String[] choices = iwc.getParameterValues(PARAMETER_PAID);
-		if (choices != null) {
-			getBusiness().storePaymentInfo(offer, choices);
-		}
+		getBusiness().storePaymentInfo(offer, choices);
 	}
 }
