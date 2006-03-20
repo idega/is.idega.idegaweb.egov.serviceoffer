@@ -1,5 +1,5 @@
 /*
- * $Id: ServiceOfferListBlock.java,v 1.6 2006/03/20 08:28:31 laddi Exp $
+ * $Id: ServiceOfferListBlock.java,v 1.7 2006/03/20 09:00:11 laddi Exp $
  * Created on Oct 2, 2005
  *
  * Copyright (C) 2005 Idega Software hf. All Rights Reserved.
@@ -43,10 +43,10 @@ import com.idega.util.text.Name;
 /**
  * A block for viewing and editing a list of service offers
  * 
- *  Last modified: $Date: 2006/03/20 08:28:31 $ by $Author: laddi $
+ *  Last modified: $Date: 2006/03/20 09:00:11 $ by $Author: laddi $
  * 
  * @author <a href="mailto:eiki@idega.com">eiki</a>
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 public class ServiceOfferListBlock extends ServiceOfferBlock implements ServiceOfferConstants{
 	
@@ -296,7 +296,7 @@ public class ServiceOfferListBlock extends ServiceOfferBlock implements ServiceO
 				//row.createCell().add(new Text( (paid)?localize("service.offer.choice.paid_for","Paid"):localize("service.offer.choice.un_paid","Not paid") ));
 				row.createCell().add(new Text( (viewed)?"X":"-"));
 				
-				CheckBox hasPaid = new CheckBox(PARAMETER_PAID);
+				CheckBox hasPaid = new CheckBox(PARAMETER_PAID, choice.getPrimaryKey().toString());
 				hasPaid.setChecked(paid);
 				row.createCell().add(hasPaid);
 				
