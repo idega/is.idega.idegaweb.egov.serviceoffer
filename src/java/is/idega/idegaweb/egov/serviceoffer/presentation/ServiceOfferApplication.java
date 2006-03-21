@@ -1,5 +1,5 @@
 /*
- * $Id: ServiceOfferApplication.java,v 1.13 2006/03/21 08:29:32 laddi Exp $
+ * $Id: ServiceOfferApplication.java,v 1.14 2006/03/21 08:58:58 laddi Exp $
  * Created on Oct 2, 2005
  * 
  * Copyright (C) 2005 Idega Software hf. All Rights Reserved.
@@ -45,10 +45,10 @@ import com.idega.util.IWTimestamp;
  * An application for sending a service offer(description), that may have a
  * price, to a citizen or a group of citizens that then have to approve it.
  * 
- * Last modified: $Date: 2006/03/21 08:29:32 $ by $Author: laddi $
+ * Last modified: $Date: 2006/03/21 08:58:58 $ by $Author: laddi $
  * 
  * @author <a href="mailto:eiki@idega.com">eiki</a>
- * @version $Revision: 1.13 $
+ * @version $Revision: 1.14 $
  */
 public class ServiceOfferApplication extends ApplicationForm {
 
@@ -546,7 +546,7 @@ public class ServiceOfferApplication extends ApplicationForm {
 	private void save(IWContext iwc) throws RemoteException {
 		getBusiness(iwc).storeServiceOffer(iwc.getParameter(PARAMETER_SERVICE_NAME), iwc.getParameter(PARAMETER_SERVICE_PAYMENT_TYPE), iwc.getParameter(PARAMETER_SERVICE_CHOICE_OPTIONAL), iwc.getParameter(PARAMETER_SERVICE_DEADLINE), iwc.getParameter(PARAMETER_SERVICE_DATE), iwc.getParameter(PARAMETER_SERVICE_TIME), iwc.getParameter(PARAMETER_SERVICE_PRICE), iwc.getParameter(PARAMETER_SERVICE_LOCATION), iwc.getParameter(PARAMETER_SERVICE_TEXT), iwc.getParameterValues(PARAMETER_SERVICE_RECIPIENTS_SCHOOL_TYPE), iwc.getParameterValues(PARAMETER_SERVICE_RECIPIENTS_SCHOOL), iwc.getParameterValues(PARAMETER_SERVICE_RECIPIENTS_SCHOOL_CLASS), getUser(iwc));
 
-		addPhasesReceipt(iwrb.getLocalizedString("service.offer.application.create_a_service_offer", "Create a new service offer"), iwrb.getLocalizedString("application.service.offer.application.saved", "Finished creating a service offer"), iwrb.getLocalizedString("service.offer.application.saved.text", "Thank you, your service offer has been saved and sent to the corresponding recipients."), 4, 4);
+		addPhasesReceipt(iwrb.getLocalizedString("service.offer.application.create_a_service_offer", "Create a new service offer"), iwrb.getLocalizedString("application.service.offer.application.saved", "Finished creating a service offer"), iwrb.getLocalizedString("service.offer.application.saved.text", "Thank you, your service offer has been saved and sent to the corresponding recipients."), 4, 4, false);
 
 		Layer clearLayer = new Layer(Layer.DIV);
 		clearLayer.setStyleClass("Clear");

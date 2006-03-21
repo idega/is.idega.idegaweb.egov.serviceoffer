@@ -1,5 +1,5 @@
 /*
- * $Id: ServiceOfferListBlock.java,v 1.9 2006/03/21 07:43:38 laddi Exp $ Created
+ * $Id: ServiceOfferListBlock.java,v 1.10 2006/03/21 09:00:58 laddi Exp $ Created
  * on Oct 2, 2005
  * 
  * Copyright (C) 2005 Idega Software hf. All Rights Reserved.
@@ -43,10 +43,10 @@ import com.idega.util.text.Name;
 /**
  * A block for viewing and editing a list of service offers
  * 
- * Last modified: $Date: 2006/03/21 07:43:38 $ by $Author: laddi $
+ * Last modified: $Date: 2006/03/21 09:00:58 $ by $Author: laddi $
  * 
  * @author <a href="mailto:eiki@idega.com">eiki</a>
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 public class ServiceOfferListBlock extends ServiceOfferBlock implements ServiceOfferConstants {
 
@@ -111,7 +111,7 @@ public class ServiceOfferListBlock extends ServiceOfferBlock implements ServiceO
 
 		Layer formItem = new Layer(Layer.DIV);
 		formItem.setStyleClass("formItem");
-		Label label = new Label(localize("service.offer.list.service_offer", "Service offer"), offers);
+		Label label = new Label(localize("service.offer.application.name_of_service_offer" ,"Name of service offer"), offers);
 		formItem.add(label);
 		formItem.add(offers);
 		section.add(formItem);

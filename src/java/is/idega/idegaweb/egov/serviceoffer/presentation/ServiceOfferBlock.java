@@ -1,5 +1,5 @@
 /*
- * $Id: ServiceOfferBlock.java,v 1.4 2006/03/21 08:58:58 laddi Exp $
+ * $Id: ServiceOfferBlock.java,v 1.5 2006/03/21 09:00:58 laddi Exp $
  * Created on Oct 2, 2005
  * 
  * Copyright (C) 2005 Idega Software hf. All Rights Reserved.
@@ -30,10 +30,10 @@ import com.idega.util.IWTimestamp;
 /**
  * A base presentationclass for ServiceOffer applications and lists...
  * 
- *  Last modified: $Date: 2006/03/21 08:58:58 $ by $Author: laddi $
+ *  Last modified: $Date: 2006/03/21 09:00:58 $ by $Author: laddi $
  * 
  * @author <a href="mailto:eiki@idega.com">eiki</a>
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public abstract class ServiceOfferBlock extends CommuneBlock {
 
@@ -93,9 +93,9 @@ public abstract class ServiceOfferBlock extends CommuneBlock {
 			formItem = new Layer();
 			formItem.setStyleClass("formItem");
 			label = new Label();
-			label.add(new Text(offer.getServiceName()));
+			label.add(new Text(localize("service.offer.application.name_of_service_offer" ,"Name of service offer")));
 			span = new Layer(Layer.SPAN);
-			span.add(new Text(localize("service.offer.application.name_of_service_offer" ,"Name of service offer")));
+			span.add(new Text(offer.getServiceName()));
 			formItem.add(label);
 			formItem.add(span);
 			layer.add(formItem);
