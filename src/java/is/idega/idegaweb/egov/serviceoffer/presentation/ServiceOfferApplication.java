@@ -1,5 +1,5 @@
 /*
- * $Id: ServiceOfferApplication.java,v 1.12 2006/03/21 07:43:38 laddi Exp $
+ * $Id: ServiceOfferApplication.java,v 1.13 2006/03/21 08:29:32 laddi Exp $
  * Created on Oct 2, 2005
  * 
  * Copyright (C) 2005 Idega Software hf. All Rights Reserved.
@@ -45,10 +45,10 @@ import com.idega.util.IWTimestamp;
  * An application for sending a service offer(description), that may have a
  * price, to a citizen or a group of citizens that then have to approve it.
  * 
- * Last modified: $Date: 2006/03/21 07:43:38 $ by $Author: laddi $
+ * Last modified: $Date: 2006/03/21 08:29:32 $ by $Author: laddi $
  * 
  * @author <a href="mailto:eiki@idega.com">eiki</a>
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 public class ServiceOfferApplication extends ApplicationForm {
 
@@ -76,6 +76,10 @@ public class ServiceOfferApplication extends ApplicationForm {
 
 	protected String getCaseCode() {
 		return ServiceOfferConstants.CASE_CODE_KEY_SERVICE_OFFER;
+	}
+
+	public String getBundleIdentifier() {
+		return ServiceOfferConstants.IW_BUNDLE_IDENTIFIER;
 	}
 
 	public void present(IWContext iwc) {
@@ -157,6 +161,7 @@ public class ServiceOfferApplication extends ApplicationForm {
 		date.keepStatusOnAction();
 
 		TimeInput time = new TimeInput(PARAMETER_SERVICE_TIME);
+		time.setStyleClass("timeInput");
 		time.keepStatusOnAction();
 
 		DateInput deadline = new DateInput(PARAMETER_SERVICE_DEADLINE);
@@ -291,8 +296,8 @@ public class ServiceOfferApplication extends ApplicationForm {
 		formItem.setStyleClass("formItem");
 		formItem.setStyleClass("radioButtonItem");
 		label = new Label(iwrb.getLocalizedString("service.offer.application.payment.type.invoice", "Invoice"), invoice);
-		formItem.add(label);
 		formItem.add(invoice);
+		formItem.add(label);
 		section.add(formItem);
 
 		section.add(clearLayer);
@@ -359,15 +364,15 @@ public class ServiceOfferApplication extends ApplicationForm {
 		bottom.setStyleClass("bottom");
 		form.add(bottom);
 
-		Link back = getButtonLink(iwrb.getLocalizedString("previous", "Previous"));
-		back.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_PHASE_ONE));
-		back.setToFormSubmit(form);
-		bottom.add(back);
-
 		Link next = getButtonLink(iwrb.getLocalizedString("next", "Next"));
 		next.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_OVERVIEW));
 		next.setToFormSubmit(form);
 		bottom.add(next);
+
+		Link back = getButtonLink(iwrb.getLocalizedString("previous", "Previous"));
+		back.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_PHASE_ONE));
+		back.setToFormSubmit(form);
+		bottom.add(back);
 
 		add(form);
 	}
@@ -525,15 +530,15 @@ public class ServiceOfferApplication extends ApplicationForm {
 		bottom.setStyleClass("bottom");
 		form.add(bottom);
 
-		Link back = getButtonLink(iwrb.getLocalizedString("previous", "Previous"));
-		back.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_PHASE_TWO));
-		back.setToFormSubmit(form);
-		bottom.add(back);
-
 		Link next = getButtonLink(iwrb.getLocalizedString("next", "Next"));
 		next.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_SAVE));
 		next.setToFormSubmit(form);
 		bottom.add(next);
+
+		Link back = getButtonLink(iwrb.getLocalizedString("previous", "Previous"));
+		back.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_PHASE_TWO));
+		back.setToFormSubmit(form);
+		bottom.add(back);
 
 		add(form);
 	}
