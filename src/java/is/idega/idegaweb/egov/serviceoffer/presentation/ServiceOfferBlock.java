@@ -1,5 +1,5 @@
 /*
- * $Id: ServiceOfferBlock.java,v 1.3 2006/03/21 07:43:38 laddi Exp $
+ * $Id: ServiceOfferBlock.java,v 1.4 2006/03/21 08:58:58 laddi Exp $
  * Created on Oct 2, 2005
  * 
  * Copyright (C) 2005 Idega Software hf. All Rights Reserved.
@@ -30,10 +30,10 @@ import com.idega.util.IWTimestamp;
 /**
  * A base presentationclass for ServiceOffer applications and lists...
  * 
- *  Last modified: $Date: 2006/03/21 07:43:38 $ by $Author: laddi $
+ *  Last modified: $Date: 2006/03/21 08:58:58 $ by $Author: laddi $
  * 
  * @author <a href="mailto:eiki@idega.com">eiki</a>
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public abstract class ServiceOfferBlock extends CommuneBlock {
 
@@ -81,15 +81,25 @@ public abstract class ServiceOfferBlock extends CommuneBlock {
 	public abstract void present(IWContext iwc);
 
 	protected void addServiceOffer(IWContext iwc, Layer layer, ServiceOffer offer) {
-		Layer formItem = new Layer();
-		formItem.setStyleClass("formItem");
-		Label label = new Label();
-		label.add(new Text(offer.getServiceName()));
-		Layer span = new Layer(Layer.SPAN);
-		span.add(new Text(localize("service.offer.application.name_of_service_offer" ,"Name of service offer")));
-		formItem.add(label);
-		formItem.add(span);
-		layer.add(formItem);
+		addServiceOffer(iwc, layer, offer, true);
+	}
+	
+	protected void addServiceOffer(IWContext iwc, Layer layer, ServiceOffer offer, boolean showName) {
+		Layer formItem;
+		Label label;
+		Layer span;
+		
+		if (showName) {
+			formItem = new Layer();
+			formItem.setStyleClass("formItem");
+			label = new Label();
+			label.add(new Text(offer.getServiceName()));
+			span = new Layer(Layer.SPAN);
+			span.add(new Text(localize("service.offer.application.name_of_service_offer" ,"Name of service offer")));
+			formItem.add(label);
+			formItem.add(span);
+			layer.add(formItem);
+		}
 		
 		double thePrice = offer.getServicePrice();
 		if(thePrice>0){
