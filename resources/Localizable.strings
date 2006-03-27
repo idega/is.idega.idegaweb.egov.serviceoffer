@@ -7,6 +7,7 @@ accept=Accept
 application.service.offer.application.saved=Finished creating a service offer
 case_code_key.SERVOFF=Service Offer
 case_code_key.SERVOFP=Service Offer
+case_status_key.AVSL=AVSL
 decline=Decline
 iw.component.is.idega.idegaweb.egov.serviceoffer.presentation.ServiceOfferApplication.name=Service Offer
 iw.component.is.idega.idegaweb.egov.serviceoffer.presentation.ServiceOfferChoiceBlock.name=ServiceOfferChoiceBlock
