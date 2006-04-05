@@ -1,5 +1,5 @@
 /*
- * $Id: ServiceOfferBlock.java,v 1.6 2006/04/05 20:04:02 laddi Exp $
+ * $Id: ServiceOfferBlock.java,v 1.7 2006/04/05 20:32:57 laddi Exp $
  * Created on Oct 2, 2005
  * 
  * Copyright (C) 2005 Idega Software hf. All Rights Reserved.
@@ -39,10 +39,10 @@ import com.idega.util.PersonalIDFormatter;
 /**
  * A base presentationclass for ServiceOffer applications and lists...
  * 
- *  Last modified: $Date: 2006/04/05 20:04:02 $ by $Author: laddi $
+ *  Last modified: $Date: 2006/04/05 20:32:57 $ by $Author: laddi $
  * 
  * @author <a href="mailto:eiki@idega.com">eiki</a>
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 public abstract class ServiceOfferBlock extends CommuneBlock {
 
@@ -175,7 +175,7 @@ public abstract class ServiceOfferBlock extends CommuneBlock {
 			label = new Label();
 			label.add(new Text(localize("service.offer.application.service_offer_date" ,"Date of service")));
 			span = new Layer(Layer.SPAN);
-			span.add(new Text(theTimestamp.getLocaleDate(iwc.getCurrentLocale())));
+			span.add(new Text(theTimestamp.getLocaleDate(iwc.getCurrentLocale(), IWTimestamp.SHORT)));
 			formItem.add(label);
 			formItem.add(span);
 			layer.add(formItem);
@@ -185,13 +185,13 @@ public abstract class ServiceOfferBlock extends CommuneBlock {
 			label = new Label();
 			label.add(new Text(localize("service.offer.application.service_offer_time" ,"Time of service offer")));
 			span = new Layer(Layer.SPAN);
-			span.add(new Text(theTimestamp.getLocaleTime(iwc.getCurrentLocale())));
+			span.add(new Text(theTimestamp.getLocaleTime(iwc.getCurrentLocale(), IWTimestamp.SHORT)));
 			formItem.add(label);
 			formItem.add(span);
 			layer.add(formItem);
 		}
 		
-		Timestamp stamper = offer.getServiceDate();
+		Timestamp stamper = offer.getServiceDeadline();
 		if(stamper!=null){
 			IWTimestamp theTimestamp = new IWTimestamp(stamper);
 
@@ -200,7 +200,7 @@ public abstract class ServiceOfferBlock extends CommuneBlock {
 			label = new Label();
 			label.add(new Text(localize("service.offer.application.dealine_for_choice" ,"Choice deadline")));
 			span = new Layer(Layer.SPAN);
-			span.add(new Text(theTimestamp.getLocaleTime(iwc.getCurrentLocale())));
+			span.add(new Text(theTimestamp.getLocaleDate(iwc.getCurrentLocale())));
 			formItem.add(label);
 			formItem.add(span);
 			layer.add(formItem);
