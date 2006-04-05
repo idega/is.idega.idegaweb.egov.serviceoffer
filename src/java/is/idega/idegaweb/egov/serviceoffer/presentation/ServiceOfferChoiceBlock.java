@@ -1,5 +1,5 @@
 /*
- * $Id: ServiceOfferChoiceBlock.java,v 1.10 2006/04/05 20:20:54 laddi Exp $
+ * $Id: ServiceOfferChoiceBlock.java,v 1.11 2006/04/05 21:24:39 laddi Exp $
  * Created on Oct 2, 2005
  *
  * Copyright (C) 2005 Idega Software hf. All Rights Reserved.
@@ -29,10 +29,10 @@ import com.idega.user.data.User;
 /**
  * A block for viewing/accepting/declining a service offer choice
  * 
- *  Last modified: $Date: 2006/04/05 20:20:54 $ by $Author: laddi $
+ *  Last modified: $Date: 2006/04/05 21:24:39 $ by $Author: laddi $
  * 
  * @author <a href="mailto:eiki@idega.com">eiki</a>
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 public class ServiceOfferChoiceBlock extends ServiceOfferBlock implements ServiceOfferConstants{
 	
@@ -43,7 +43,6 @@ public class ServiceOfferChoiceBlock extends ServiceOfferBlock implements Servic
 	private static final int ACTION_PHASE_ONE = 1;
 	private static final int ACTION_ACCEPT = 2;
 	private static final int ACTION_DECLINE = 3;
-	private static final int ACTION_OVERVIEW = 4;
 	private static final int ACTION_VIEW_CLOSED = 6;
 	
 	
@@ -147,12 +146,12 @@ public class ServiceOfferChoiceBlock extends ServiceOfferBlock implements Servic
 		
 		if(isOptional){
 			Link next = getButtonLink(localize("accept", "Accept"));
-			next.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_OVERVIEW));
+			next.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_ACCEPT));
 			next.setToFormSubmit(form);
 			bottom.add(next);
 
 			Link back = getButtonLink(localize("decline", "Decline"));
-			back.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_PHASE_ONE));
+			back.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_DECLINE));
 			back.setToFormSubmit(form);
 			bottom.add(back);
 		}
