@@ -1,5 +1,5 @@
 /*
- * $Id: ServiceOfferBlock.java,v 1.5 2006/03/21 09:00:58 laddi Exp $
+ * $Id: ServiceOfferBlock.java,v 1.6 2006/04/05 20:04:02 laddi Exp $
  * Created on Oct 2, 2005
  * 
  * Copyright (C) 2005 Idega Software hf. All Rights Reserved.
@@ -12,6 +12,8 @@ package is.idega.idegaweb.egov.serviceoffer.presentation;
 import is.idega.idegaweb.egov.serviceoffer.business.ServiceOfferBusiness;
 import is.idega.idegaweb.egov.serviceoffer.data.ServiceOffer;
 import is.idega.idegaweb.egov.serviceoffer.util.ServiceOfferConstants;
+
+import java.rmi.RemoteException;
 import java.sql.Timestamp;
 import java.text.NumberFormat;
 
@@ -20,20 +22,27 @@ import se.idega.idegaweb.commune.presentation.CommuneBlock;
 import com.idega.business.IBOLookup;
 import com.idega.business.IBOLookupException;
 import com.idega.business.IBORuntimeException;
+import com.idega.core.location.data.Address;
+import com.idega.core.location.data.PostalCode;
 import com.idega.idegaweb.IWApplicationContext;
 import com.idega.presentation.IWContext;
 import com.idega.presentation.Layer;
+import com.idega.presentation.text.Heading1;
+import com.idega.presentation.text.Link;
+import com.idega.presentation.text.Paragraph;
 import com.idega.presentation.text.Text;
 import com.idega.presentation.ui.Label;
+import com.idega.user.data.User;
 import com.idega.util.IWTimestamp;
+import com.idega.util.PersonalIDFormatter;
 
 /**
  * A base presentationclass for ServiceOffer applications and lists...
  * 
- *  Last modified: $Date: 2006/03/21 09:00:58 $ by $Author: laddi $
+ *  Last modified: $Date: 2006/04/05 20:04:02 $ by $Author: laddi $
  * 
  * @author <a href="mailto:eiki@idega.com">eiki</a>
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 public abstract class ServiceOfferBlock extends CommuneBlock {
 
@@ -79,6 +88,47 @@ public abstract class ServiceOfferBlock extends CommuneBlock {
 	}
 
 	public abstract void present(IWContext iwc);
+
+	protected Layer getPersonInfo(IWContext iwc, User user) throws RemoteException {
+		Address address = getUserBusiness(iwc).getUsersMainAddress(user);
+		PostalCode postal = null;
+		if (address != null) {
+			postal = address.getPostalCode();
+		}
+
+		Layer layer = new Layer(Layer.DIV);
+		layer.setStyleClass("info");
+
+		Layer personInfo = new Layer(Layer.DIV);
+		personInfo.setStyleClass("personInfo");
+		personInfo.setID("name");
+		personInfo.add(new Text(user.getName()));
+		layer.add(personInfo);
+
+		personInfo = new Layer(Layer.DIV);
+		personInfo.setStyleClass("personInfo");
+		personInfo.setID("personalID");
+		personInfo.add(new Text(PersonalIDFormatter.format(user.getPersonalID(), iwc.getCurrentLocale())));
+		layer.add(personInfo);
+
+		personInfo = new Layer(Layer.DIV);
+		personInfo.setStyleClass("personInfo");
+		personInfo.setID("address");
+		if (address != null) {
+			personInfo.add(new Text(address.getStreetAddress()));
+		}
+		layer.add(personInfo);
+
+		personInfo = new Layer(Layer.DIV);
+		personInfo.setStyleClass("personInfo");
+		personInfo.setID("postal");
+		if (postal != null) {
+			personInfo.add(new Text(postal.getPostalAddress()));
+		}
+		layer.add(personInfo);
+
+		return layer;
+	}
 
 	protected void addServiceOffer(IWContext iwc, Layer layer, ServiceOffer offer) {
 		addServiceOffer(iwc, layer, offer, true);
@@ -196,5 +246,69 @@ public abstract class ServiceOfferBlock extends CommuneBlock {
 			formItem.add(span);
 			layer.add(formItem);
 		}
+	}
+	
+	protected Layer getAttentionLayer(String text) {
+		Layer layer = new Layer(Layer.DIV);
+		layer.setStyleClass("attention");
+
+		Layer imageLayer = new Layer(Layer.DIV);
+		imageLayer.setStyleClass("attentionImage");
+		layer.add(imageLayer);
+
+		Layer textLayer = new Layer(Layer.DIV);
+		textLayer.setStyleClass("attentionText");
+		layer.add(textLayer);
+
+		Paragraph paragraph = new Paragraph();
+		paragraph.add(new Text(text));
+		textLayer.add(paragraph);
+
+		Layer clearLayer = new Layer(Layer.DIV);
+		clearLayer.setStyleClass("attentionClear");
+		layer.add(clearLayer);
+
+		return layer;
+	}
+	
+	protected Layer getReceiptLayer(String header, String body) {
+		Layer layer = new Layer(Layer.DIV);
+		layer.setStyleClass("receipt");
+
+		Layer image = new Layer(Layer.DIV);
+		image.setStyleClass("receiptImage");
+		layer.add(image);
+
+		Heading1 heading = new Heading1(header);
+		layer.add(heading);
+
+		Paragraph paragraph = new Paragraph();
+		paragraph.add(new Text(body));
+		layer.add(paragraph);
+
+		return layer;
+	}
+
+	protected Link getButtonLink(String text) {
+		Layer all = new Layer(Layer.SPAN);
+		all.setStyleClass("buttonSpan");
+
+		Layer left = new Layer(Layer.SPAN);
+		left.setStyleClass("left");
+		all.add(left);
+
+		Layer middle = new Layer(Layer.SPAN);
+		middle.setStyleClass("middle");
+		middle.add(new Text(text));
+		all.add(middle);
+
+		Layer right = new Layer(Layer.SPAN);
+		right.setStyleClass("right");
+		all.add(right);
+
+		Link link = new Link(all);
+		link.setStyleClass("button");
+
+		return link;
 	}
 }

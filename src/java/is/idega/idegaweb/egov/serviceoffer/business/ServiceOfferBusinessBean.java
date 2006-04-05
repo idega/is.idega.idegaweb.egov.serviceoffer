@@ -1,5 +1,5 @@
 /*
- * $Id: ServiceOfferBusinessBean.java,v 1.10 2006/03/20 09:44:16 laddi Exp $
+ * $Id: ServiceOfferBusinessBean.java,v 1.11 2006/04/05 20:04:02 laddi Exp $
  * Created on Aug 10, 2005
  *
  * Copyright (C) 2005 Idega Software hf. All Rights Reserved.
@@ -49,10 +49,10 @@ import com.idega.util.text.Name;
 /**
  * 
  * 
- *  Last modified: $Date: 2006/03/20 09:44:16 $ by $Author: laddi $
+ *  Last modified: $Date: 2006/04/05 20:04:02 $ by $Author: laddi $
  * 
  * @author <a href="mailto:eiki@idega.com">eiki</a>
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 public class ServiceOfferBusinessBean extends CaseBusinessBean implements CaseBusiness, ServiceOfferBusiness, ServiceOfferConstants{
 
@@ -361,13 +361,20 @@ public class ServiceOfferBusinessBean extends CaseBusinessBean implements CaseBu
 			return ListUtil.getEmptyList();
 		}
 		
+		IWTimestamp stamp = new IWTimestamp();
+		stamp.addMonths(-3);
+		
 		List offers = new ArrayList();
 		for (Iterator iter = cases.iterator(); iter.hasNext();) {
 			
 			Case generalCase = (Case) iter.next();
 		
 				try {
-					offers.add(getServiceOffer((Integer)generalCase.getPrimaryKey()));
+					ServiceOffer offer = getServiceOffer((Integer)generalCase.getPrimaryKey());
+					IWTimestamp offerDate = new IWTimestamp(offer.getServiceDate());
+					if (offerDate.isLaterThan(stamp)) {
+						offers.add(offer);
+					}
 				}
 				catch (EJBException e) {
 					e.printStackTrace();

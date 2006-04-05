@@ -1,5 +1,5 @@
 /*
- * $Id: ServiceOfferApplication.java,v 1.15 2006/03/27 17:14:08 laddi Exp $
+ * $Id: ServiceOfferApplication.java,v 1.16 2006/04/05 20:04:02 laddi Exp $
  * Created on Oct 2, 2005
  * 
  * Copyright (C) 2005 Idega Software hf. All Rights Reserved.
@@ -45,10 +45,10 @@ import com.idega.util.IWTimestamp;
  * An application for sending a service offer(description), that may have a
  * price, to a citizen or a group of citizens that then have to approve it.
  * 
- * Last modified: $Date: 2006/03/27 17:14:08 $ by $Author: laddi $
+ * Last modified: $Date: 2006/04/05 20:04:02 $ by $Author: laddi $
  * 
  * @author <a href="mailto:eiki@idega.com">eiki</a>
- * @version $Revision: 1.15 $
+ * @version $Revision: 1.16 $
  */
 public class ServiceOfferApplication extends ApplicationForm {
 
@@ -292,13 +292,13 @@ public class ServiceOfferApplication extends ApplicationForm {
 		formItem.add(label);
 		section.add(formItem);
 
-		formItem = new Layer();
+		/*formItem = new Layer();
 		formItem.setStyleClass("formItem");
 		formItem.setStyleClass("radioButtonItem");
 		label = new Label(iwrb.getLocalizedString("service.offer.application.payment.type.invoice", "Invoice"), invoice);
 		formItem.add(invoice);
 		formItem.add(label);
-		section.add(formItem);
+		section.add(formItem);*/
 
 		section.add(clearLayer);
 
