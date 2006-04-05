@@ -1,5 +1,5 @@
 /*
- * $Id: ServiceOfferChoiceBlock.java,v 1.9 2006/04/05 20:04:02 laddi Exp $
+ * $Id: ServiceOfferChoiceBlock.java,v 1.10 2006/04/05 20:20:54 laddi Exp $
  * Created on Oct 2, 2005
  *
  * Copyright (C) 2005 Idega Software hf. All Rights Reserved.
@@ -29,10 +29,10 @@ import com.idega.user.data.User;
 /**
  * A block for viewing/accepting/declining a service offer choice
  * 
- *  Last modified: $Date: 2006/04/05 20:04:02 $ by $Author: laddi $
+ *  Last modified: $Date: 2006/04/05 20:20:54 $ by $Author: laddi $
  * 
  * @author <a href="mailto:eiki@idega.com">eiki</a>
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 public class ServiceOfferChoiceBlock extends ServiceOfferBlock implements ServiceOfferConstants{
 	
@@ -142,7 +142,7 @@ public class ServiceOfferChoiceBlock extends ServiceOfferBlock implements Servic
 		section.add(getAttentionLayer(message));
 		
 		Layer bottom = new Layer(Layer.DIV);
-		bottom.setStyleClass("buttonDiv");
+		bottom.setStyleClass("bottom");
 		form.add(bottom);
 		
 		if(isOptional){
