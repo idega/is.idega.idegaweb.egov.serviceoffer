@@ -1,5 +1,5 @@
 /*
- * $Id: ServiceOfferApplication.java,v 1.17 2006/04/06 10:04:55 laddi Exp $
+ * $Id: ServiceOfferApplication.java,v 1.18 2006/04/06 10:09:57 laddi Exp $
  * Created on Oct 2, 2005
  * 
  * Copyright (C) 2005 Idega Software hf. All Rights Reserved.
@@ -49,10 +49,10 @@ import com.idega.util.IWTimestamp;
  * An application for sending a service offer(description), that may have a
  * price, to a citizen or a group of citizens that then have to approve it.
  * 
- * Last modified: $Date: 2006/04/06 10:04:55 $ by $Author: laddi $
+ * Last modified: $Date: 2006/04/06 10:09:57 $ by $Author: laddi $
  * 
  * @author <a href="mailto:eiki@idega.com">eiki</a>
- * @version $Revision: 1.17 $
+ * @version $Revision: 1.18 $
  */
 public class ServiceOfferApplication extends ApplicationForm {
 
@@ -393,11 +393,6 @@ public class ServiceOfferApplication extends ApplicationForm {
 		section.setStyleClass("formSection");
 		form.add(section);
 		
-		Layer helpLayer = new Layer(Layer.DIV);
-		helpLayer.setStyleClass("helperText");
-		helpLayer.add(new Text(iwrb.getLocalizedString("service.offer.application.overview", "Please confirm the information below is correct.")));
-		section.add(helpLayer);
-		
 		Layer formItem = new Layer();
 		formItem.setStyleClass("formItem");
 		Label label = new Label();
@@ -423,9 +418,20 @@ public class ServiceOfferApplication extends ApplicationForm {
 			section.add(formItem);
 		}
 		
+		section.add(clearLayer);
+
+		Heading1 heading = new Heading1(iwrb.getLocalizedString("service.offer.application.choice_optional", "Optional service"));
+		heading.setStyleClass("subHeader");
+		form.add(heading);
+		
+		section = new Layer(Layer.DIV);
+		section.setStyleClass("formSection");
+		form.add(section);
+		
 		String localKey = "Y".equals(iwc.getParameter(PARAMETER_SERVICE_CHOICE_OPTIONAL)) ? "Yes" : "No";
 		formItem = new Layer();
 		formItem.setStyleClass("formItem");
+		formItem.setStyleClass("informationItem");
 		label = new Label();
 		label.add(new Text(iwrb.getLocalizedString("service.offer.application.choice_optional", "Optional service")));
 		span = new Layer(Layer.SPAN);
@@ -434,6 +440,16 @@ public class ServiceOfferApplication extends ApplicationForm {
 		formItem.add(span);
 		section.add(formItem);
 
+		section.add(clearLayer);
+
+		heading = new Heading1(iwrb.getLocalizedString("service.offer.application.choose_dates", "Choose dates of service"));
+		heading.setStyleClass("subHeader");
+		form.add(heading);
+		
+		section = new Layer(Layer.DIV);
+		section.setStyleClass("formSection");
+		form.add(section);
+		
 		if (iwc.isParameterSet(PARAMETER_SERVICE_DATE)) {
 			IWTimestamp date = new IWTimestamp(iwc.getParameter(PARAMETER_SERVICE_DATE));
 			
@@ -488,6 +504,16 @@ public class ServiceOfferApplication extends ApplicationForm {
 			section.add(formItem);
 		}
 		
+		section.add(clearLayer);
+
+		heading = new Heading1(iwrb.getLocalizedString("service.offer.application.choose_payment_type", "Payment option"));
+		heading.setStyleClass("subHeader");
+		form.add(heading);
+		
+		section = new Layer(Layer.DIV);
+		section.setStyleClass("formSection");
+		form.add(section);
+		
 		String paymentTypeLocalizationKey = ServiceOfferConstants.PAYMENT_TYPE_CASH.equals(iwc.getParameter(PARAMETER_SERVICE_PAYMENT_TYPE)) ? "service.offer.application.payment.type.cash" : "service.offer.application.payment.type.invoice";
 
 		formItem = new Layer();
@@ -501,6 +527,16 @@ public class ServiceOfferApplication extends ApplicationForm {
 		section.add(formItem);
 
 		if (iwc.isParameterSet(PARAMETER_SERVICE_TEXT)) {
+			section.add(clearLayer);
+
+			heading = new Heading1(iwrb.getLocalizedString("service.offer.application.description", "Description of service"));
+			heading.setStyleClass("subHeader");
+			form.add(heading);
+			
+			section = new Layer(Layer.DIV);
+			section.setStyleClass("formSection");
+			form.add(section);
+			
 			formItem = new Layer();
 			formItem.setStyleClass("formItem");
 			formItem.setStyleClass("informationItem");
@@ -512,6 +548,16 @@ public class ServiceOfferApplication extends ApplicationForm {
 			formItem.add(span);
 			section.add(formItem);
 		}
+		
+		section.add(clearLayer);
+
+		heading = new Heading1(iwrb.getLocalizedString("service.offer.application.recipients", "Recipients"));
+		heading.setStyleClass("subHeader");
+		form.add(heading);
+		
+		section = new Layer(Layer.DIV);
+		section.setStyleClass("formSection");
+		form.add(section);
 		
 		Lists groupList = new Lists();
 		groupList.setStyleClass("formItemList");
@@ -530,17 +576,12 @@ public class ServiceOfferApplication extends ApplicationForm {
 			}
 		}
 
-		formItem = new Layer();
-		formItem.setStyleClass("formItem");
-		formItem.setStyleClass("informationItem");
-		label = new Label();
-		label.add(new Text(iwrb.getLocalizedString("service.offer.application.recipients", "Recipients")));
-		formItem.add(label);
-		formItem.add(groupList);
-		section.add(formItem);
+		section.add(groupList);
 
 		section.add(clearLayer);
 
+		section.add(getAttentionLayer(iwrb.getLocalizedString("service.offer.application.overview", "Please confirm the information below is correct.")));
+		
 		Layer bottom = new Layer(Layer.DIV);
 		bottom.setStyleClass("bottom");
 		form.add(bottom);
