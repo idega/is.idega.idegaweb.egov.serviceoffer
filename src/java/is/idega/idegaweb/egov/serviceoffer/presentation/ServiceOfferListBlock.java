@@ -1,5 +1,5 @@
 /*
- * $Id: ServiceOfferListBlock.java,v 1.10 2006/03/21 09:00:58 laddi Exp $ Created
+ * $Id: ServiceOfferListBlock.java,v 1.11 2006/04/06 09:53:38 laddi Exp $ Created
  * on Oct 2, 2005
  * 
  * Copyright (C) 2005 Idega Software hf. All Rights Reserved.
@@ -9,6 +9,7 @@
  */
 package is.idega.idegaweb.egov.serviceoffer.presentation;
 
+import is.idega.idegaweb.egov.serviceoffer.business.ParticipantsXLSWriter;
 import is.idega.idegaweb.egov.serviceoffer.data.ServiceOffer;
 import is.idega.idegaweb.egov.serviceoffer.data.ServiceOfferChoice;
 import is.idega.idegaweb.egov.serviceoffer.util.ServiceOfferConstants;
@@ -25,10 +26,10 @@ import com.idega.presentation.IWContext;
 import com.idega.presentation.Layer;
 import com.idega.presentation.Table2;
 import com.idega.presentation.TableCell2;
-import com.idega.presentation.TableColumn;
-import com.idega.presentation.TableColumnGroup;
 import com.idega.presentation.TableRow;
 import com.idega.presentation.TableRowGroup;
+import com.idega.presentation.text.DownloadLink;
+import com.idega.presentation.text.Link;
 import com.idega.presentation.text.Paragraph;
 import com.idega.presentation.text.Text;
 import com.idega.presentation.ui.CheckBox;
@@ -43,10 +44,10 @@ import com.idega.util.text.Name;
 /**
  * A block for viewing and editing a list of service offers
  * 
- * Last modified: $Date: 2006/03/21 09:00:58 $ by $Author: laddi $
+ * Last modified: $Date: 2006/04/06 09:53:38 $ by $Author: laddi $
  * 
  * @author <a href="mailto:eiki@idega.com">eiki</a>
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 public class ServiceOfferListBlock extends ServiceOfferBlock implements ServiceOfferConstants {
 
@@ -117,9 +118,10 @@ public class ServiceOfferListBlock extends ServiceOfferBlock implements ServiceO
 		section.add(formItem);
 
 		if (offer != null) {
-			addServiceOffer(iwc, section, offer);
+			addServiceOffer(iwc, section, offer, false);
 			section.add(clearLayer);
 
+			form.add(getPrintouts(iwc, offer));
 			form.add(getServiceOfferChoiceList(iwc, offer));
 	
 			Layer buttonLayer = new Layer(Layer.DIV);
@@ -141,13 +143,6 @@ public class ServiceOfferListBlock extends ServiceOfferBlock implements ServiceO
 		table.setCellpadding(0);
 		table.setCellspacing(0);
 		table.setStyleClass("adminTable");
-
-		TableColumnGroup columnGroup = table.createColumnGroup();
-		TableColumn column = columnGroup.createColumn();
-		column.setSpan(2);
-		column = columnGroup.createColumn();
-		column.setSpan(7);
-		column.setCellHorizontalAlignment(Table2.HORIZONTAL_ALIGNMENT_CENTER);
 
 		Collection choices = getBusiness().getServiceOfferChoices(offer);
 
@@ -280,6 +275,21 @@ public class ServiceOfferListBlock extends ServiceOfferBlock implements ServiceO
 
 		return form;
 	}
+
+	private Layer getPrintouts(IWContext iwc, ServiceOffer offer) throws RemoteException {
+		Layer layer = new Layer(Layer.DIV);
+		layer.setStyleClass("printIcons");
+		
+    DownloadLink link = new DownloadLink(getBundle().getImage("xls.gif"));
+    link.setStyleClass("xls");
+    link.setTarget(Link.TARGET_NEW_WINDOW);
+    link.setMediaWriterClass(ParticipantsXLSWriter.class);
+    link.addParameter(ParticipantsXLSWriter.PARAMETER_SERVICE_OFFER, offer.getPrimaryKey().toString());
+
+		layer.add(link);
+		
+		return layer;
+	}	
 
 	private int parseAction(IWContext iwc) {
 		int action = ACTION_LIST;
