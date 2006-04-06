@@ -1,5 +1,5 @@
 /*
- * $Id: ServiceOfferApplication.java,v 1.16 2006/04/05 20:04:02 laddi Exp $
+ * $Id: ServiceOfferApplication.java,v 1.17 2006/04/06 10:04:55 laddi Exp $
  * Created on Oct 2, 2005
  * 
  * Copyright (C) 2005 Idega Software hf. All Rights Reserved.
@@ -20,6 +20,8 @@ import javax.ejb.FinderException;
 
 import se.idega.idegaweb.commune.school.presentation.inputhandler.SchoolGroupHandler;
 
+import com.idega.block.school.business.SchoolBusiness;
+import com.idega.block.school.data.SchoolClass;
 import com.idega.business.IBOLookup;
 import com.idega.business.IBOLookupException;
 import com.idega.business.IBORuntimeException;
@@ -30,6 +32,8 @@ import com.idega.presentation.IWContext;
 import com.idega.presentation.Layer;
 import com.idega.presentation.text.Heading1;
 import com.idega.presentation.text.Link;
+import com.idega.presentation.text.ListItem;
+import com.idega.presentation.text.Lists;
 import com.idega.presentation.text.Text;
 import com.idega.presentation.ui.DateInput;
 import com.idega.presentation.ui.Form;
@@ -45,10 +49,10 @@ import com.idega.util.IWTimestamp;
  * An application for sending a service offer(description), that may have a
  * price, to a citizen or a group of citizens that then have to approve it.
  * 
- * Last modified: $Date: 2006/04/05 20:04:02 $ by $Author: laddi $
+ * Last modified: $Date: 2006/04/06 10:04:55 $ by $Author: laddi $
  * 
  * @author <a href="mailto:eiki@idega.com">eiki</a>
- * @version $Revision: 1.16 $
+ * @version $Revision: 1.17 $
  */
 public class ServiceOfferApplication extends ApplicationForm {
 
@@ -509,19 +513,30 @@ public class ServiceOfferApplication extends ApplicationForm {
 			section.add(formItem);
 		}
 		
-		SchoolGroupHandler recipients = new SchoolGroupHandler();
-		recipients.setName(PARAMETER_SERVICE_RECIPIENTS_SCHOOL_CLASS);
-		recipients.setStyleClass("selectionBox");
-		recipients.setDisabled(true);
-		recipients.setToShowOnlySelected(true);
-		recipients.keepStatusOnAction();
+		Lists groupList = new Lists();
+		groupList.setStyleClass("formItemList");
+
+		String[] groups = iwc.getParameterValues(PARAMETER_SERVICE_RECIPIENTS_SCHOOL_CLASS);
+		for (int i = 0; i < groups.length; i++) {
+			try {
+				SchoolClass group = getSchoolBusiness(iwc).getSchoolClassHome().findByPrimaryKey(new Integer(groups[i]));
+				
+				ListItem item = new ListItem();
+				item.add(group.getSchoolClassName());
+				groupList.add(item);
+			}
+			catch (FinderException fe) {
+				fe.printStackTrace();
+			}
+		}
 
 		formItem = new Layer();
 		formItem.setStyleClass("formItem");
 		formItem.setStyleClass("informationItem");
-		label = new Label(iwrb.getLocalizedString("service.offer.application.recipients", "Recipients"), recipients);
+		label = new Label();
+		label.add(new Text(iwrb.getLocalizedString("service.offer.application.recipients", "Recipients")));
 		formItem.add(label);
-		formItem.add(recipients);
+		formItem.add(groupList);
 		section.add(formItem);
 
 		section.add(clearLayer);
@@ -611,6 +626,15 @@ public class ServiceOfferApplication extends ApplicationForm {
 	private ServiceOfferBusiness getBusiness(IWApplicationContext iwac) {
 		try {
 			return (ServiceOfferBusiness) IBOLookup.getServiceInstance(iwac, ServiceOfferBusiness.class);
+		}
+		catch (IBOLookupException ile) {
+			throw new IBORuntimeException(ile);
+		}
+	}
+	
+	private SchoolBusiness getSchoolBusiness(IWApplicationContext iwac) {
+		try {
+			return (SchoolBusiness) IBOLookup.getServiceInstance(iwac, SchoolBusiness.class);
 		}
 		catch (IBOLookupException ile) {
 			throw new IBORuntimeException(ile);
