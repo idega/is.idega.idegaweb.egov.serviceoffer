@@ -1,5 +1,5 @@
 /*
- * $Id: ServiceOfferBlock.java,v 1.7 2006/04/05 20:32:57 laddi Exp $
+ * $Id: ServiceOfferBlock.java,v 1.8 2006/04/09 11:38:20 laddi Exp $
  * Created on Oct 2, 2005
  * 
  * Copyright (C) 2005 Idega Software hf. All Rights Reserved.
@@ -39,10 +39,10 @@ import com.idega.util.PersonalIDFormatter;
 /**
  * A base presentationclass for ServiceOffer applications and lists...
  * 
- *  Last modified: $Date: 2006/04/05 20:32:57 $ by $Author: laddi $
+ *  Last modified: $Date: 2006/04/09 11:38:20 $ by $Author: laddi $
  * 
  * @author <a href="mailto:eiki@idega.com">eiki</a>
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 public abstract class ServiceOfferBlock extends CommuneBlock {
 
@@ -52,17 +52,17 @@ public abstract class ServiceOfferBlock extends CommuneBlock {
 	public void main(IWContext iwc) throws Exception {
 		setBundle(getBundle(iwc));
 		setResourceBundle(getResourceBundle(iwc));
-		business = getBusiness(iwc);
-		uBusiness = getUserBusiness(iwc);
+		this.business = getBusiness(iwc);
+		this.uBusiness = getUserBusiness(iwc);
 		present(iwc);
 	}
 
 	protected ServiceOfferBusiness getBusiness() {
-		return business;
+		return this.business;
 	}
 
 	protected CommuneUserBusiness getUserBusiness() {
-		return uBusiness;
+		return this.uBusiness;
 	}
 
 	private ServiceOfferBusiness getBusiness(IWApplicationContext iwac) {

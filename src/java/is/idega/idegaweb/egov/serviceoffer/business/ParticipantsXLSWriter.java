@@ -55,15 +55,15 @@ public class ParticipantsXLSWriter extends DownloadWriter implements MediaWritab
 
 	public void init(HttpServletRequest req, IWContext iwc) {
 		try {
-			locale = iwc.getApplicationSettings().getApplicationLocale();
-			business = getBusiness(iwc);
-			iwrb = iwc.getIWMainApplication().getBundle(ServiceOfferConstants.IW_BUNDLE_IDENTIFIER).getResourceBundle(locale);
+			this.locale = iwc.getApplicationSettings().getApplicationLocale();
+			this.business = getBusiness(iwc);
+			this.iwrb = iwc.getIWMainApplication().getBundle(ServiceOfferConstants.IW_BUNDLE_IDENTIFIER).getResourceBundle(this.locale);
 
-			ServiceOffer offer = business.getServiceOffer(new Integer(iwc.getParameter(PARAMETER_SERVICE_OFFER)).intValue());
-			Collection choices = business.getServiceOfferChoices(offer);
+			ServiceOffer offer = this.business.getServiceOffer(new Integer(iwc.getParameter(PARAMETER_SERVICE_OFFER)).intValue());
+			Collection choices = this.business.getServiceOfferChoices(offer);
 
-			buffer = writeXLS(choices, iwc);
-			setAsDownload(iwc, "participants.xls", buffer.length());
+			this.buffer = writeXLS(choices, iwc);
+			setAsDownload(iwc, "participants.xls", this.buffer.length());
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -71,22 +71,24 @@ public class ParticipantsXLSWriter extends DownloadWriter implements MediaWritab
 	}
 
 	public String getMimeType() {
-		if (buffer != null)
-			return buffer.getMimeType();
+		if (this.buffer != null) {
+			return this.buffer.getMimeType();
+		}
 		return super.getMimeType();
 	}
 
 	public void writeTo(OutputStream out) throws IOException {
-		if (buffer != null) {
-			MemoryInputStream mis = new MemoryInputStream(buffer);
+		if (this.buffer != null) {
+			MemoryInputStream mis = new MemoryInputStream(this.buffer);
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			while (mis.available() > 0) {
 				baos.write(mis.read());
 			}
 			baos.writeTo(out);
 		}
-		else
+		else {
 			System.err.println("buffer is null");
+		}
 	}
 
 	public MemoryFileBuffer writeXLS(Collection students, IWContext iwc) throws Exception {
@@ -113,35 +115,35 @@ public class ParticipantsXLSWriter extends DownloadWriter implements MediaWritab
 			HSSFRow row = sheet.createRow(cellRow++);
 			
 			HSSFCell cell = row.createCell((short) cellColumn++);
-			cell.setCellValue(iwrb.getLocalizedString("service.offer.choice.name", "Child's name"));
+			cell.setCellValue(this.iwrb.getLocalizedString("service.offer.choice.name", "Child's name"));
 			cell.setCellStyle(style);
 
 			cell = row.createCell((short) cellColumn++);
-			cell.setCellValue(iwrb.getLocalizedString("service.offer.choice.personal_id", "Child's ssn"));
+			cell.setCellValue(this.iwrb.getLocalizedString("service.offer.choice.personal_id", "Child's ssn"));
 			cell.setCellStyle(style);
 
 			cell = row.createCell((short) cellColumn++);
-			cell.setCellValue(iwrb.getLocalizedString("service.offer.choice.custodian_name", "Custodian's name"));
+			cell.setCellValue(this.iwrb.getLocalizedString("service.offer.choice.custodian_name", "Custodian's name"));
 			cell.setCellStyle(style);
 
 			cell = row.createCell((short) cellColumn++);
-			cell.setCellValue(iwrb.getLocalizedString("service.offer.choice.custodian_personal_id", "Custodian's ssn"));
+			cell.setCellValue(this.iwrb.getLocalizedString("service.offer.choice.custodian_personal_id", "Custodian's ssn"));
 			cell.setCellStyle(style);
 
 			cell = row.createCell((short) cellColumn++);
-			cell.setCellValue(iwrb.getLocalizedString("service.offer.choice.phone_number", "Phone number"));
+			cell.setCellValue(this.iwrb.getLocalizedString("service.offer.choice.phone_number", "Phone number"));
 			cell.setCellStyle(style);
 
 			cell = row.createCell((short) cellColumn++);
-			cell.setCellValue(iwrb.getLocalizedString("service.offer.choice.status", "Status"));
+			cell.setCellValue(this.iwrb.getLocalizedString("service.offer.choice.status", "Status"));
 			cell.setCellStyle(style);
 
 			cell = row.createCell((short) cellColumn++);
-			cell.setCellValue(iwrb.getLocalizedString("service.offer.choice.viewed", "Viewed"));
+			cell.setCellValue(this.iwrb.getLocalizedString("service.offer.choice.viewed", "Viewed"));
 			cell.setCellStyle(style);
 
 			cell = row.createCell((short) cellColumn++);
-			cell.setCellValue(iwrb.getLocalizedString("service.offer.choice.payment_status", "Payment"));
+			cell.setCellValue(this.iwrb.getLocalizedString("service.offer.choice.payment_status", "Payment"));
 			cell.setCellStyle(style);
 
 			Iterator iter = students.iterator();
@@ -160,11 +162,11 @@ public class ParticipantsXLSWriter extends DownloadWriter implements MediaWritab
 				boolean paid = choice.hasBeenPaidFor();
 				boolean viewed = choice.hasBeenViewed();
 
-				row.createCell((short) cellColumn++).setCellValue(name.getName(locale, true));
-		    row.createCell((short) cellColumn++).setCellValue(PersonalIDFormatter.format(user.getPersonalID(), locale));
+				row.createCell((short) cellColumn++).setCellValue(name.getName(this.locale, true));
+		    row.createCell((short) cellColumn++).setCellValue(PersonalIDFormatter.format(user.getPersonalID(), this.locale));
 
-		    row.createCell((short) cellColumn++).setCellValue(ownerName.getName(locale, true));
-		    row.createCell((short) cellColumn++).setCellValue(PersonalIDFormatter.format(owner.getPersonalID(), locale));
+		    row.createCell((short) cellColumn++).setCellValue(ownerName.getName(this.locale, true));
+		    row.createCell((short) cellColumn++).setCellValue(PersonalIDFormatter.format(owner.getPersonalID(), this.locale));
 
 				Collection userPhones = owner.getPhones();
 		    cell = row.createCell((short) cellColumn++);
@@ -177,7 +179,7 @@ public class ParticipantsXLSWriter extends DownloadWriter implements MediaWritab
 					}
 				}
 
-				row.createCell((short) cellColumn++).setCellValue(iwrb.getLocalizedString(status, status));
+				row.createCell((short) cellColumn++).setCellValue(this.iwrb.getLocalizedString(status, status));
 				row.createCell((short) cellColumn++).setCellValue(viewed ? "X" : "-");
 				row.createCell((short) cellColumn++).setCellValue(paid ? "X" : "-");
 			}
