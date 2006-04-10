@@ -54,6 +54,7 @@ service.offer.choice.closed_choice_overview=Yfirlit yfir loka\u00F0 erindi um \u
 service.offer.choice.custodian_name=Nafn forr\u00E1\u00F0amanns
 service.offer.choice.custodian_personal_id=Kennitala forr\u00E1\u00F0amanns
 service.offer.choice.declined_text=\u00DE\u00FA hefur \u00E1kve\u00F0i\u00F0 a\u00F0 hafna fer\u00F0inni/efniss\u00F6lunni. <br> Vinsamlegast smelltu \u00E1 VISTA til a\u00F0 kl\u00E1ra e\u00F0a TIL BAKA ef \u00FE\u00FA vilt breyta vali \u00FE\u00EDnu. 
+service.offer.choice.has_account=Foreldri/forr\u00E1\u00F0ama\u00F0ur hefur \u00FEj\u00F3nustug\u00E1tt
 service.offer.choice.make_a_service_choice=Sko\u00F0a/sam\u00FEykkja fer\u00F0/efniskaup
 service.offer.choice.make_a_service_choice2=Sko\u00F0a/sam\u00FEykkja fer\u00F0/efniskaup Skref 2 af 2
 service.offer.choice.name=Nafn barns

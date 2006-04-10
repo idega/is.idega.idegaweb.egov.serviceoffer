@@ -1,5 +1,5 @@
 /*
- * $Id: ServiceOfferListBlock.java,v 1.11 2006/04/06 09:53:38 laddi Exp $ Created
+ * $Id: ServiceOfferListBlock.java,v 1.12 2006/04/10 15:30:46 laddi Exp $ Created
  * on Oct 2, 2005
  * 
  * Copyright (C) 2005 Idega Software hf. All Rights Reserved.
@@ -30,6 +30,8 @@ import com.idega.presentation.TableRow;
 import com.idega.presentation.TableRowGroup;
 import com.idega.presentation.text.DownloadLink;
 import com.idega.presentation.text.Link;
+import com.idega.presentation.text.ListItem;
+import com.idega.presentation.text.Lists;
 import com.idega.presentation.text.Paragraph;
 import com.idega.presentation.text.Text;
 import com.idega.presentation.ui.CheckBox;
@@ -44,10 +46,10 @@ import com.idega.util.text.Name;
 /**
  * A block for viewing and editing a list of service offers
  * 
- * Last modified: $Date: 2006/04/06 09:53:38 $ by $Author: laddi $
+ * Last modified: $Date: 2006/04/10 15:30:46 $ by $Author: laddi $
  * 
  * @author <a href="mailto:eiki@idega.com">eiki</a>
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 public class ServiceOfferListBlock extends ServiceOfferBlock implements ServiceOfferConstants {
 
@@ -123,6 +125,7 @@ public class ServiceOfferListBlock extends ServiceOfferBlock implements ServiceO
 
 			form.add(getPrintouts(iwc, offer));
 			form.add(getServiceOfferChoiceList(iwc, offer));
+			form.add(getLegend());
 	
 			Layer buttonLayer = new Layer(Layer.DIV);
 			buttonLayer.setStyleClass("buttonLayer");
@@ -186,7 +189,8 @@ public class ServiceOfferListBlock extends ServiceOfferBlock implements ServiceO
 
 			User owner = choice.getOwner();
 			Name ownerName = new Name(owner.getFirstName(), owner.getMiddleName(), owner.getLastName());
-
+			boolean hasAccount = getBusiness().getCommuneUserBusiness().hasCitizenAccount(owner);
+			
 			String status = choice.getStatus();
 			if (agreedStatusCode.equals(status)) {
 				totalAgreed++;
@@ -207,6 +211,7 @@ public class ServiceOfferListBlock extends ServiceOfferBlock implements ServiceO
 
 			try {
 				cell = row.createCell();
+				
 				cell.setStyleClass("firstColumn");
 				cell.add(new Text(name.getName(iwc.getCurrentLocale())));
 				
@@ -235,6 +240,10 @@ public class ServiceOfferListBlock extends ServiceOfferBlock implements ServiceO
 				cell.setStyleClass("lastColumn");
 				cell.add(hasPaid);
 
+				if (hasAccount) {
+					row.setStyleClass("hasAccount");
+				}
+				
 				if (iRow % 2 == 0) {
 					row.setStyleClass("evenRow");
 				}
@@ -274,6 +283,18 @@ public class ServiceOfferListBlock extends ServiceOfferBlock implements ServiceO
 		form.addParameter(PARAMETER_ACTION, actionPhase);
 
 		return form;
+	}
+
+	private Lists getLegend() {
+		Lists list = new Lists();
+		list.setStyleClass("legend");
+		
+		ListItem item = new ListItem();
+		item.setStyleClass("hasAccount");
+		item.add(new Text(this.getResourceBundle().getLocalizedString("service.offer.choice.has_account", "Parent has citizen account")));
+		list.add(item);
+		
+		return list;
 	}
 
 	private Layer getPrintouts(IWContext iwc, ServiceOffer offer) throws RemoteException {

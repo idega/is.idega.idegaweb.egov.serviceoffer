@@ -53,6 +53,7 @@ service.offer.choice.closed_choice_overview=Closed service offer overview
 service.offer.choice.custodian_name=Custodian's name
 service.offer.choice.custodian_personal_id=Custodian's ssn
 service.offer.choice.declined_text=You have decided to decline the service offer, to finish press save or press previous change your choice.
+service.offer.choice.has_account=Parent has citizen account
 service.offer.choice.make_a_service_choice=Make a service offer choice 1 of 2
 service.offer.choice.make_a_service_choice2=Make a service offer choice 2 of 2
 service.offer.choice.name=Child's name
