@@ -7,6 +7,7 @@ accept=Sam\u00FEykkja
 application.service.offer.application.saved=Fer\u00F0/efnissala b\u00FAin til
 case_code_key.SERVOFF=Sko\u00F0a/sam\u00FEykkja fer\u00F0/s\u00F6lu
 case_code_key.SERVOFP=\u00DEj\u00F3nustukaup
+case_status_key.AVSL=Hafna\u00F0
 case_status_key.BVJD=Sam\u00FEykkt
 case_status_key.UBEH=Opi\u00F0
 decline=Hafna
