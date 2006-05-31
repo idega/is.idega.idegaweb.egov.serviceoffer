@@ -1,5 +1,5 @@
 /*
- * $Id: ServiceOfferApplication.java,v 1.19 2006/04/09 11:38:20 laddi Exp $
+ * $Id: ServiceOfferApplication.java,v 1.20 2006/05/31 11:11:28 laddi Exp $
  * Created on Oct 2, 2005
  * 
  * Copyright (C) 2005 Idega Software hf. All Rights Reserved.
@@ -14,20 +14,24 @@ import is.idega.idegaweb.egov.serviceoffer.business.ServiceOfferBusiness;
 import is.idega.idegaweb.egov.serviceoffer.util.ServiceOfferConstants;
 
 import java.rmi.RemoteException;
+import java.sql.Date;
 import java.text.NumberFormat;
 
 import javax.ejb.FinderException;
 
+import se.idega.idegaweb.commune.school.business.SchoolCommuneSession;
 import se.idega.idegaweb.commune.school.presentation.inputhandler.SchoolGroupHandler;
 
 import com.idega.block.school.business.SchoolBusiness;
 import com.idega.block.school.data.SchoolClass;
+import com.idega.block.school.data.SchoolSeason;
 import com.idega.business.IBOLookup;
 import com.idega.business.IBOLookupException;
 import com.idega.business.IBORuntimeException;
 import com.idega.core.builder.data.ICPage;
 import com.idega.idegaweb.IWApplicationContext;
 import com.idega.idegaweb.IWResourceBundle;
+import com.idega.idegaweb.IWUserContext;
 import com.idega.presentation.IWContext;
 import com.idega.presentation.Layer;
 import com.idega.presentation.text.Heading1;
@@ -49,10 +53,10 @@ import com.idega.util.IWTimestamp;
  * An application for sending a service offer(description), that may have a
  * price, to a citizen or a group of citizens that then have to approve it.
  * 
- * Last modified: $Date: 2006/04/09 11:38:20 $ by $Author: laddi $
+ * Last modified: $Date: 2006/05/31 11:11:28 $ by $Author: laddi $
  * 
  * @author <a href="mailto:eiki@idega.com">eiki</a>
- * @version $Revision: 1.19 $
+ * @version $Revision: 1.20 $
  */
 public class ServiceOfferApplication extends ApplicationForm {
 
@@ -354,7 +358,26 @@ public class ServiceOfferApplication extends ApplicationForm {
 		helpLayer.add(new Text(this.iwrb.getLocalizedString("service.offer.application.select_recipients", "Please select the recipients of the service offer.")));
 		section.add(helpLayer);
 		
-		SchoolGroupHandler recipients = new SchoolGroupHandler();
+		Date placementDate = new IWTimestamp(iwc.getParameter(PARAMETER_SERVICE_DATE)).getDate();
+		int schoolID = getSchoolSession(iwc).getSchoolID();
+		int seasonID = -1;
+		try {
+			SchoolSeason placementSeason = getSchoolBusiness(iwc).getSchoolSeasonHome().findSeasonByDate(getSchoolBusiness(iwc).getCategoryElementarySchool(), placementDate);
+			seasonID = new Integer(placementSeason.getPrimaryKey().toString()).intValue();
+		}
+		catch (FinderException fe) {
+			log(fe);
+			
+			try {
+				SchoolSeason placementSeason = getSchoolBusiness(iwc).getSchoolSeasonHome().findNextSeason(getSchoolBusiness(iwc).getCategoryElementarySchool(), placementDate);
+				seasonID = new Integer(placementSeason.getPrimaryKey().toString()).intValue();
+			}
+			catch (FinderException fe1) {
+				log(fe1);
+			}
+		}
+		
+		SchoolGroupHandler recipients = new SchoolGroupHandler(schoolID, seasonID);
 		recipients.setName(PARAMETER_SERVICE_RECIPIENTS_SCHOOL_CLASS);
 		recipients.setStyleClass("selectionBox");
 		recipients.keepStatusOnAction();
@@ -679,6 +702,15 @@ public class ServiceOfferApplication extends ApplicationForm {
 		}
 		catch (IBOLookupException ile) {
 			throw new IBORuntimeException(ile);
+		}
+	}
+
+	private SchoolCommuneSession getSchoolSession(IWUserContext iwuc) {
+		try {
+			return (SchoolCommuneSession) IBOLookup.getSessionInstance(iwuc, SchoolCommuneSession.class);
+		}
+		catch (RemoteException e) {
+			throw new IBORuntimeException(e);
 		}
 	}
 }
