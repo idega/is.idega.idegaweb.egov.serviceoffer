@@ -76,5 +76,7 @@ service.offer.list.select_service_offer=Select service offer
 service.offer.list.service_offer=Service offer
 service.offer.list.service_offer_list=Below you will find details about the selected service offer and its participants.
 service.offer.list.service_offer_view=Service offer overview
+service_offer.message_body_mandatory=The service offer\: "{2}", has been made for {0}, {1}. Please click on case nr.{3} in your case list for more info.
 service_offer.message_body_optional=The service offer\: "{2}", has been made that needs your approval for {0}, {1}. Please click on case nr.{3} in your case list for more info.
+service_offer.message_subject_mandatory=You have received a mandatory service offer
 service_offer.message_subject_optional=You have received a service offer that awaits your response
