@@ -1,5 +1,5 @@
 /*
- * $Id: ServiceOfferBusinessBean.java,v 1.11 2006/04/05 20:04:02 laddi Exp $
+ * $Id: ServiceOfferBusinessBean.java,v 1.12 2006/11/24 10:42:39 laddi Exp $
  * Created on Aug 10, 2005
  *
  * Copyright (C) 2005 Idega Software hf. All Rights Reserved.
@@ -49,10 +49,10 @@ import com.idega.util.text.Name;
 /**
  * 
  * 
- *  Last modified: $Date: 2006/04/05 20:04:02 $ by $Author: laddi $
+ *  Last modified: $Date: 2006/11/24 10:42:39 $ by $Author: laddi $
  * 
  * @author <a href="mailto:eiki@idega.com">eiki</a>
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  */
 public class ServiceOfferBusinessBean extends CaseBusinessBean implements CaseBusiness, ServiceOfferBusiness, ServiceOfferConstants{
 
@@ -225,7 +225,7 @@ public class ServiceOfferBusinessBean extends CaseBusinessBean implements CaseBu
 				offer.setServiceDate(stamp.getTimestamp());
 			}
 						
-			offer.setServicePrice(Double.valueOf(price).doubleValue());
+			offer.setServicePrice(price.length() > 0 ? Double.valueOf(price).doubleValue() : 0);
 			offer.setServiceText(text);
 			offer.setOwner(performer);
 		
