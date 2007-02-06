@@ -1,5 +1,5 @@
 /*
- * $Id: ServiceOfferBusinessBean.java,v 1.12 2006/11/24 10:42:39 laddi Exp $
+ * $Id: ServiceOfferBusinessBean.java,v 1.13 2007/02/06 22:19:36 laddi Exp $
  * Created on Aug 10, 2005
  *
  * Copyright (C) 2005 Idega Software hf. All Rights Reserved.
@@ -31,6 +31,7 @@ import com.idega.block.process.business.CaseBusinessBean;
 import com.idega.block.process.data.Case;
 import com.idega.block.process.message.data.Message;
 import com.idega.block.school.business.SchoolBusiness;
+import com.idega.block.school.business.SchoolUserBusiness;
 import com.idega.block.school.data.School;
 import com.idega.block.school.data.SchoolClass;
 import com.idega.block.school.data.SchoolClassMember;
@@ -49,16 +50,25 @@ import com.idega.util.text.Name;
 /**
  * 
  * 
- *  Last modified: $Date: 2006/11/24 10:42:39 $ by $Author: laddi $
+ *  Last modified: $Date: 2007/02/06 22:19:36 $ by $Author: laddi $
  * 
  * @author <a href="mailto:eiki@idega.com">eiki</a>
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 public class ServiceOfferBusinessBean extends CaseBusinessBean implements CaseBusiness, ServiceOfferBusiness, ServiceOfferConstants{
 
 	public SchoolBusiness getSchoolBusiness() {
 		try {
 			return (SchoolBusiness) getServiceInstance(SchoolBusiness.class);
+		}
+		catch (IBOLookupException ile) {
+			throw new IBORuntimeException(ile);
+		}
+	}
+
+	public SchoolUserBusiness getSchoolUserBusiness() {
+		try {
+			return (SchoolUserBusiness) getServiceInstance(SchoolUserBusiness.class);
 		}
 		catch (IBOLookupException ile) {
 			throw new IBORuntimeException(ile);
@@ -198,7 +208,7 @@ public class ServiceOfferBusinessBean extends CaseBusinessBean implements CaseBu
 	}
 	
 	public School getManagingSchoolForUser(User user) throws RemoteException, FinderException {
-		return getCommuneUserBusiness().getFirstManagingSchoolForUser(user);
+		return getSchoolUserBusiness().getFirstManagingSchoolForUser(user);
 	}
 
 	public void storeServiceOffer(String name, String paymentType, String choiceOptional, String deadline, String date, String time, String price, String location, String text, String[] schoolType, String[] school, String[] schoolClass, User performer) {
