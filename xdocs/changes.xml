@@ -1,21 +1,29 @@
 <document>
-  <properties>
-    <title>Service offer changes</title>
-    <author email="laddi@idega.com">Thorhallur "Laddi" Helgason</author>
-  </properties>
-  <body>
-  
-   <release version="1.0.2" date="2007-02-07">
-      <action dev="laddi" type="update">
-        Update version of com.idega.block.school.
-      </action>
-    </release>
+	<properties>
+		<title>Service offer changes</title>
+		<author email="laddi@idega.com">
+			Thorhallur "Laddi" Helgason
+		</author>
+	</properties>
+	<body>
+		<release version="1.0.3" date="2007-03-09">
+			<action dev="palli" type="update">
+				Updating and fixing dependencies to create a new sunnan3
+				application.
+			</action>
+		</release>
 
-   <release version="1.0.1" date="2006-07-11">
-      <action dev="laddi" type="update">
-        Declaring new version of block.
-      </action>
-    </release>
+		<release version="1.0.2" date="2007-02-07">
+			<action dev="laddi" type="update">
+				Update version of com.idega.block.school.
+			</action>
+		</release>
 
-  </body>
+		<release version="1.0.1" date="2006-07-11">
+			<action dev="laddi" type="update">
+				Declaring new version of block.
+			</action>
+		</release>
+
+	</body>
 </document>
