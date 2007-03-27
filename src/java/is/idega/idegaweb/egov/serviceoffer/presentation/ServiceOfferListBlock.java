@@ -1,11 +1,9 @@
 /*
- * $Id: ServiceOfferListBlock.java,v 1.12 2006/04/10 15:30:46 laddi Exp $ Created
- * on Oct 2, 2005
+ * $Id: ServiceOfferListBlock.java,v 1.13 2007/03/27 09:02:04 laddi Exp $ Created on Oct 2, 2005
  * 
  * Copyright (C) 2005 Idega Software hf. All Rights Reserved.
  * 
- * This software is the proprietary information of Idega hf. Use is subject to
- * license terms.
+ * This software is the proprietary information of Idega hf. Use is subject to license terms.
  */
 package is.idega.idegaweb.egov.serviceoffer.presentation;
 
@@ -46,10 +44,10 @@ import com.idega.util.text.Name;
 /**
  * A block for viewing and editing a list of service offers
  * 
- * Last modified: $Date: 2006/04/10 15:30:46 $ by $Author: laddi $
+ * Last modified: $Date: 2007/03/27 09:02:04 $ by $Author: laddi $
  * 
  * @author <a href="mailto:eiki@idega.com">eiki</a>
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 public class ServiceOfferListBlock extends ServiceOfferBlock implements ServiceOfferConstants {
 
@@ -100,8 +98,8 @@ public class ServiceOfferListBlock extends ServiceOfferBlock implements ServiceO
 
 		Paragraph paragraph = new Paragraph();
 		paragraph.add(new Text(localize("service.offer.list.service_offer_list", "Below you will find details about the selected service offer and its participants.")));
-		//section.add(paragraph);
-		
+		// section.add(paragraph);
+
 		Layer clearLayer = new Layer(Layer.DIV);
 		clearLayer.setStyleClass("Clear");
 
@@ -114,7 +112,7 @@ public class ServiceOfferListBlock extends ServiceOfferBlock implements ServiceO
 
 		Layer formItem = new Layer(Layer.DIV);
 		formItem.setStyleClass("formItem");
-		Label label = new Label(localize("service.offer.application.name_of_service_offer" ,"Name of service offer"), offers);
+		Label label = new Label(localize("service.offer.application.name_of_service_offer", "Name of service offer"), offers);
 		formItem.add(label);
 		formItem.add(offers);
 		section.add(formItem);
@@ -126,14 +124,14 @@ public class ServiceOfferListBlock extends ServiceOfferBlock implements ServiceO
 			form.add(getPrintouts(iwc, offer));
 			form.add(getServiceOfferChoiceList(iwc, offer));
 			form.add(getLegend());
-	
+
 			Layer buttonLayer = new Layer(Layer.DIV);
 			buttonLayer.setStyleClass("buttonLayer");
 			form.add(buttonLayer);
-	
+
 			SubmitButton save = new SubmitButton(localize("save", "Save"));
 			save.setValueOnClick(PARAMETER_ACTION, String.valueOf(ACTION_STORE_PAYMENT_INFO));
-	
+
 			buttonLayer.add(save);
 		}
 
@@ -151,18 +149,18 @@ public class ServiceOfferListBlock extends ServiceOfferBlock implements ServiceO
 
 		TableRowGroup group = table.createHeaderRowGroup();
 		TableRow row = group.createRow();
-		
+
 		TableCell2 cell = row.createHeaderCell();
 		cell.setStyleClass("firstColumn");
 		cell.add(new Text(localize("service.offer.choice.name", "Child's name")));
-		
+
 		row.createHeaderCell().add(new Text(localize("service.offer.choice.personal_id", "Child's ssn")));
 		row.createHeaderCell().add(new Text(localize("service.offer.choice.custodian_name", "Custodian's name")));
 		row.createHeaderCell().add(new Text(localize("service.offer.choice.custodian_personal_id", "Custodian's ssn")));
 		row.createHeaderCell().add(new Text(localize("service.offer.choice.phone_number", "Phone number")));
 		row.createHeaderCell().add(new Text(localize("service.offer.choice.status", "Status")));
 		row.createHeaderCell().add(new Text(localize("service.offer.choice.viewed", "Viewed")));
-		
+
 		cell = row.createHeaderCell();
 		cell.setStyleClass("lastColumn");
 		cell.add(new Text(localize("service.offer.choice.payment_status", "Payment")));
@@ -189,8 +187,8 @@ public class ServiceOfferListBlock extends ServiceOfferBlock implements ServiceO
 
 			User owner = choice.getOwner();
 			Name ownerName = new Name(owner.getFirstName(), owner.getMiddleName(), owner.getLastName());
-			boolean hasAccount = getBusiness().getCommuneUserBusiness().hasCitizenAccount(owner);
-			
+			boolean hasAccount = getBusiness().getUserBusiness().hasCitizenAccount(owner);
+
 			String status = choice.getStatus();
 			if (agreedStatusCode.equals(status)) {
 				totalAgreed++;
@@ -211,10 +209,10 @@ public class ServiceOfferListBlock extends ServiceOfferBlock implements ServiceO
 
 			try {
 				cell = row.createCell();
-				
+
 				cell.setStyleClass("firstColumn");
 				cell.add(new Text(name.getName(iwc.getCurrentLocale())));
-				
+
 				row.createCell().add(new Text(user.getPersonalID() != null ? PersonalIDFormatter.format(user.getPersonalID(), iwc.getCurrentLocale()) : "-"));
 
 				row.createCell().add(new Text(ownerName.getName(iwc.getCurrentLocale())));
@@ -243,7 +241,7 @@ public class ServiceOfferListBlock extends ServiceOfferBlock implements ServiceO
 				if (hasAccount) {
 					row.setStyleClass("hasAccount");
 				}
-				
+
 				if (iRow % 2 == 0) {
 					row.setStyleClass("evenRow");
 				}
@@ -266,16 +264,17 @@ public class ServiceOfferListBlock extends ServiceOfferBlock implements ServiceO
 		cell.setStyleClass("firstColumn");
 		cell.setColumnSpan(5);
 		cell.add(new Text(localize("service.offer.choice.total", "Total")));
-		
+
 		row.createCell().add(new Text(String.valueOf(totalAgreed) + "/" + String.valueOf(totalDenied) + "/" + total));
 		row.createCell().add(new Text(String.valueOf(totalViewed) + "/" + total));
-		
+
 		cell = row.createCell();
 		cell.setStyleClass("lastColumn");
 		cell.add(new Text(String.valueOf(totalPaid) + "/" + total));
 
 		return table;
 	}
+
 	private Form createForm(IWContext iwc, int actionPhase) throws RemoteException {
 		Form form = new Form();
 		form.setID("serviceOfferForm");
@@ -288,29 +287,29 @@ public class ServiceOfferListBlock extends ServiceOfferBlock implements ServiceO
 	private Lists getLegend() {
 		Lists list = new Lists();
 		list.setStyleClass("legend");
-		
+
 		ListItem item = new ListItem();
 		item.setStyleClass("hasAccount");
 		item.add(new Text(this.getResourceBundle().getLocalizedString("service.offer.choice.has_account", "Parent has citizen account")));
 		list.add(item);
-		
+
 		return list;
 	}
 
 	private Layer getPrintouts(IWContext iwc, ServiceOffer offer) throws RemoteException {
 		Layer layer = new Layer(Layer.DIV);
 		layer.setStyleClass("printIcons");
-		
-    DownloadLink link = new DownloadLink(getBundle().getImage("xls.gif"));
-    link.setStyleClass("xls");
-    link.setTarget(Link.TARGET_NEW_WINDOW);
-    link.setMediaWriterClass(ParticipantsXLSWriter.class);
-    link.addParameter(ParticipantsXLSWriter.PARAMETER_SERVICE_OFFER, offer.getPrimaryKey().toString());
+
+		DownloadLink link = new DownloadLink(getBundle().getImage("xls.gif"));
+		link.setStyleClass("xls");
+		link.setTarget(Link.TARGET_NEW_WINDOW);
+		link.setMediaWriterClass(ParticipantsXLSWriter.class);
+		link.addParameter(ParticipantsXLSWriter.PARAMETER_SERVICE_OFFER, offer.getPrimaryKey().toString());
 
 		layer.add(link);
-		
+
 		return layer;
-	}	
+	}
 
 	private int parseAction(IWContext iwc) {
 		int action = ACTION_LIST;
