@@ -1,5 +1,5 @@
 /*
- * $Id: ServiceOfferApplication.java,v 1.21 2007/03/27 09:02:04 laddi Exp $ Created on Oct 2, 2005
+ * $Id: ServiceOfferApplication.java,v 1.22 2008/11/06 19:26:48 laddi Exp $ Created on Oct 2, 2005
  * 
  * Copyright (C) 2005 Idega Software hf. All Rights Reserved.
  * 
@@ -44,14 +44,15 @@ import com.idega.presentation.ui.TextInput;
 import com.idega.presentation.ui.TimeInput;
 import com.idega.user.data.User;
 import com.idega.util.IWTimestamp;
+import com.idega.util.PresentationUtil;
 
 /**
  * An application for sending a service offer(description), that may have a price, to a citizen or a group of citizens that then have to approve it.
  * 
- * Last modified: $Date: 2007/03/27 09:02:04 $ by $Author: laddi $
+ * Last modified: $Date: 2008/11/06 19:26:48 $ by $Author: laddi $
  * 
  * @author <a href="mailto:eiki@idega.com">eiki</a>
- * @version $Revision: 1.21 $
+ * @version $Revision: 1.22 $
  */
 public class ServiceOfferApplication extends ApplicationForm {
 
@@ -87,6 +88,7 @@ public class ServiceOfferApplication extends ApplicationForm {
 
 	public void present(IWContext iwc) {
 		this.iwrb = getResourceBundle(iwc);
+		PresentationUtil.addStyleSheetToHeader(iwc, getBundle(iwc).getVirtualPathWithFileNameString("style/serviceoffer.css"));
 
 		try {
 			switch (parseAction(iwc)) {

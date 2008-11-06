@@ -1,5 +1,5 @@
 /*
- * $Id: IWBundleStarter.java,v 1.2 2005/10/06 18:06:40 eiki Exp $
+ * $Id: IWBundleStarter.java,v 1.3 2008/11/06 19:26:48 laddi Exp $
  * Created on Sep 29, 2005
  *
  * Copyright (C) 2005 Idega Software hf. All Rights Reserved.
@@ -20,9 +20,6 @@ import com.idega.idegaweb.include.GlobalIncludeManager;
 public class IWBundleStarter implements IWBundleStartable,ServiceOfferConstants {
 
 	public void start(IWBundle starterBundle) {
-		GlobalIncludeManager includeManager = GlobalIncludeManager.getInstance();
-		includeManager.addBundleStyleSheet(IW_BUNDLE_IDENTIFIER, "/style/serviceoffer.css");
-		
 		CaseCodeManager caseCodeManager = CaseCodeManager.getInstance();
 		caseCodeManager.addCaseBusinessForCode( CASE_CODE_KEY_SERVICE_OFFER_PARENT, ServiceOfferBusiness.class);
 		caseCodeManager.addCaseBusinessForCode( CASE_CODE_KEY_SERVICE_OFFER, ServiceOfferBusiness.class);

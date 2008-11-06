@@ -1,5 +1,5 @@
 /*
- * $Id: ServiceOfferBlock.java,v 1.9 2007/03/27 09:02:04 laddi Exp $ Created on Oct 2, 2005
+ * $Id: ServiceOfferBlock.java,v 1.10 2008/11/06 19:26:48 laddi Exp $ Created on Oct 2, 2005
  * 
  * Copyright (C) 2005 Idega Software hf. All Rights Reserved.
  * 
@@ -35,14 +35,15 @@ import com.idega.presentation.ui.Label;
 import com.idega.user.data.User;
 import com.idega.util.IWTimestamp;
 import com.idega.util.PersonalIDFormatter;
+import com.idega.util.PresentationUtil;
 
 /**
  * A base presentationclass for ServiceOffer applications and lists...
  * 
- * Last modified: $Date: 2007/03/27 09:02:04 $ by $Author: laddi $
+ * Last modified: $Date: 2008/11/06 19:26:48 $ by $Author: laddi $
  * 
  * @author <a href="mailto:eiki@idega.com">eiki</a>
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 public abstract class ServiceOfferBlock extends Block {
 
@@ -57,6 +58,7 @@ public abstract class ServiceOfferBlock extends Block {
 		setResourceBundle(getResourceBundle(iwc));
 		this.business = getBusiness(iwc);
 		this.uBusiness = getUserBusiness(iwc);
+		PresentationUtil.addStyleSheetToHeader(iwc, getBundle().getVirtualPathWithFileNameString("style/serviceoffer.css"));
 		present(iwc);
 	}
 
