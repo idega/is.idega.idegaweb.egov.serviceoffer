@@ -3,11 +3,11 @@
   <parent>
     <groupId>com.idega.block.egov</groupId>
     <artifactId>com.idega.block.egov</artifactId>
-    <version>4.0.2-SNAPSHOT</version>
+    <version>4.1.0</version>
   </parent>
   <groupId>com.idega.block.egov</groupId>
   <artifactId>is.idega.idegaweb.egov.serviceoffer</artifactId>
-  <version>4.0.2-SNAPSHOT</version>
+  <version>4.1.0</version>
   <packaging>jar</packaging>
   <organization>
     <name>idega software</name>
@@ -24,6 +24,7 @@
     -->
     <connection>scm:cvs:ext:${user.name}@code.idega.com:/idega/cvs:${groupId}/${artifactId}/</connection>
     <developerConnection>scm:cvs:ext:${user.name}@code.idega.com:/idega/cvs:${groupId}/${artifactId}/</developerConnection>
+    <tag>com_idega_block_egov-4_1_0</tag>
   </scm>
 
   <developers>
@@ -32,28 +33,28 @@
       <id>tryggvil</id>
       <email>tryggvi@idega.is</email>
       <organization>idega software</organization>
-      <roles/>
+      <roles />
     </developer>
     <developer>
       <name>Grimur Jonsson</name>
       <id>gimmi</id>
       <email>gimmi@idega.is</email>
       <organization>idega software</organization>
-      <roles/>
+      <roles />
     </developer>
     <developer>
       <name>Thorhallur Helgason</name>
       <id>laddi</id>
       <email>laddi@idega.is</email>
       <organization>idega software</organization>
-      <roles/>
+      <roles />
     </developer>
     <developer>
       <name>Eirikur S. Hrafnsson</name>
       <id>eiki</id>
       <email>eiki@idega.is</email>
       <organization>idega software</organization>
-      <roles/>
+      <roles />
     </developer>
   </developers>
   
