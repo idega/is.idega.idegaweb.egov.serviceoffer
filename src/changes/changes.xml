@@ -1,0 +1,39 @@
+    <document xmlns='http://maven.apache.org/changes/1.0.0'>
+	<properties>
+		<title>Service offer changes</title>
+		<author email='laddi@idega.com'>
+			Thorhallur "Laddi" Helgason
+		</author>
+	</properties>
+	<body>
+		<release date='2009-01-27' description='First 4.1.x Release' version='4.1.0'>
+          <action type='add' dev='tryggvil'>First 4.1.x Release</action>
+        </release>
+        <release date='2007-03-27' version='1.0.4'>
+			<action type='update' dev='laddi'>
+				Refactoring/Elimination of se bundles.
+			</action>
+		</release>
+
+		<release date='2007-03-09' version='1.0.3'>
+			<action type='update' dev='palli'>
+				Updating and fixing dependencies to create a new sunnan3
+				application.
+			</action>
+		</release>
+
+		<release date='2007-02-07' version='1.0.2'>
+			<action type='update' dev='laddi'>
+				Update version of com.idega.block.school.
+			</action>
+		</release>
+
+		<release date='2006-07-11' version='1.0.1'>
+			<action type='update' dev='laddi'>
+				Declaring new version of block.
+			</action>
+		</release>
+
+	</body>
+</document>
+
