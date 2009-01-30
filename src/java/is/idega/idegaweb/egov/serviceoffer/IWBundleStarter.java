@@ -1,5 +1,5 @@
 /*
- * $Id: IWBundleStarter.java,v 1.3 2008/11/06 19:26:48 laddi Exp $
+ * $Id: IWBundleStarter.java,v 1.4 2009/01/30 07:29:54 laddi Exp $
  * Created on Sep 29, 2005
  *
  * Copyright (C) 2005 Idega Software hf. All Rights Reserved.
@@ -11,10 +11,10 @@ package is.idega.idegaweb.egov.serviceoffer;
 
 import is.idega.idegaweb.egov.serviceoffer.business.ServiceOfferBusiness;
 import is.idega.idegaweb.egov.serviceoffer.util.ServiceOfferConstants;
+
 import com.idega.block.process.business.CaseCodeManager;
 import com.idega.idegaweb.IWBundle;
 import com.idega.idegaweb.IWBundleStartable;
-import com.idega.idegaweb.include.GlobalIncludeManager;
 
 
 public class IWBundleStarter implements IWBundleStartable,ServiceOfferConstants {
