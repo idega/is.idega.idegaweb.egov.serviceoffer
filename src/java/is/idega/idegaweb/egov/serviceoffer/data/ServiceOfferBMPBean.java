@@ -1,5 +1,5 @@
 /*
- * $Id: ServiceOfferBMPBean.java,v 1.4 2005/10/17 03:08:12 eiki Exp $ Created on
+ * $Id: ServiceOfferBMPBean.java,v 1.5 2009/05/25 13:43:15 valdas Exp $ Created on
  * Aug 10, 2005
  * 
  * Copyright (C) 2005 Idega Software hf. All Rights Reserved.
@@ -17,17 +17,19 @@ import com.idega.block.process.data.Case;
 import com.idega.block.school.data.SchoolClass;
 import com.idega.data.IDOAddRelationshipException;
 import com.idega.data.IDORelationshipException;
+import com.idega.data.IDORemoveRelationshipException;
 import com.idega.user.data.Group;
+import com.idega.user.data.User;
 import com.idega.util.IWTimestamp;
 import com.idega.util.ListUtil;
 
 /**
  * A parent case for ServiceOfferChoices
  * 
- * Last modified: $Date: 2005/10/17 03:08:12 $ by $Author: eiki $
+ * Last modified: $Date: 2009/05/25 13:43:15 $ by $Author: valdas $
  * 
  * @author <a href="mailto:eiki@idega.com">eiki</a>
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class ServiceOfferBMPBean extends AbstractCaseBMPBean implements Case, ServiceOfferConstants, ServiceOffer {
 
@@ -49,6 +51,7 @@ public class ServiceOfferBMPBean extends AbstractCaseBMPBean implements Case, Se
 	 * 
 	 * @see com.idega.block.process.data.AbstractCaseBMPBean#getCaseCodeKey()
 	 */
+	@Override
 	public String getCaseCodeKey() {
 		return CASE_CODE_KEY_SERVICE_OFFER_PARENT;
 	}
@@ -58,6 +61,7 @@ public class ServiceOfferBMPBean extends AbstractCaseBMPBean implements Case, Se
 	 * 
 	 * @see com.idega.block.process.data.AbstractCaseBMPBean#getCaseCodeDescription()
 	 */
+	@Override
 	public String getCaseCodeDescription() {
 		return "Parent case for service offer choices";
 	}
@@ -67,6 +71,7 @@ public class ServiceOfferBMPBean extends AbstractCaseBMPBean implements Case, Se
 	 * 
 	 * @see com.idega.data.GenericEntity#getEntityName()
 	 */
+	@Override
 	public String getEntityName() {
 		return ENTITY_NAME;
 	}
@@ -76,6 +81,7 @@ public class ServiceOfferBMPBean extends AbstractCaseBMPBean implements Case, Se
 	 * 
 	 * @see com.idega.data.GenericEntity#initializeAttributes()
 	 */
+	@Override
 	public void initializeAttributes() {
 		addGeneralCaseRelation();
 		addManyToManyRelationShip(SchoolClass.class, SCHOOL_CLASS_MIDDLE_TABLE_NAME);
@@ -188,6 +194,7 @@ public class ServiceOfferBMPBean extends AbstractCaseBMPBean implements Case, Se
 		this.idoAddTo(schoolClass);
 	}
 	
+	@Override
 	public String toString(){
 		
 		Timestamp date = getServiceDate();
@@ -199,6 +206,20 @@ public class ServiceOfferBMPBean extends AbstractCaseBMPBean implements Case, Se
 			IWTimestamp stamp = new IWTimestamp(date);
 			return getServiceName()+" - "+stamp.getDateString("dd/MM/yyyy hh:mm");
 		}
+	}
+
+	public void addSubscriber(User subscriber)
+			throws IDOAddRelationshipException {
+		throw new UnsupportedOperationException("This method is not implemented!");
+	}
+
+	public Collection<User> getSubscribers() {
+		throw new UnsupportedOperationException("This method is not implemented!");
+	}
+
+	public void removeSubscriber(User subscriber)
+			throws IDORemoveRelationshipException {
+		throw new UnsupportedOperationException("This method is not implemented!");
 	}
 	
 }

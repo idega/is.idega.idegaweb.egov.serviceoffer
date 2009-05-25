@@ -1,5 +1,5 @@
 /*
- * $Id: ServiceOfferChoiceBMPBean.java,v 1.4 2006/03/20 09:19:57 laddi Exp $
+ * $Id: ServiceOfferChoiceBMPBean.java,v 1.5 2009/05/25 13:43:15 valdas Exp $
  * Created on Aug 10, 2005
  *
  * Copyright (C) 2005 Idega Software hf. All Rights Reserved.
@@ -9,9 +9,13 @@
  */
 package is.idega.idegaweb.egov.serviceoffer.data;
 
+import java.util.Collection;
+
 import is.idega.idegaweb.egov.serviceoffer.util.ServiceOfferConstants;
 import com.idega.block.process.data.AbstractCaseBMPBean;
 import com.idega.block.process.data.Case;
+import com.idega.data.IDOAddRelationshipException;
+import com.idega.data.IDORemoveRelationshipException;
 import com.idega.user.data.User;
 
 
@@ -20,10 +24,10 @@ import com.idega.user.data.User;
  * The actual case that is created for a custodian of the user that is referenced in this bean.
  * The parent case is the ServiceOffer that belongs to the person who creates a new ServiceOffer
  * 
- *  Last modified: $Date: 2006/03/20 09:19:57 $ by $Author: laddi $
+ *  Last modified: $Date: 2009/05/25 13:43:15 $ by $Author: valdas $
  * 
  * @author <a href="mailto:eiki@idega.com">eiki</a>
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class ServiceOfferChoiceBMPBean extends AbstractCaseBMPBean implements Case , ServiceOfferConstants, ServiceOfferChoice{
 	
@@ -37,6 +41,7 @@ public class ServiceOfferChoiceBMPBean extends AbstractCaseBMPBean implements Ca
 	/* (non-Javadoc)
 	 * @see com.idega.block.process.data.AbstractCaseBMPBean#getCaseCodeKey()
 	 */
+	@Override
 	public String getCaseCodeKey() {
 		return CASE_CODE_KEY_SERVICE_OFFER;
 	}
@@ -44,6 +49,7 @@ public class ServiceOfferChoiceBMPBean extends AbstractCaseBMPBean implements Ca
 	/* (non-Javadoc)
 	 * @see com.idega.block.process.data.AbstractCaseBMPBean#getCaseCodeDescription()
 	 */
+	@Override
 	public String getCaseCodeDescription() {
 		return "Case for a service offer choice";
 	}
@@ -51,6 +57,7 @@ public class ServiceOfferChoiceBMPBean extends AbstractCaseBMPBean implements Ca
 	/* (non-Javadoc)
 	 * @see com.idega.data.GenericEntity#getEntityName()
 	 */
+	@Override
 	public String getEntityName() {
 		return ENTITY_NAME;
 	}
@@ -58,6 +65,7 @@ public class ServiceOfferChoiceBMPBean extends AbstractCaseBMPBean implements Ca
 	/* (non-Javadoc)
 	 * @see com.idega.data.GenericEntity#initializeAttributes()
 	 */
+	@Override
 	public void initializeAttributes() {
 		addGeneralCaseRelation();		
 		addManyToOneRelationship(COLUMN_USER, "Citizen", User.class);
@@ -96,6 +104,20 @@ public class ServiceOfferChoiceBMPBean extends AbstractCaseBMPBean implements Ca
 	
 	public void setAsUnPaidFor(){
 		setColumn(COLUMN_PAYED, false);
+	}
+
+	public void addSubscriber(User subscriber)
+			throws IDOAddRelationshipException {
+		throw new UnsupportedOperationException("This method is not implemented!");
+	}
+
+	public Collection<User> getSubscribers() {
+		throw new UnsupportedOperationException("This method is not implemented!");
+	}
+
+	public void removeSubscriber(User subscriber)
+			throws IDORemoveRelationshipException {
+		throw new UnsupportedOperationException("This method is not implemented!");
 	}
 	
 }
