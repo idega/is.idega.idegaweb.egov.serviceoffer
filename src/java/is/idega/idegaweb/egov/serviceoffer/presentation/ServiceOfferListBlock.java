@@ -100,9 +100,6 @@ public class ServiceOfferListBlock extends ServiceOfferBlock implements ServiceO
 		paragraph.add(new Text(localize("service.offer.list.service_offer_list", "Below you will find details about the selected service offer and its participants.")));
 		// section.add(paragraph);
 
-		Layer clearLayer = new Layer(Layer.DIV);
-		clearLayer.setStyleClass("Clear");
-
 		DropdownMenu offers = new DropdownMenu(getBusiness().getSelectedCaseParameter());
 		offers.setID("serviceOfferDropdown");
 		offers.addMenuElements(getBusiness().getServiceOffers(iwc.getCurrentUser()));
@@ -119,6 +116,9 @@ public class ServiceOfferListBlock extends ServiceOfferBlock implements ServiceO
 
 		if (offer != null) {
 			addServiceOffer(iwc, section, offer, false);
+
+			Layer clearLayer = new Layer();
+			clearLayer.setStyleClass("Clear");
 			section.add(clearLayer);
 
 			form.add(getPrintouts(iwc, offer));

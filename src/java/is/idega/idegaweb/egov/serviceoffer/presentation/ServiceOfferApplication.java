@@ -130,9 +130,6 @@ public class ServiceOfferApplication extends ApplicationForm {
 
 		form.add(getPhasesHeader(this.iwrb.getLocalizedString("service.offer.application.create_a_service_offer", "Create a new service offer"), 1, 4, false));
 
-		Layer clearLayer = new Layer(Layer.DIV);
-		clearLayer.setStyleClass("Clear");
-
 		Layer section = new Layer(Layer.DIV);
 		section.setStyleClass("formSection");
 		form.add(section);
@@ -200,6 +197,8 @@ public class ServiceOfferApplication extends ApplicationForm {
 		formItem.add(price);
 		section.add(formItem);
 
+		Layer clearLayer = new Layer();
+		clearLayer.setStyleClass("Clear");
 		section.add(clearLayer);
 
 		Heading1 heading = new Heading1(this.iwrb.getLocalizedString("service.offer.application.choice_optional", "Optional service"));
@@ -231,6 +230,8 @@ public class ServiceOfferApplication extends ApplicationForm {
 		formItem.add(label);
 		section.add(formItem);
 
+		clearLayer = new Layer();
+		clearLayer.setStyleClass("Clear");
 		section.add(clearLayer);
 
 		heading = new Heading1(this.iwrb.getLocalizedString("service.offer.application.choose_dates", "Choose dates of service"));
@@ -274,6 +275,8 @@ public class ServiceOfferApplication extends ApplicationForm {
 		formItem.add(location);
 		section.add(formItem);
 
+		clearLayer = new Layer();
+		clearLayer.setStyleClass("Clear");
 		section.add(clearLayer);
 
 		heading = new Heading1(this.iwrb.getLocalizedString("service.offer.application.choose_payment_type", "Payment option"));
@@ -297,12 +300,8 @@ public class ServiceOfferApplication extends ApplicationForm {
 		formItem.add(label);
 		section.add(formItem);
 
-		/*
-		 * formItem = new Layer(); formItem.setStyleClass("formItem"); formItem.setStyleClass("radioButtonItem"); label = new
-		 * Label(iwrb.getLocalizedString("service.offer.application.payment.type.invoice", "Invoice"), invoice); formItem.add(invoice);
-		 * formItem.add(label); section.add(formItem);
-		 */
-
+		clearLayer = new Layer();
+		clearLayer.setStyleClass("Clear");
 		section.add(clearLayer);
 
 		heading = new Heading1(this.iwrb.getLocalizedString("service.offer.application.description", "Description of service"));
@@ -340,9 +339,6 @@ public class ServiceOfferApplication extends ApplicationForm {
 		Form form = createForm(iwc, ACTION_PHASE_TWO);
 
 		form.add(getPhasesHeader(this.iwrb.getLocalizedString("service.offer.application.create_a_service_offer", "Create a new service offer"), 2, 4, false));
-
-		Layer clearLayer = new Layer(Layer.DIV);
-		clearLayer.setStyleClass("Clear");
 
 		Layer section = new Layer(Layer.DIV);
 		section.setStyleClass("formSection");
@@ -404,9 +400,6 @@ public class ServiceOfferApplication extends ApplicationForm {
 
 		form.add(getPhasesHeader(this.iwrb.getLocalizedString("service.offer.application.create_a_service_offer", "Create a new service offer"), 3, 4, false));
 
-		Layer clearLayer = new Layer(Layer.DIV);
-		clearLayer.setStyleClass("Clear");
-
 		Layer section = new Layer(Layer.DIV);
 		section.setStyleClass("formSection");
 		form.add(section);
@@ -436,6 +429,8 @@ public class ServiceOfferApplication extends ApplicationForm {
 			section.add(formItem);
 		}
 
+		Layer clearLayer = new Layer();
+		clearLayer.setStyleClass("Clear");
 		section.add(clearLayer);
 
 		Heading1 heading = new Heading1(this.iwrb.getLocalizedString("service.offer.application.choice_optional", "Optional service"));
@@ -458,6 +453,8 @@ public class ServiceOfferApplication extends ApplicationForm {
 		formItem.add(span);
 		section.add(formItem);
 
+		clearLayer = new Layer();
+		clearLayer.setStyleClass("Clear");
 		section.add(clearLayer);
 
 		heading = new Heading1(this.iwrb.getLocalizedString("service.offer.application.choose_dates", "Choose dates of service"));
@@ -522,6 +519,8 @@ public class ServiceOfferApplication extends ApplicationForm {
 			section.add(formItem);
 		}
 
+		clearLayer = new Layer();
+		clearLayer.setStyleClass("Clear");
 		section.add(clearLayer);
 
 		heading = new Heading1(this.iwrb.getLocalizedString("service.offer.application.choose_payment_type", "Payment option"));
@@ -545,6 +544,8 @@ public class ServiceOfferApplication extends ApplicationForm {
 		section.add(formItem);
 
 		if (iwc.isParameterSet(PARAMETER_SERVICE_TEXT)) {
+			clearLayer = new Layer();
+			clearLayer.setStyleClass("Clear");
 			section.add(clearLayer);
 
 			heading = new Heading1(this.iwrb.getLocalizedString("service.offer.application.description", "Description of service"));
@@ -567,6 +568,8 @@ public class ServiceOfferApplication extends ApplicationForm {
 			section.add(formItem);
 		}
 
+		clearLayer = new Layer();
+		clearLayer.setStyleClass("Clear");
 		section.add(clearLayer);
 
 		heading = new Heading1(this.iwrb.getLocalizedString("service.offer.application.recipients", "Recipients"));
@@ -596,6 +599,8 @@ public class ServiceOfferApplication extends ApplicationForm {
 
 		section.add(groupList);
 
+		clearLayer = new Layer();
+		clearLayer.setStyleClass("Clear");
 		section.add(clearLayer);
 
 		section.add(getAttentionLayer(this.iwrb.getLocalizedString("service.offer.application.overview", "Please confirm the information below is correct.")));
