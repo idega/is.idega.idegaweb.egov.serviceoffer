@@ -61,10 +61,12 @@ public class ServiceOfferSessionBean extends IBOSessionBean implements ServiceOf
 	private int getSchoolIDFromUser(User user) throws RemoteException {
 		this._schoolID = -1;
 		if (user != null) {
-			School school = (School) getSchoolUserBusiness().getFirstManagingSchoolForUser(user);
-			if (school != null) {
-				this._schoolID = ((Integer) school.getPrimaryKey()).intValue();
-			}
+			try {
+				School school = (School) getSchoolUserBusiness().getFirstManagingSchoolForUser(user);
+				if (school != null) {
+					this._schoolID = ((Integer) school.getPrimaryKey()).intValue();
+				}
+			} catch (Exception e) {}
 		}
 		return this._schoolID;
 	}
