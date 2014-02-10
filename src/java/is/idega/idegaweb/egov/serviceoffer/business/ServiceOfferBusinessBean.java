@@ -214,7 +214,7 @@ public class ServiceOfferBusinessBean extends CaseBusinessBean implements CaseBu
 	}
 
 	public School getManagingSchoolForUser(User user) throws RemoteException, FinderException {
-		return getSchoolUserBusiness().getFirstManagingSchoolForUser(user);
+		return (School) getSchoolUserBusiness().getFirstManagingSchoolForUser(user);
 	}
 
 	public void storeServiceOffer(String name, String paymentType, String choiceOptional, String deadline, String date, String time, String price, String location, String text, String[] schoolType, String[] school, String[] schoolClass, User performer) {

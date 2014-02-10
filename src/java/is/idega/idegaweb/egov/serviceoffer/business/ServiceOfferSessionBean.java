@@ -2,8 +2,6 @@ package is.idega.idegaweb.egov.serviceoffer.business;
 
 import java.rmi.RemoteException;
 
-import javax.ejb.FinderException;
-
 import com.idega.block.school.business.SchoolUserBusiness;
 import com.idega.block.school.data.School;
 import com.idega.business.IBOLookup;
@@ -63,14 +61,9 @@ public class ServiceOfferSessionBean extends IBOSessionBean implements ServiceOf
 	private int getSchoolIDFromUser(User user) throws RemoteException {
 		this._schoolID = -1;
 		if (user != null) {
-			try {
-				School school = getSchoolUserBusiness().getFirstManagingSchoolForUser(user);
-				if (school != null) {
-					this._schoolID = ((Integer) school.getPrimaryKey()).intValue();
-				}
-			}
-			catch (FinderException fe) {
-				this._schoolID = -1;
+			School school = (School) getSchoolUserBusiness().getFirstManagingSchoolForUser(user);
+			if (school != null) {
+				this._schoolID = ((Integer) school.getPrimaryKey()).intValue();
 			}
 		}
 		return this._schoolID;
