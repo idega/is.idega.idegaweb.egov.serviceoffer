@@ -1,9 +1,5 @@
 package is.idega.idegaweb.egov.serviceoffer.business;
 
-import is.idega.idegaweb.egov.serviceoffer.data.ServiceOffer;
-import is.idega.idegaweb.egov.serviceoffer.data.ServiceOfferChoice;
-import is.idega.idegaweb.egov.serviceoffer.util.ServiceOfferConstants;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -33,12 +29,17 @@ import com.idega.io.MemoryInputStream;
 import com.idega.io.MemoryOutputStream;
 import com.idega.presentation.IWContext;
 import com.idega.user.data.User;
+import com.idega.util.IOUtil;
 import com.idega.util.PersonalIDFormatter;
 import com.idega.util.text.Name;
 
+import is.idega.idegaweb.egov.serviceoffer.data.ServiceOffer;
+import is.idega.idegaweb.egov.serviceoffer.data.ServiceOfferChoice;
+import is.idega.idegaweb.egov.serviceoffer.util.ServiceOfferConstants;
+
 /**
  * Title: Description: Copyright: Copyright (c) 2001 Company: idega multimedia
- * 
+ *
  * @author <a href="mailto:aron@idega.is">aron@idega.is</a>
  * @version 1.0
  */
@@ -48,7 +49,7 @@ public class ParticipantsXLSWriter extends DownloadWriter implements MediaWritab
 	private ServiceOfferBusiness business;
 	private Locale locale;
 	private IWResourceBundle iwrb;
-	
+
 	public static final String PARAMETER_SERVICE_OFFER = "prm_service_offer";
 
 	public ParticipantsXLSWriter() {
@@ -56,6 +57,10 @@ public class ParticipantsXLSWriter extends DownloadWriter implements MediaWritab
 
 	@Override
 	public void init(HttpServletRequest req, IWContext iwc) {
+		if (iwc == null || !iwc.isLoggedOn()) {
+			return;
+		}
+
 		try {
 			this.locale = iwc.getApplicationSettings().getApplicationLocale();
 			this.business = getBusiness(iwc);
@@ -81,7 +86,7 @@ public class ParticipantsXLSWriter extends DownloadWriter implements MediaWritab
 	}
 
 	@Override
-	public void writeTo(OutputStream out) throws IOException {
+	public void writeTo(IWContext iwc, OutputStream out) throws IOException {
 		if (this.buffer != null) {
 			MemoryInputStream mis = new MemoryInputStream(this.buffer);
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -89,6 +94,7 @@ public class ParticipantsXLSWriter extends DownloadWriter implements MediaWritab
 				baos.write(mis.read());
 			}
 			baos.writeTo(out);
+			IOUtil.close(mis);
 		}
 		else {
 			System.err.println("buffer is null");
@@ -117,7 +123,7 @@ public class ParticipantsXLSWriter extends DownloadWriter implements MediaWritab
 	    int cellColumn = 0;
 	    int cellRow = 0;
 			HSSFRow row = sheet.createRow(cellRow++);
-			
+
 			HSSFCell cell = row.createCell((short) cellColumn++);
 			cell.setCellValue(this.iwrb.getLocalizedString("service.offer.choice.name", "Child's name"));
 			cell.setCellStyle(style);
@@ -161,7 +167,7 @@ public class ParticipantsXLSWriter extends DownloadWriter implements MediaWritab
 
 				User owner = choice.getOwner();
 				Name ownerName = new Name(owner.getFirstName(), owner.getMiddleName(), owner.getLastName());
-				
+
 				String status = choice.getStatus();
 				boolean paid = choice.hasBeenPaidFor();
 				boolean viewed = choice.hasBeenViewed();
@@ -188,7 +194,7 @@ public class ParticipantsXLSWriter extends DownloadWriter implements MediaWritab
 				row.createCell((short) cellColumn++).setCellValue(paid ? "X" : "-");
 			}
 		}
-		
+
 		wb.write(mos);
 
 		buffer.setMimeType(MimeTypeUtil.MIME_TYPE_EXCEL_2);
@@ -196,6 +202,6 @@ public class ParticipantsXLSWriter extends DownloadWriter implements MediaWritab
 	}
 
 	protected ServiceOfferBusiness getBusiness(IWApplicationContext iwac) throws RemoteException {
-		return (ServiceOfferBusiness) IBOLookup.getServiceInstance(iwac, ServiceOfferBusiness.class);
+		return IBOLookup.getServiceInstance(iwac, ServiceOfferBusiness.class);
 	}
 }
