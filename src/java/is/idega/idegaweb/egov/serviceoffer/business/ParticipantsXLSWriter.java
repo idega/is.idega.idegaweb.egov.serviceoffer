@@ -104,7 +104,7 @@ public class ParticipantsXLSWriter extends DownloadWriter implements MediaWritab
 	public MemoryFileBuffer writeXLS(Collection students, IWContext iwc) throws Exception {
 		MemoryFileBuffer buffer = new MemoryFileBuffer();
 		MemoryOutputStream mos = new MemoryOutputStream(buffer);
-    HSSFWorkbook wb = new HSSFWorkbook();
+		HSSFWorkbook wb = new HSSFWorkbook();
 		if (!students.isEmpty()) {
 	    HSSFSheet sheet = wb.createSheet("Participants");
 	    sheet.setColumnWidth((short)0, (short) (30 * 256));
@@ -115,7 +115,7 @@ public class ParticipantsXLSWriter extends DownloadWriter implements MediaWritab
 	    sheet.setColumnWidth((short)5, (short) (14 * 256));
 
 	    HSSFFont font = wb.createFont();
-	    font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+	    font.setBold(true);
 	    font.setFontHeightInPoints((short)12);
 	    HSSFCellStyle style = wb.createCellStyle();
 	    style.setFont(font);
@@ -196,6 +196,7 @@ public class ParticipantsXLSWriter extends DownloadWriter implements MediaWritab
 		}
 
 		wb.write(mos);
+		wb.close();
 
 		buffer.setMimeType(MimeTypeUtil.MIME_TYPE_EXCEL_2);
 		return buffer;
